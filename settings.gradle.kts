@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Success Diary"
 include(":app")
- 
+include(":data")
+include(":domain")

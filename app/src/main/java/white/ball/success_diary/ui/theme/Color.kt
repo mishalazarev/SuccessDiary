@@ -9,3 +9,12 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val MainBackgroundColor = Color(0xFFFF9840)
+
+// MainScreen
+val LineCoffeeCoinBalanceColor = Color(0xFFBF7130)
+val TextBalanceColor = Color(0xFFF8D176)
+
+val DefaultButtonTimerColor = Color(0xFF008500)
+val ClickedButtonTimerColor = Color(0xFFFF0000)

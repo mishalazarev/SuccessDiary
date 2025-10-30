@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import white.ball.success_diary.presentation.navigation.MainNavController
 import white.ball.success_diary.ui.theme.SuccessDiaryTheme
 
 @AndroidEntryPoint
@@ -21,29 +23,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SuccessDiaryTheme {
+                val navController = rememberNavController()
+
+//                val mainViewModel: MainViewModel = hiltViewModel()
+//                val noteViewModel: NoteViewModel = hiltViewModel()
+//                val profileViewModel: ProfileViewModel = hiltViewModel()
+//                val taskViewModel: TaskViewModel = hiltViewModel()
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val targetValue = innerPadding
+
+                    MainNavController(
+                        navController = navController,
+//                        mainViewModel = mainViewModel,
+//                        noteViewModel = noteViewModel,
+//                        profileViewModel = profileViewModel,
+//                        taskViewModel = taskViewModel
+                    ) {
+                        this.finish()
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SuccessDiaryTheme {
-        Greeting("Android")
     }
 }
