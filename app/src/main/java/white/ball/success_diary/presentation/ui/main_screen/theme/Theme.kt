@@ -1,6 +1,5 @@
-package white.ball.success_diary.ui.theme
+package white.ball.success_diary.presentation.ui.main_screen.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -17,8 +17,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import white.ball.success_diary.R
-import white.ball.success_diary.ui.theme.LineCoffeeCoinBalanceColor
-import white.ball.success_diary.ui.theme.TextBalanceColor
+import white.ball.success_diary.presentation.ui.main_screen.theme.LineCoffeeCoinBalanceColor
+import white.ball.success_diary.presentation.ui.main_screen.theme.TextBalanceColor
 
 @Composable
 fun BalanceUI(

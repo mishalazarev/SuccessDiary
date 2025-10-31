@@ -1,8 +1,12 @@
 package white.ball.success_diary.presentation.view_model
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import white.ball.domain.model.Tag
 import white.ball.domain.model.User
 import white.ball.domain.model.UserFullStack
@@ -16,16 +20,12 @@ class MainViewModel @Inject constructor(
     private val tagUseCases: TagUseCases,
 ) : ViewModel() {
 
-    val user: Flow<UserFullStack> = userUseCases.getUserUseCase()
+    val user: Flow<UserFullStack?> = userUseCases.getUserUseCase()
 
     val tags = tagUseCases.getTagListUseCase()
 
     suspend fun createUser(user: User) {
         userUseCases.createUserUseCase(user)
-    }
-
-    suspend fun updateUser(user: User) {
-        userUseCases.updateUserUseCase(user)
     }
 
     suspend fun deleteUser(user: User) {
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
         tagUseCases.createTagUseCase(tag)
     }
 
-    suspend fun updateTag(tag: Tag) {
-        tagUseCases.updateTagUseCase(tag)
+    suspend fun updateUser(user: User) {
+        userUseCases.updateUserUseCase(user)
     }
 }

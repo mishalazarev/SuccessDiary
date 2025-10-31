@@ -55,6 +55,7 @@ dependencies {
     // Module
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(libs.androidx.compose.runtime.livedata)
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

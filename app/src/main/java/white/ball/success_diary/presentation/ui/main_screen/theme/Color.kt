@@ -1,4 +1,4 @@
-package white.ball.success_diary.ui.theme
+package white.ball.success_diary.presentation.ui.main_screen.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -11,6 +11,12 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val MainBackgroundColor = Color(0xFFFF9840)
+
+val BottomBarColor = Color(0xFFFFB473)
+
+val BottomBarItemClickedColor = Color(0xFF06246F)
+val BottomBarItemDefaultColor = Color(0xFF70727B)
+
 
 // MainScreen
 val LineCoffeeCoinBalanceColor = Color(0xFFBF7130)
