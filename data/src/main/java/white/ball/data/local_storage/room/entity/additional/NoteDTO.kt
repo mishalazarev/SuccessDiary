@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import white.ball.data.local_storage.room.entity.main.UserDTO
+import white.ball.domain.extension_model.NoteColor
 import white.ball.domain.extension_model.NoteLocation
 
 @Entity("note",
@@ -21,7 +22,7 @@ data class NoteDTO(
     var title: String,
     var content: String,
     var creationDate: Long,
-    var color: Int,
+    var color: NoteColor,
     var location: NoteLocation,
     val userOwnerId: Long
 )

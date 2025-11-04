@@ -1,14 +1,14 @@
 package white.ball.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import white.ball.domain.model.Note
+import white.ball.domain.model.NoteDomainModel
 
 interface NoteRepository {
-    fun getNoteList(): Flow<List<Note>>
+    fun getNoteList(): Flow<List<NoteDomainModel>>
 
-    suspend fun addNote(note: Note)
+    suspend fun addNote(noteModelUI: NoteDomainModel)
 
-    suspend fun deleteNote(note: Note)
+    suspend fun deleteNote(noteModelUI: NoteDomainModel)
 
-    suspend fun editNote(note: Note)
+    suspend fun editNote(noteModelUI: NoteDomainModel)
 }

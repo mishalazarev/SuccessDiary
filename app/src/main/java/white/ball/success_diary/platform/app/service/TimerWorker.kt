@@ -23,7 +23,6 @@ class TimerWorker(
 
     override suspend fun doWork(): Result {
         val mainMinutes = inputData.getInt(MAIN_KEY_MINUTES, DEFAULT_VALUE)
-        var secondsForCancel = inputData.getInt(TIME_FOR_CANCEL_KEY, DEFAULT_VALUE)
 
         val totalSeconds = mainMinutes * SIXTY
 
@@ -32,12 +31,11 @@ class TimerWorker(
         setForeground(createForegroundInfo("Осталось $mainMinutes"))
 
         var secondsLeft = totalSeconds
-        while (secondsLeft > ZERO && secondsForCancel > ZERO) {
+        while (secondsLeft > ZERO) {
             val minutesLeft = secondsLeft / SIXTY
             val secondsRem = secondsLeft % SIXTY
 
             setProgress(workDataOf(MAIN_TIME_LEFT_KEY to secondsLeft))
-            setProgress(workDataOf(TIME_FOR_CANCEL_KEY to secondsForCancel))
 
             val text = String.format("%02d:%02d", minutesLeft, secondsRem)
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -46,7 +44,6 @@ class TimerWorker(
             setForeground(createForegroundInfo(text))
             delay(1000L)
             secondsLeft -= 1
-            secondsForCancel -= 1
         }
 
         return Result.success()
@@ -92,8 +89,6 @@ class TimerWorker(
         const val CHANNEL_ID = "timer_channel_id"
         const val NAME_CHANNEL = "channel"
         const val MAIN_KEY_MINUTES = "main_key_minutes"
-
-        const val TIME_FOR_CANCEL_KEY = "time_for_cancel"
 
         const val MAIN_TIME_LEFT_KEY = "main_time_left"
 

@@ -2,32 +2,53 @@ package white.ball.success_diary.presentation.ui.main_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.main_screen.theme.LineCoffeeCoinBalanceColor
-import white.ball.success_diary.presentation.ui.main_screen.theme.TextBalanceColor
+import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
+import white.ball.success_diary.presentation.ui.theme.TextBalanceColor
+import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
 fun BalanceUI(
-    balance: Int,
+    mainViewModel: MainViewModel,
+    openAddBalance: @Composable () -> Unit
 ) {
+//    val user by mainViewModel.user.collectAsState(null)
+    val isOpenBalanceDialog by mainViewModel.isOpenDialogBalance.collectAsState(false)
+
+    if (isOpenBalanceDialog) {
+        openAddBalance()
+    }
+
     Box(
         modifier = Modifier
-            .size(140.dp, 40.dp),
-        contentAlignment = Alignment.Center
+            .size(140.dp, 40.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .clickable {
+                mainViewModel.setDialogBalance()
+            },
+        contentAlignment = Alignment.Center,
     ) {
         Box(
             modifier = Modifier
@@ -48,7 +69,9 @@ fun BalanceUI(
             )
 
             Text(
-                text = balance.toString(),
+                text =
+//                    user?.user?.balance.toString() ?:
+                        "0",
                 style = TextStyle(
                     color = TextBalanceColor,
                     fontSize = 24.sp

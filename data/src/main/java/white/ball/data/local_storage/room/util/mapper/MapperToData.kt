@@ -8,7 +8,7 @@ import white.ball.data.local_storage.room.entity.additional.TimerDTO
 import white.ball.data.local_storage.room.entity.main.UserDTO
 import white.ball.data.local_storage.room.entity.pack.UserFullStackDTO
 import white.ball.domain.model.Achievement
-import white.ball.domain.model.Note
+import white.ball.domain.model.NoteDomainModel
 import white.ball.domain.model.Tag
 import white.ball.domain.model.Task
 import white.ball.domain.model.Timer
@@ -27,7 +27,7 @@ fun Achievement.toAchievementTDO(): AchievementDTO = AchievementDTO(
     userOwnerId = this.userOwnerId
 )
 
-fun Note.toNoteDTO(): NoteDTO = NoteDTO(
+fun NoteDomainModel.toNoteDTO(): NoteDTO = NoteDTO(
     noteId = this.noteId,
     title = this.title,
     content = this.content,
@@ -72,7 +72,7 @@ fun User.toUserDTO(): UserDTO = UserDTO (
 fun UserFullStack.toUserFullStackDTO(): UserFullStackDTO = UserFullStackDTO(
     userDTO = this.user.toUserDTO(),
     taskList = this.taskList.map { it.toTaskDTO() }.toList(),
-    noteList = this.noteList.map { it.toNoteDTO() }.toList(),
+    noteList = this.noteModelUIList.map { it.toNoteDTO() }.toList(),
     tagList = this.tagList.map { it.toTagDTO() }.toList(),
     achievementList = this.achievementList.map { it.toAchievementTDO() }.toList(),
 )

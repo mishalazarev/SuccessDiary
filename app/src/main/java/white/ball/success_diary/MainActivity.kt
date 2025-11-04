@@ -12,10 +12,10 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import white.ball.success_diary.presentation.navigation.MainNavController
 import white.ball.success_diary.presentation.view_model.MainViewModel
-import white.ball.success_diary.presentation.view_model.NoteViewModel
+import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 import white.ball.success_diary.presentation.view_model.ProfileViewModel
-import white.ball.success_diary.presentation.view_model.TaskViewModel
-import white.ball.success_diary.presentation.ui.main_screen.theme.SuccessDiaryTheme
+import white.ball.success_diary.presentation.view_model.TaskListViewModel
+import white.ball.success_diary.presentation.ui.theme.SuccessDiaryTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,19 +27,19 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 val mainViewModel: MainViewModel = hiltViewModel()
-                val noteViewModel: NoteViewModel = hiltViewModel()
+                val noteBookViewModel: NoteBookViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
-                val taskViewModel: TaskViewModel = hiltViewModel()
+                val taskListViewModel: TaskListViewModel = hiltViewModel()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val targetValue = innerPadding
 
                     MainNavController(
                         navController = navController,
                         mainViewModel = mainViewModel,
-                        noteViewModel = noteViewModel,
+                        noteBookViewModel = noteBookViewModel,
                         profileViewModel = profileViewModel,
-                        taskViewModel = taskViewModel
+                        taskListViewModel = taskListViewModel,
+                        innerPadding = innerPadding,
                     ) {
                         this.finish()
                     }

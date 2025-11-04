@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.ui.main_screen.theme
+package white.ball.success_diary.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -18,12 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.main_screen.theme.ClickedButtonTimerColor
-import white.ball.success_diary.presentation.ui.main_screen.theme.DefaultButtonTimerColor
-import white.ball.success_diary.presentation.ui.main_screen.theme.MainBackgroundColor
+import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
+import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
+import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 
 @Composable
-fun ButtonTimerUI(
+fun TimerButtonUI(
 //    backgroundColor: Int,
     isStartedButton: Boolean,
     onClick: () -> Unit
