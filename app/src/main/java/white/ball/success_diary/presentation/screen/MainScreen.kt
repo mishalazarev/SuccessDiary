@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
@@ -73,6 +74,7 @@ fun MainScreen(
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 15.dp)
             ) {
                 TopAppBarMainUI(
                     mainViewModel = mainViewModel

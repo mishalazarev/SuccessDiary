@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import white.ball.data.local_storage.room.entity.additional.NoteDTO
+import white.ball.data.local_storage.room.entity.NoteDTO
 
 @Dao
 interface NoteDao {

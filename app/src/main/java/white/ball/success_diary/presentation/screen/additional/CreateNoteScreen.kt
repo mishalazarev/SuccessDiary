@@ -52,7 +52,7 @@ fun CreateNoteScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(innerPadding)
-                    .padding(start = 10.dp, end = 10.dp, top = 5.dp),
+                    .padding(start = 10.dp, end = 10.dp, top = 15.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -66,7 +66,8 @@ fun CreateNoteScreen(
                 )
 
                 BottomSheetNoteMenuUI(
-                    noteBookViewModel = noteBookViewModel
+                    noteBookViewModel = noteBookViewModel,
+                    navController = navController,
                 )
             }
         }
@@ -121,7 +122,7 @@ fun CreateNoteScreen(
                         style = TextStyle(
                             color = BottomBarItemDefaultColor,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraLight
+                            fontWeight = FontWeight.ExtraBold
                         )
                     )
                 },

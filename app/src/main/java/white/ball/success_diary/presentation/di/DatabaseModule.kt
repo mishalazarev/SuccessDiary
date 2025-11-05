@@ -11,16 +11,13 @@ import jakarta.inject.Singleton
 import white.ball.data.local_storage.room.dao.NoteDao
 import white.ball.data.local_storage.room.dao.TagDao
 import white.ball.data.local_storage.room.dao.TaskDao
-import white.ball.data.local_storage.room.dao.UserDao
 import white.ball.data.local_storage.room.database.SuccessDiaryDatabase
 import white.ball.data.local_storage.room.implementation.NoteImpl
 import white.ball.data.local_storage.room.implementation.TagImpl
 import white.ball.data.local_storage.room.implementation.TaskImpl
-import white.ball.data.local_storage.room.implementation.UserImpl
 import white.ball.domain.repository.NoteRepository
 import white.ball.domain.repository.TagRepository
 import white.ball.domain.repository.TaskRepository
-import white.ball.domain.repository.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -34,12 +31,6 @@ object DatabaseModule {
             SuccessDiaryDatabase::class.java,
             NAME_DATABASE
         ).build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserDao(database: SuccessDiaryDatabase): UserDao {
-        return database.userDao()
     }
 
     @Provides
@@ -58,12 +49,6 @@ object DatabaseModule {
     @Singleton
     fun provideTagDao(database: SuccessDiaryDatabase): TagDao {
         return database.tagDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserRepositoryImpl(userDao: UserDao): UserRepository {
-        return UserImpl(userDao)
     }
 
     @Provides

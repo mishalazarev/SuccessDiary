@@ -1,19 +1,15 @@
 package white.ball.data.local_storage.room.util.mapper
 
-import white.ball.data.local_storage.room.entity.additional.AchievementDTO
-import white.ball.data.local_storage.room.entity.additional.NoteDTO
-import white.ball.data.local_storage.room.entity.additional.TagDTO
-import white.ball.data.local_storage.room.entity.additional.TaskDTO
-import white.ball.data.local_storage.room.entity.additional.TimerDTO
-import white.ball.data.local_storage.room.entity.main.UserDTO
-import white.ball.data.local_storage.room.entity.pack.UserFullStackDTO
+import white.ball.data.local_storage.room.entity.AchievementDTO
+import white.ball.data.local_storage.room.entity.NoteDTO
+import white.ball.data.local_storage.room.entity.TagDTO
+import white.ball.data.local_storage.room.entity.TaskDTO
+import white.ball.data.local_storage.room.entity.TimerDTO
 import white.ball.domain.model.Achievement
 import white.ball.domain.model.NoteDomainModel
 import white.ball.domain.model.Tag
 import white.ball.domain.model.Task
 import white.ball.domain.model.Timer
-import white.ball.domain.model.User
-import white.ball.domain.model.UserFullStack
 
 
 fun AchievementDTO.toAchievement(): Achievement = Achievement(
@@ -31,7 +27,7 @@ fun NoteDTO.toNote(): NoteDomainModel = NoteDomainModel(
     noteId = this.noteId,
     title = this.title,
     content = this.content,
-    creationDate = this.creationDate,
+    dateCreated = this.dateCreated,
     color = this.color,
     location = this.location,
     userOwnerId = this.userOwnerId
@@ -52,7 +48,7 @@ fun TaskDTO.toTask(): Task = Task(
     color = this.color,
     isDone = this.isDone,
     location = this.location,
-    creationDate = this.creationDate,
+    dateCreated = this.dateCreated,
     userOwnerId = this.userOwnerId
 )
 
@@ -61,18 +57,4 @@ fun TimerDTO.toTimer(): Timer = Timer(
     maxTime = this.maxTime,
     lefTime = this.leftTime,
     userOwnerId = this.userOwnerId
-)
-
-fun UserDTO.toUser(): User = User(
-    userId = this.userId,
-    status = this.status,
-    balance = this.balance,
-)
-
-fun UserFullStackDTO.toUserFullStack(): UserFullStack = UserFullStack(
-    user = this.userDTO.toUser(),
-    taskList = this.taskList.map { it.toTask() }.toList(),
-    noteModelUIList = this.noteList.map { it.toNote() }.toList(),
-    tagList = this.tagList.map { it.toTag() }.toList(),
-    achievementList = this.achievementList.map { it.toAchievement() }.toList()
 )

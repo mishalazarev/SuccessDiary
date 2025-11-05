@@ -3,7 +3,7 @@ package white.ball.data.local_storage.room.util.convert
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import white.ball.data.local_storage.room.entity.additional.AchievementDTO
+import white.ball.data.local_storage.room.entity.AchievementDTO
 
 class AchievementConverter {
 

@@ -2,7 +2,7 @@ package white.ball.data.local_storage.room.util.convert
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import white.ball.data.local_storage.room.entity.additional.TimerDTO
+import white.ball.data.local_storage.room.entity.TimerDTO
 
 class TimerConverter {
 

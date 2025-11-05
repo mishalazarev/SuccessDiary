@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,10 +35,11 @@ fun NoteBookScreen(
 ) {
 
     val noteList by noteBookViewModel.noteList.collectAsState(emptyList())
+    val locationListener by noteBookViewModel.locationListener.collectAsState()
 
-    Scaffold (
+    Scaffold(
         floatingActionButton = {
-            Image (
+            Image(
                 painter = painterResource(R.drawable.icon_add_action_bar),
                 contentDescription = null,
                 modifier = Modifier
@@ -47,7 +51,7 @@ fun NoteBookScreen(
             )
         },
     ) { innerPadding ->
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MainBackgroundColor)
@@ -58,17 +62,20 @@ fun NoteBookScreen(
                 noteBookViewModel = noteBookViewModel
             )
 
-            LazyColumn (
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .fillMaxSize()
+                    .padding(top = 7.dp)
             ) {
-                items(noteList.size) {
+                val sortedNoteList = noteList.filter { it.location == locationListener }
+
+                items(sortedNoteList.size) { index ->
                     NoteItemUI(
-                        note = noteList[it]
+                        note = sortedNoteList[index],
+                        noteBookViewModel = noteBookViewModel,
                     )
                 }
-             }
+            }
         }
     }
 }

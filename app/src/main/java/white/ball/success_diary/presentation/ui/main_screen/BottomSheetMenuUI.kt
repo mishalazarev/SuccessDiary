@@ -1,8 +1,13 @@
 package white.ball.success_diary.presentation.ui.main_screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -14,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -46,7 +51,7 @@ fun BottomSheetMenuUI() {
         shape = CircleShape
     ) {
         Image(
-            painter = painterResource(R.drawable.icon_main_menu),
+            painter = painterResource(R.drawable.icon_menu),
             contentDescription = null,
         )
     }
@@ -59,52 +64,119 @@ fun BottomSheetMenuUI() {
             sheetState = bottomSheetState,
             containerColor = BottomBarColor
         ) {
-            Text(
-                text = "Тэги",
+            Row(
                 modifier = Modifier
-                    .padding(16.dp),
-                style = bottomSheetTextStyle
-            )
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.decor_tag),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Тэги",
+                    style = bottomSheetTextStyle
+                )
+            }
 
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp),
+                    .padding(horizontal = 10.dp),
                 color = LineCoffeeCoinBalanceColor
             )
 
-            Text(
-                text = "История",
+            Row(
                 modifier = Modifier
-                    .padding(16.dp),
-                style = bottomSheetTextStyle
-            )
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.decor_history),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "История",
+                    style = bottomSheetTextStyle
+                )
+            }
 
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp),
-                color = LineCoffeeCoinBalanceColor)
-
-            Text(
-                text = "Задания",
-                modifier = Modifier
-                    .padding(16.dp),
-                style = bottomSheetTextStyle
+                    .padding(horizontal = 10.dp),
+                color = LineCoffeeCoinBalanceColor
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.decor_task),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Задания",
+                    style = bottomSheetTextStyle
+                )
+            }
 
             HorizontalDivider(
                 modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp),
-                color = LineCoffeeCoinBalanceColor)
-
-            Text(
-                text = "Новости",
-                modifier = Modifier
-                    .padding(16.dp),
-                style = bottomSheetTextStyle
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                color = LineCoffeeCoinBalanceColor
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.decor_news),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Новости",
+                    style = bottomSheetTextStyle
+                )
+            }
         }
     }
 }

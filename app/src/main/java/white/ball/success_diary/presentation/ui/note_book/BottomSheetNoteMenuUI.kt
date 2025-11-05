@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.sp
 import white.ball.success_diary.R
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import white.ball.success_diary.presentation.model.NoteModelUI
+import kotlinx.coroutines.async
+import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
@@ -39,7 +40,8 @@ import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetNoteMenuUI(
-    noteBookViewModel: NoteBookViewModel
+    noteBookViewModel: NoteBookViewModel,
+    navController: NavController,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     var isOpenBottomSheet by remember { mutableStateOf(false) }
@@ -59,7 +61,7 @@ fun BottomSheetNoteMenuUI(
         .height(50.dp)
 
     Image(
-        painter = painterResource(R.drawable.icon_additional_menu),
+        painter = painterResource(R.drawable.icon_menu),
         contentDescription = null,
         modifier = Modifier
             .clickable {
@@ -82,8 +84,21 @@ fun BottomSheetNoteMenuUI(
             ) {
                 TextButton(
                     onClick = {
-                        scope.launch (Dispatchers.IO) {
+                        val addJob = scope.async (Dispatchers.IO) {
                             noteBookViewModel.addNote()
+                        }
+
+                        navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
+                            popUpTo (0) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+
+                       scope.async (Dispatchers.Main) {
+                            addJob.await()
+                            noteBookViewModel.setContent("")
+                            noteBookViewModel.setTitle("")
                         }
                     },
                     colors = ButtonDefaults.buttonColors(

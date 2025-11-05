@@ -8,7 +8,7 @@ data class NoteModelUI(
     val noteId: Long = 0,
     var title: String,
     var content: String,
-    val creationDate: Long = 0,
+    val createdDate: String = "",
     var color: Color = NotePinkColor,
     var location: NoteLocation,
     val userOwnerId: Long = 0,

@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import white.ball.data.local_storage.room.entity.additional.TagDTO
+import white.ball.data.local_storage.room.entity.TagDTO
 
 @Dao
 interface TagDao {

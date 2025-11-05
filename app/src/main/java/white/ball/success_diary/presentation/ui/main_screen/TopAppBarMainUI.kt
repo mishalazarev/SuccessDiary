@@ -71,6 +71,7 @@ fun TopAppBarMainUI(
             }
 
         }
+
         AnimatedVisibility(
             visible = !isTimerRunning,
             enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
