@@ -11,5 +11,4 @@ data class Achievement(
     val measurement: AchievementMeasurement,
     val currentEvent: Int,
     val maxEvent: Int,
-    val userOwnerId: Long,
 )

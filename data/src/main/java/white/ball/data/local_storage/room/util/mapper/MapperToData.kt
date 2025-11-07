@@ -20,7 +20,6 @@ fun Achievement.toAchievementTDO(): AchievementDTO = AchievementDTO(
     measurement = this.measurement,
     currentEvent = this.currentEvent,
     maxEvent = this.maxEvent,
-    userOwnerId = this.userOwnerId
 )
 
 fun NoteDomainModel.toNoteDTO(): NoteDTO = NoteDTO(
@@ -30,7 +29,6 @@ fun NoteDomainModel.toNoteDTO(): NoteDTO = NoteDTO(
     dateCreated = this.dateCreated,
     color = this.color,
     location = this.location,
-    userOwnerId = this.userOwnerId
 )
 
 fun Task.toTaskDTO(): TaskDTO = TaskDTO(
@@ -40,7 +38,6 @@ fun Task.toTaskDTO(): TaskDTO = TaskDTO(
     isDone = this.isDone,
     location = this.location,
     dateCreated = this.dateCreated,
-    userOwnerId = this.userOwnerId
 )
 
 fun Tag.toTagDTO(): TagDTO = TagDTO(
@@ -49,12 +46,10 @@ fun Tag.toTagDTO(): TagDTO = TagDTO(
     status = this.status,
     timer = this.timer.toTimerDTO(),
     price= this.price,
-    userOwnerId = this.userOwnerId
 )
 
 fun Timer.toTimerDTO(): TimerDTO = TimerDTO(
     timerId = this.timerId,
     maxTime = this.maxTime,
     leftTime = this.lefTime,
-    userOwnerId = this.userOwnerId
 )

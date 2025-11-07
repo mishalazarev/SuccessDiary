@@ -7,6 +7,7 @@ import white.ball.success_diary.presentation.ui.theme.NoteGreenColor
 import white.ball.success_diary.presentation.ui.theme.NotePinkColor
 import white.ball.success_diary.presentation.ui.theme.NotePurpleColor
 import white.ball.success_diary.presentation.ui.theme.NoteRedColor
+import white.ball.success_diary.presentation.ui.theme.NoteWhiteColor
 import white.ball.success_diary.presentation.ui.theme.NoteYellowColor
 
 fun NoteColor.toColorUI(): Color = when (this) {
@@ -16,6 +17,7 @@ fun NoteColor.toColorUI(): Color = when (this) {
     NoteColor.YELLOW -> NoteYellowColor
     NoteColor.BLUE -> NoteBlueColor
     NoteColor.PURPLE -> NotePurpleColor
+    NoteColor.WHITE -> NoteWhiteColor
 }
 
 fun Color.toDomainColor(): NoteColor = when (this) {
@@ -25,5 +27,6 @@ fun Color.toDomainColor(): NoteColor = when (this) {
     NoteYellowColor -> NoteColor.YELLOW
     NoteBlueColor -> NoteColor.BLUE
     NotePurpleColor -> NoteColor.PURPLE
+    NoteWhiteColor -> NoteColor.WHITE
     else -> throw IllegalArgumentException("Illegal color")
 }

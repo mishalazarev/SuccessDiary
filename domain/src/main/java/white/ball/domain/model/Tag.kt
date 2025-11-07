@@ -9,6 +9,5 @@ data class Tag(
     val status: TagStatus,
     val timer: Timer,
     val price: Int,
-    val userOwnerId: Long,
 )
 

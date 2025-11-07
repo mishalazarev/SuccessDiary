@@ -90,4 +90,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Icons
     implementation(libs.androidx.compose.material.icons.extended)
+    // ThreeTenABP (LocalDateTime)
+    implementation(libs.threetenabp)
 }

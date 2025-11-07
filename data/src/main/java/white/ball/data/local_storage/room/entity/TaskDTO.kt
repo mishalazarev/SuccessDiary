@@ -13,5 +13,4 @@ data class TaskDTO(
     var isDone: Boolean,
     var location: TaskLocation,
     var dateCreated: String,
-    val userOwnerId: Long,
 )

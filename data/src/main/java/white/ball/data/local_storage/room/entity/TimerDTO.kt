@@ -9,5 +9,4 @@ data class TimerDTO(
     val timerId: Long,
     val maxTime: Long,
     var leftTime: Long,
-    val userOwnerId: Long,
 )

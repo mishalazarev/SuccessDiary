@@ -20,6 +20,7 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.packInts
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import white.ball.domain.extension_model.NoteLocation
 import white.ball.success_diary.R
@@ -44,31 +46,12 @@ import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 @Composable
 fun NoteItemUI(
     note: NoteModelUI,
-    noteBookViewModel: NoteBookViewModel
+    noteBookViewModel: NoteBookViewModel,
+    editNote: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
-    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {value ->
-            when (value) {
-                SwipeToDismissBoxValue.StartToEnd -> {
-                    scope.launch(Dispatchers.IO) {
-                        noteBookViewModel.throwInTrashNote(note)
-                    }
-                    true
-                }
-
-                SwipeToDismissBoxValue.EndToStart -> {
-                    scope.launch(Dispatchers.IO) {
-                        noteBookViewModel.throwInMain(note)
-                    }
-                    true
-                }
-
-                else -> true
-            }
-        },
-    )
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
 
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
@@ -88,18 +71,20 @@ fun NoteItemUI(
                 }
 
                 SwipeToDismissBoxValue.EndToStart -> {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIosNew,
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 9.dp)
-                            .height(70.dp)
-                            .background(BottomBarItemDefaultColor)
-                    )
+                    if (note.location != NoteLocation.MAIN) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 9.dp)
+                                .height(70.dp)
+                                .background(BottomBarItemDefaultColor)
+                        )
+                    }
                 }
 
-                else -> {  }
+                else -> {}
             }
         }
     ) {
@@ -108,7 +93,9 @@ fun NoteItemUI(
                 .fillMaxWidth()
                 .padding(top = 9.dp)
                 .background(note.color, RoundedCornerShape(10.dp))
-                .animateContentSize(),
+                .clickable {
+                    editNote()
+                },
         ) {
             Text(
                 text = note.title,
@@ -137,6 +124,29 @@ fun NoteItemUI(
                     modifier = Modifier
                         .padding(end = 10.dp, bottom = 10.dp)
                 )
+
+                LaunchedEffect(swipeToDismissBoxState.currentValue) {
+                    when (swipeToDismissBoxState.currentValue) {
+
+                        SwipeToDismissBoxValue.StartToEnd -> {
+                            if (note.location != NoteLocation.DELETED) {
+                                noteBookViewModel.throwInTrashNote(note)
+                            } else {
+                                noteBookViewModel.deleteNote(note)
+                            }
+                            swipeToDismissBoxState.reset()
+                        }
+
+                        SwipeToDismissBoxValue.EndToStart -> {
+                            if (note.location != NoteLocation.MAIN) {
+                                noteBookViewModel.throwInMain(note)
+                            }
+                            swipeToDismissBoxState.reset()
+                        }
+
+                        else -> Unit
+                    }
+                }
             }
         }
     }

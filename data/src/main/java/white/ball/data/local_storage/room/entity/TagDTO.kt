@@ -12,6 +12,5 @@ data class TagDTO(
     val status: TagStatus,
     val timer: TimerDTO,
     val price: Int,
-    val userOwnerId: Long,
 )
 

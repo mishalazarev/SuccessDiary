@@ -3,6 +3,7 @@ package white.ball.success_diary.presentation.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -37,6 +41,8 @@ fun NoteBookScreen(
     val noteList by noteBookViewModel.noteList.collectAsState(emptyList())
     val locationListener by noteBookViewModel.locationListener.collectAsState()
 
+    val focus = LocalFocusManager.current
+
     Scaffold(
         floatingActionButton = {
             Image(
@@ -44,6 +50,10 @@ fun NoteBookScreen(
                 contentDescription = null,
                 modifier = Modifier
                     .clickable {
+                        noteBookViewModel.apply {
+                            setTitle("")
+                            setContent("")
+                        }
                         navController.navigate(ScreenNavigation.CREATE_SCREEN.route)
                     }
                     .padding(bottom = 100.dp)
@@ -51,11 +61,17 @@ fun NoteBookScreen(
             )
         },
     ) { innerPadding ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MainBackgroundColor)
                 .padding(innerPadding)
+                .pointerInput(Unit) {
+                    detectDragGestures(onDrag = { change, dragAmount ->
+                        focus.clearFocus()
+                    })
+                }
                 .padding(horizontal = 15.dp)
         ) {
             TopBarNoteBookUI(
@@ -70,10 +86,16 @@ fun NoteBookScreen(
                 val sortedNoteList = noteList.filter { it.location == locationListener }
 
                 items(sortedNoteList.size) { index ->
+                    val currentNote = sortedNoteList[index]
+
                     NoteItemUI(
-                        note = sortedNoteList[index],
+                        note = currentNote,
                         noteBookViewModel = noteBookViewModel,
-                    )
+                    ) {
+                        noteBookViewModel.loadClickedNote(currentNote)
+
+                        navController.navigate(ScreenNavigation.CREATE_SCREEN.route)
+                    }
                 }
             }
         }

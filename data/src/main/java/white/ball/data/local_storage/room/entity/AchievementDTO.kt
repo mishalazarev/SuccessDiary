@@ -15,5 +15,4 @@ data class AchievementDTO(
     val measurement: AchievementMeasurement,
     val currentEvent: Int,
     val maxEvent: Int,
-    val userOwnerId: Long
 )

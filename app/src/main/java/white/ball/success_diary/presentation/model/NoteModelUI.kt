@@ -11,5 +11,4 @@ data class NoteModelUI(
     val createdDate: String = "",
     var color: Color = NotePinkColor,
     var location: NoteLocation,
-    val userOwnerId: Long = 0,
 )

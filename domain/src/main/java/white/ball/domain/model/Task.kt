@@ -10,5 +10,4 @@ data class Task(
     var isDone: Boolean,
     var location: TaskLocation,
     var dateCreated: String,
-    val userOwnerId: Long,
 )

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
@@ -44,6 +45,7 @@ fun BottomSheetNoteMenuUI(
     navController: NavController,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
+
     var isOpenBottomSheet by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
@@ -71,32 +73,30 @@ fun BottomSheetNoteMenuUI(
 
     if (isOpenBottomSheet) {
         ModalBottomSheet(
-            onDismissRequest = {
-                isOpenBottomSheet = false
-            },
+            onDismissRequest = { isOpenBottomSheet = false},
             sheetState = bottomSheetState,
             containerColor = BottomBarColor,
         ) {
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
                 TextButton(
                     onClick = {
-                        val addJob = scope.async (Dispatchers.IO) {
-                            noteBookViewModel.addNote()
+                        val addJob = scope.async(Dispatchers.IO) {
+                            noteBookViewModel.editeNote()
                         }
 
-                        navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
-                            popUpTo (0) {
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                        }
-
-                       scope.async (Dispatchers.Main) {
+                        scope.async(Dispatchers.Main) {
                             addJob.await()
+                            navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
+                                popUpTo(0) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+
                             noteBookViewModel.setContent("")
                             noteBookViewModel.setTitle("")
                         }
@@ -115,23 +115,22 @@ fun BottomSheetNoteMenuUI(
 
                 TextButton(
                     onClick = {
+                        val deleteJob = scope.async (Dispatchers.IO) {
+                            noteBookViewModel.deleteNote()
+                        }
 
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = LineCoffeeCoinBalanceColor
-                    ),
-                    modifier = textBottomModifier,
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Text(
-                        text = "Сменить цвет",
-                        style = bottomSheetTextStyle
-                    )
-                }
+                        scope.async(Dispatchers.Main) {
+                            deleteJob.await()
+                            navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
+                                popUpTo(0) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
 
-                TextButton(
-                    onClick = {
-
+                            noteBookViewModel.setContent("")
+                            noteBookViewModel.setTitle("")
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = LineCoffeeCoinBalanceColor

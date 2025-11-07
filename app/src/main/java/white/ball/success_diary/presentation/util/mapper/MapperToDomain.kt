@@ -11,5 +11,4 @@ fun NoteModelUI.toNote(): NoteDomainModel = NoteDomainModel(
     dateCreated = this.createdDate,
     color = this.color.toDomainColor(),
     location = this.location,
-    userOwnerId = this.userOwnerId
 )

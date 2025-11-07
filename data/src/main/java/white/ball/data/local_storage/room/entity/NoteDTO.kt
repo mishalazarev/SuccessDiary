@@ -14,5 +14,4 @@ data class NoteDTO(
     var dateCreated: String,
     var color: NoteColor,
     var location: NoteLocation,
-    val userOwnerId: Long
 )

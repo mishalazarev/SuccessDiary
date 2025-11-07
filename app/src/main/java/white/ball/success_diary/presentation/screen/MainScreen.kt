@@ -71,7 +71,7 @@ fun MainScreen(
                 .padding(innerPadding)
         ) {
 
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 15.dp)
@@ -81,47 +81,47 @@ fun MainScreen(
                 )
             }
 
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+
+                TimerButtonUI(
+                    isOpenButtonTimer
                 ) {
+                    val inputMainData = Data.Builder()
+                        .putInt(TimerWorker.MAIN_KEY_MINUTES, minutesTimeLeft)
+                        .build()
 
-                    TimerButtonUI(
-                        isOpenButtonTimer
-                    ) {
-                        val inputMainData = Data.Builder()
-                            .putInt(TimerWorker.MAIN_KEY_MINUTES, minutesTimeLeft)
-                            .build()
+                    val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
+                        .setInputData(inputMainData)
+                        .build()
 
-                        val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
-                            .setInputData(inputMainData)
-                            .build()
+                    workManager.enqueue(workRequest)
 
-                        workManager.enqueue(workRequest)
+                    mainViewModel.setTimer()
 
-                        mainViewModel.setTimer()
-
-                        if (isOpenButtonTimer) {
-                            currentWorkId?.let { id ->
-                                workManager.cancelWorkById(id)
-                                setCurrentWorkId(null)
-                            }
-                        } else {
-                            setCurrentWorkId(workRequest.id)
+                    if (isOpenButtonTimer) {
+                        currentWorkId?.let { id ->
+                            workManager.cancelWorkById(id)
+                            setCurrentWorkId(null)
                         }
+                    } else {
+                        setCurrentWorkId(workRequest.id)
                     }
-
-                    Text(
-                        text = timeText,
-                        style = TextStyle(
-                            color = Color.White,
-                            fontSize = 96.sp,
-                            fontFamily = FontFamily(Font(R.font.post_no_bills_colombo))
-                        )
-                    )
                 }
+
+                Text(
+                    text = timeText,
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 96.sp,
+                        fontFamily = FontFamily(Font(R.font.post_no_bills_colombo))
+                    )
+                )
+            }
         }
     }
 }

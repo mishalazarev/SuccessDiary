@@ -11,16 +11,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -32,7 +41,9 @@ import androidx.navigation.NavController
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.note_book.BottomSheetNoteMenuUI
+import white.ball.success_diary.presentation.ui.note_book.ChangeColorDialogUI
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
+import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 
@@ -43,8 +54,17 @@ fun CreateNoteScreen(
     innerPadding: PaddingValues,
 ) {
 
-    val title by noteBookViewModel.title.collectAsState()
-    val content by noteBookViewModel.content.collectAsState()
+    val clickedNote by noteBookViewModel.clickedNote.collectAsState(null)
+
+    var isOpenChangeColorDialog by remember { mutableStateOf(false) }
+
+    if (isOpenChangeColorDialog) {
+        ChangeColorDialogUI(
+            noteBookViewModel = noteBookViewModel
+        ) {
+            isOpenChangeColorDialog = false
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -60,8 +80,18 @@ fun CreateNoteScreen(
                     painter = painterResource(R.drawable.icon_back),
                     contentDescription = null,
                     modifier = Modifier
+                        .clip(RectangleShape)
                         .clickable {
                             navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route)
+                        }
+                )
+
+                Image(
+                    painter = painterResource(R.drawable.icon_change_color),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            isOpenChangeColorDialog = true
                         }
                 )
 
@@ -75,12 +105,12 @@ fun CreateNoteScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MainBackgroundColor)
+                .background(clickedNote?.color ?: MainBackgroundColor)
                 .padding(innerPadding)
         ) {
 
             OutlinedTextField(
-                value = title,
+                value = clickedNote?.title ?: "",
                 onValueChange = { text ->
                     noteBookViewModel.setTitle(text)
                 },
@@ -109,7 +139,7 @@ fun CreateNoteScreen(
             )
 
             OutlinedTextField(
-                value = content,
+                value = clickedNote?.content ?: "",
                 onValueChange = { text ->
                     noteBookViewModel.setContent(text)
                 },

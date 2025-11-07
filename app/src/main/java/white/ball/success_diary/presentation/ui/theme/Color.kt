@@ -33,6 +33,9 @@ val NoteGreenColor = Color(0xFF91F48F)
 val NoteYellowColor = Color(0xFFFFF599)
 val NoteBlueColor = Color(0xFF9EFFFF)
 val NotePurpleColor = Color(0xFFB69CFF)
+val NoteWhiteColor = Color(0xFFFFFFFF)
+
+
 
 
 

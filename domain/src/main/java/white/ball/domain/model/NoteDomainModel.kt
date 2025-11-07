@@ -11,6 +11,5 @@ data class NoteDomainModel(
     val dateCreated: String,
     var color: NoteColor,
     var location: NoteLocation,
-    val userOwnerId: Long,
 )
 
