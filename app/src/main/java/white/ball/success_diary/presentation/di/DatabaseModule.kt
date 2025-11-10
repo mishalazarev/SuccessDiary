@@ -8,16 +8,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
+import white.ball.data.local_storage.room.dao.CoffeeCoinDao
 import white.ball.data.local_storage.room.dao.NoteDao
 import white.ball.data.local_storage.room.dao.TagDao
-import white.ball.data.local_storage.room.dao.TaskDao
 import white.ball.data.local_storage.room.database.SuccessDiaryDatabase
+import white.ball.data.local_storage.room.implementation.CoffeeCoinImpl
 import white.ball.data.local_storage.room.implementation.NoteImpl
 import white.ball.data.local_storage.room.implementation.TagImpl
-import white.ball.data.local_storage.room.implementation.TaskImpl
+import white.ball.domain.repository.CoffeeCoinRepository
 import white.ball.domain.repository.NoteRepository
 import white.ball.domain.repository.TagRepository
-import white.ball.domain.repository.TaskRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,12 +35,6 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideTaskDao(database: SuccessDiaryDatabase): TaskDao {
-        return database.taskDao()
-    }
-
-    @Provides
-    @Singleton
     fun provideNoteDao(database: SuccessDiaryDatabase): NoteDao {
         return database.noteDao()
     }
@@ -53,8 +47,8 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesTaskRepositoryImpl(taskDao: TaskDao): TaskRepository {
-        return TaskImpl(taskDao)
+    fun provideCoffeeCoinDao(database: SuccessDiaryDatabase): CoffeeCoinDao {
+        return database.coffeeCoinDao()
     }
 
     @Provides
@@ -68,6 +62,13 @@ object DatabaseModule {
     fun providesTagRepositoryImpl(tagDao: TagDao): TagRepository {
         return TagImpl(tagDao)
     }
+
+    @Provides
+    @Singleton
+    fun providesCoffeeCoinImpl(coffeeCoinDao: CoffeeCoinDao): CoffeeCoinRepository {
+        return CoffeeCoinImpl(coffeeCoinDao)
+    }
+
     private const val NAME_DATABASE = "room"
 
 }

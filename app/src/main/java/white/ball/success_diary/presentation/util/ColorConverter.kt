@@ -1,32 +1,32 @@
 package white.ball.success_diary.presentation.util
 
 import androidx.compose.ui.graphics.Color
-import white.ball.domain.extension_model.NoteColor
-import white.ball.success_diary.presentation.ui.theme.NoteBlueColor
-import white.ball.success_diary.presentation.ui.theme.NoteGreenColor
-import white.ball.success_diary.presentation.ui.theme.NotePinkColor
-import white.ball.success_diary.presentation.ui.theme.NotePurpleColor
-import white.ball.success_diary.presentation.ui.theme.NoteRedColor
-import white.ball.success_diary.presentation.ui.theme.NoteWhiteColor
-import white.ball.success_diary.presentation.ui.theme.NoteYellowColor
+import white.ball.domain.extension_model.PageColor
+import white.ball.success_diary.presentation.ui.theme.PageBlueColor
+import white.ball.success_diary.presentation.ui.theme.PageGreenColor
+import white.ball.success_diary.presentation.ui.theme.PagePinkColor
+import white.ball.success_diary.presentation.ui.theme.PagePurpleColor
+import white.ball.success_diary.presentation.ui.theme.PageRedColor
+import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
+import white.ball.success_diary.presentation.ui.theme.PageYellowColor
 
-fun NoteColor.toColorUI(): Color = when (this) {
-    NoteColor.PINK -> NotePinkColor
-    NoteColor.RED -> NoteRedColor
-    NoteColor.GREEN -> NoteGreenColor
-    NoteColor.YELLOW -> NoteYellowColor
-    NoteColor.BLUE -> NoteBlueColor
-    NoteColor.PURPLE -> NotePurpleColor
-    NoteColor.WHITE -> NoteWhiteColor
+fun PageColor.toColorUI(): Color = when (this) {
+    PageColor.PINK -> PagePinkColor
+    PageColor.RED -> PageRedColor
+    PageColor.GREEN -> PageGreenColor
+    PageColor.YELLOW -> PageYellowColor
+    PageColor.BLUE -> PageBlueColor
+    PageColor.PURPLE -> PagePurpleColor
+    PageColor.WHITE -> PageWhiteColor
 }
 
-fun Color.toDomainColor(): NoteColor = when (this) {
-    NotePinkColor -> NoteColor.PINK
-    NoteRedColor -> NoteColor.RED
-    NoteGreenColor -> NoteColor.GREEN
-    NoteYellowColor -> NoteColor.YELLOW
-    NoteBlueColor -> NoteColor.BLUE
-    NotePurpleColor -> NoteColor.PURPLE
-    NoteWhiteColor -> NoteColor.WHITE
+fun Color.toDomainColor(): PageColor = when (this) {
+    PagePinkColor -> PageColor.PINK
+    PageRedColor -> PageColor.RED
+    PageGreenColor -> PageColor.GREEN
+    PageYellowColor -> PageColor.YELLOW
+    PageBlueColor -> PageColor.BLUE
+    PagePurpleColor -> PageColor.PURPLE
+    PageWhiteColor -> PageColor.WHITE
     else -> throw IllegalArgumentException("Illegal color")
 }

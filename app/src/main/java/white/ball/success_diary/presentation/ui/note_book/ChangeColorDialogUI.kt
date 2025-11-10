@@ -26,33 +26,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
-import white.ball.success_diary.presentation.ui.theme.NoteBlueColor
-import white.ball.success_diary.presentation.ui.theme.NoteGreenColor
-import white.ball.success_diary.presentation.ui.theme.NotePinkColor
-import white.ball.success_diary.presentation.ui.theme.NotePurpleColor
-import white.ball.success_diary.presentation.ui.theme.NoteRedColor
-import white.ball.success_diary.presentation.ui.theme.NoteWhiteColor
-import white.ball.success_diary.presentation.ui.theme.NoteYellowColor
+import white.ball.success_diary.presentation.ui.theme.PageBlueColor
+import white.ball.success_diary.presentation.ui.theme.PageGreenColor
+import white.ball.success_diary.presentation.ui.theme.PagePinkColor
+import white.ball.success_diary.presentation.ui.theme.PagePurpleColor
+import white.ball.success_diary.presentation.ui.theme.PageRedColor
+import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
+import white.ball.success_diary.presentation.ui.theme.PageYellowColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 
 @Composable
 fun ChangeColorDialogUI(
     noteBookViewModel: NoteBookViewModel,
-    closeDialog: () -> Unit
 ) {
 
     val colors = listOf(
-        NoteWhiteColor,
-        NotePinkColor,
-        NotePurpleColor,
-        NoteBlueColor,
-        NoteYellowColor,
-        NoteGreenColor,
-        NoteRedColor
+        PageWhiteColor,
+        PagePinkColor,
+        PagePurpleColor,
+        PageBlueColor,
+        PageYellowColor,
+        PageGreenColor,
+        PageRedColor
     )
 
     Dialog(onDismissRequest = {
-        closeDialog()
+        noteBookViewModel.setDialogVisibleChangeColor(false)
     }) {
         Card(
             modifier = Modifier
@@ -93,7 +92,8 @@ fun ChangeColorDialogUI(
                                 .clip(CircleShape)
                                 .background(colors[index])
                                 .clickable {
-                                    noteBookViewModel.changeNoteColor(colors[index])
+                                    noteBookViewModel.setColor(colors[index])
+                                    noteBookViewModel.setDialogVisibleChangeColor(false)
                                 }
                         )
                     }

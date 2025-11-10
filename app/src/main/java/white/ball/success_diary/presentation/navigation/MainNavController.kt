@@ -12,12 +12,10 @@ import white.ball.success_diary.presentation.bottom_bar.BottomNavigationBar
 import white.ball.success_diary.presentation.screen.MainScreen
 import white.ball.success_diary.presentation.screen.NoteBookScreen
 import white.ball.success_diary.presentation.screen.ProfileScreen
-import white.ball.success_diary.presentation.screen.TaskListScreen
 import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
 import white.ball.success_diary.presentation.view_model.MainViewModel
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 import white.ball.success_diary.presentation.view_model.ProfileViewModel
-import white.ball.success_diary.presentation.view_model.TaskListViewModel
 
 @Composable
 fun MainNavController(
@@ -25,7 +23,6 @@ fun MainNavController(
     mainViewModel: MainViewModel,
     noteBookViewModel: NoteBookViewModel,
     profileViewModel: ProfileViewModel,
-    taskListViewModel: TaskListViewModel,
     innerPadding: PaddingValues,
     finishApp: () -> Unit
 ) {
@@ -50,14 +47,6 @@ fun MainNavController(
         }
 
         composable (
-            route = ScreenNavigation.TASK_LIST_SCREEN.route
-        ) {
-            TaskListScreen(
-                taskListViewModel = taskListViewModel
-            )
-        }
-
-        composable (
             route = ScreenNavigation.PROFILE_SCREEN.route
         ) {
             ProfileScreen(
@@ -66,7 +55,7 @@ fun MainNavController(
         }
 
         composable (
-            route = ScreenNavigation.CREATE_SCREEN.route
+            route = ScreenNavigation.CREATE_NOTE_SCREEN.route
         ) {
             CreateNoteScreen(
                 noteBookViewModel = noteBookViewModel,

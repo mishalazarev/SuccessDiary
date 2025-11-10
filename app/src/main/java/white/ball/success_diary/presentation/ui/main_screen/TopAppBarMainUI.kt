@@ -6,10 +6,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -19,6 +22,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,12 +36,13 @@ import white.ball.success_diary.presentation.view_model.MainViewModel
 fun TopAppBarMainUI(
     mainViewModel: MainViewModel
 ) {
+
     val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
 
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TextButton(
@@ -72,12 +78,33 @@ fun TopAppBarMainUI(
 
         }
 
-        AnimatedVisibility(
-            visible = !isTimerRunning,
-            enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
-            exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
-            BottomSheetMenuUI()
+            AnimatedVisibility(
+                visible = !isTimerRunning,
+                enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
+                exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
+            ) {
+                BottomSheetMenuUI()
+            }
+
+            TextButton(
+                onClick = {
+
+                },
+                shape = CircleShape
+            ) {
+            Image(
+                painter = painterResource(R.drawable.icon_tag_collection),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 9.dp)
+                    .rotate(-90f)
+                    .clip(CircleShape))
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,8 @@ fun BottomSheetNoteMenuUI(
     navController: NavController,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
+
+    val note by noteBookViewModel.clickedNote.collectAsState(null)
 
     var isOpenBottomSheet by remember { mutableStateOf(false) }
 
@@ -85,7 +88,9 @@ fun BottomSheetNoteMenuUI(
                 TextButton(
                     onClick = {
                         val addJob = scope.async(Dispatchers.IO) {
-                            noteBookViewModel.editeNote()
+                            note?.let {
+                                noteBookViewModel.addNote(it)
+                            }
                         }
 
                         scope.async(Dispatchers.Main) {
@@ -116,7 +121,9 @@ fun BottomSheetNoteMenuUI(
                 TextButton(
                     onClick = {
                         val deleteJob = scope.async (Dispatchers.IO) {
-                            noteBookViewModel.deleteNote()
+                            note?.let {
+                                noteBookViewModel.deleteNote(it)
+                            }
                         }
 
                         scope.async(Dispatchers.Main) {

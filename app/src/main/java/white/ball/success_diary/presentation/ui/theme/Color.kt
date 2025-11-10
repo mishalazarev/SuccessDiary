@@ -27,13 +27,13 @@ val ClickedButtonTimerColor = Color(0xFFFF0000)
 
 // NoteBook
 
-val NotePinkColor = Color(0xFFFD99FF)
-val NoteRedColor = Color(0xFFFF9E9E)
-val NoteGreenColor = Color(0xFF91F48F)
-val NoteYellowColor = Color(0xFFFFF599)
-val NoteBlueColor = Color(0xFF9EFFFF)
-val NotePurpleColor = Color(0xFFB69CFF)
-val NoteWhiteColor = Color(0xFFFFFFFF)
+val PagePinkColor = Color(0xFFFD99FF)
+val PageRedColor = Color(0xFFFF9E9E)
+val PageGreenColor = Color(0xFF91F48F)
+val PageYellowColor = Color(0xFFFFF599)
+val PageBlueColor = Color(0xFF9EFFFF)
+val PagePurpleColor = Color(0xFFB69CFF)
+val PageWhiteColor = Color(0xFFFFFFFF)
 
 
 

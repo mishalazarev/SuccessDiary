@@ -3,17 +3,13 @@ package white.ball.success_diary.presentation.ui.note_book
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -35,11 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import white.ball.domain.extension_model.NoteLocation
+import white.ball.domain.extension_model.ItemLocation
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.model_ui.ButtonLocationItemListModel
-import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
+import white.ball.success_diary.presentation.model_ui.GroupItemsByLocation
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
@@ -48,22 +44,23 @@ import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 fun TopBarNoteBookUI(
     noteBookViewModel: NoteBookViewModel,
 ) {
-    val noteList by noteBookViewModel.noteList.collectAsState(emptyList())
 
     var textField by remember { mutableStateOf("") }
 
-    val selectedButton by noteBookViewModel.isSelectedButton.collectAsState(null)
+    val selectedButton by noteBookViewModel.isSelectedFilteredButton.collectAsState(null)
+
+    val focus = LocalFocusManager.current
 
     val scope = rememberCoroutineScope()
 
     val buttonSortedList by remember {
         mutableStateOf(
             listOf(
-                ButtonLocationItemListModel(
+                GroupItemsByLocation(
                     textTitle = "Корзина",
                     iconImageResId = R.drawable.decor_trash,
                     colorClicked = ClickedButtonTimerColor,
-                    location = NoteLocation.DELETED
+                    location = ItemLocation.DELETED
                 ),
             )
         )
@@ -80,8 +77,10 @@ fun TopBarNoteBookUI(
                 textField = it
 
                 if (it.isEmpty()) {
-                    noteBookViewModel.loadNoteListFromLocalStorage()
-                } else {
+                    scope.launch {
+                        noteBookViewModel.loadFromLocalStorage()
+                    }
+                } else if (it.isNotEmpty()) {
                     noteBookViewModel.searchNote(it)
                 }
             },
@@ -113,8 +112,11 @@ fun TopBarNoteBookUI(
                         tint = Color.Black,
                         modifier = Modifier
                             .clickable {
+                                focus.clearFocus()
                                 textField = ""
-                                noteBookViewModel.loadNoteListFromLocalStorage()
+                                scope.launch(Dispatchers.IO) {
+                                    noteBookViewModel.loadFromLocalStorage()
+                                }
                             }
                     )
                 }
@@ -130,8 +132,10 @@ fun TopBarNoteBookUI(
         ) {
             buttonSortedList.forEach { currentButton ->
                 ButtonLocationItemListUI(
-                    buttonLocationItemListModel = currentButton,
-                    onClick = { noteBookViewModel.setSelectedButton(currentButton) },
+                    noteGroupItems = currentButton,
+                    onClick = {
+                        noteBookViewModel.setSelectedButton(currentButton)
+                    },
                     isSelected = currentButton == selectedButton,
                     modifier = Modifier
                         .weight(1f)
@@ -142,11 +146,6 @@ fun TopBarNoteBookUI(
         if (selectedButton != null) {
             Button(
                 onClick = {
-                    noteList.filter { it.location == NoteLocation.DELETED }.forEach {
-                        scope.launch(Dispatchers.IO) {
-                            noteBookViewModel.deleteNote(it)
-                        }
-                    }
                     selectedButton?.let {
                         noteBookViewModel.setSelectedButton(it)
                     }

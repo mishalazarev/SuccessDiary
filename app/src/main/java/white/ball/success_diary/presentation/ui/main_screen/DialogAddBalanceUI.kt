@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
@@ -42,8 +45,13 @@ import white.ball.success_diary.presentation.view_model.MainViewModel
 fun ShowDialogAddBalanceUI(
     mainViewModel: MainViewModel
 ) {
+
+    val coffeeCoin by mainViewModel.coffeeCoin.collectAsState(null)
+
     val isOpenDialogBalance by mainViewModel.isOpenDialogBalance.collectAsState(false)
     val gradientForBackgroundImage = listOf(Color.Yellow, MainBackgroundColor, LineCoffeeCoinBalanceColor)
+
+    val scope = rememberCoroutineScope()
 
     if (isOpenDialogBalance) {
         Dialog(
@@ -151,7 +159,11 @@ fun ShowDialogAddBalanceUI(
 
                             Button(
                                 onClick = {
-
+                                    scope.launch (Dispatchers.IO) {
+                                        coffeeCoin?.let {
+                                            mainViewModel.updateBalance(it.balance + 45)
+                                        }
+                                    }
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = LineCoffeeCoinBalanceColor,
@@ -238,7 +250,6 @@ fun ShowDialogAddBalanceUI(
                         }
                     }
                 }
-
             }
         )
     }

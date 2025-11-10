@@ -6,7 +6,7 @@ import white.ball.domain.extension_model.TagStatus
 data class Tag(
     val tagId: Long,
     val title: String,
-    val status: TagStatus,
+    var status: TagStatus,
     val timer: Timer,
     val price: Int,
 )

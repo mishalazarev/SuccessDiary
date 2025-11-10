@@ -19,11 +19,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.model_ui.ButtonLocationItemListModel
+import white.ball.success_diary.presentation.model_ui.GroupItemsByLocation
 
 @Composable
 fun ButtonLocationItemListUI(
-    buttonLocationItemListModel: ButtonLocationItemListModel,
+    noteGroupItems: GroupItemsByLocation,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier,
@@ -32,7 +32,7 @@ fun ButtonLocationItemListUI(
         modifier = modifier
             .background(
                 if (isSelected)
-                buttonLocationItemListModel.colorClicked
+                noteGroupItems.colorClicked
             else
                 Color.White,
                 RoundedCornerShape(10.dp))
@@ -44,16 +44,16 @@ fun ButtonLocationItemListUI(
         horizontalArrangement = Arrangement.Start
     ) {
         Icon(
-            painter = painterResource(buttonLocationItemListModel.iconImageResId),
+            painter = painterResource(noteGroupItems.iconImageResId),
             contentDescription = null,
             tint = if (isSelected)
                 Color.White
             else
-                buttonLocationItemListModel.colorClicked
+                noteGroupItems.colorClicked
         )
 
         Text(
-            text = buttonLocationItemListModel.textTitle,
+            text = noteGroupItems.textTitle,
             style = TextStyle(
                 color = Color.Black,
                 fontSize = 15.sp,

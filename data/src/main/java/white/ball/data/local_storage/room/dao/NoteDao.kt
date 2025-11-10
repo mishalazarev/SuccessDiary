@@ -3,6 +3,7 @@ package white.ball.data.local_storage.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ interface NoteDao {
     @Query("SELECT * FROM note")
     fun getNoteList(): Flow<List<NoteDTO>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNote(note: NoteDTO)
 
     @Delete

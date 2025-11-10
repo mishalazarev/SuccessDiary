@@ -8,7 +8,7 @@ fun NoteModelUI.toNote(): NoteDomainModel = NoteDomainModel(
     noteId = this.noteId,
     title = this.title,
     content = this.content,
-    dateCreated = this.createdDate,
+    createdDate = this.createdDate,
     color = this.color.toDomainColor(),
     location = this.location,
 )

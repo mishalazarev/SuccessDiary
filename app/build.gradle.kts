@@ -92,4 +92,6 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     // ThreeTenABP (LocalDateTime)
     implementation(libs.threetenabp)
+    // swipe
+    implementation("androidx.compose.material3:material3:1.3.0")
 }

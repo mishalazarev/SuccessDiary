@@ -1,5 +1,5 @@
 package white.ball.domain.extension_model
 
-enum class NoteColor {
+enum class PageColor {
     WHITE ,PINK, RED, GREEN, YELLOW, BLUE, PURPLE
 }

@@ -1,14 +1,14 @@
 package white.ball.data.local_storage.room.util.mapper
 
 import white.ball.data.local_storage.room.entity.AchievementDTO
+import white.ball.data.local_storage.room.entity.CoffeeCoinDTO
 import white.ball.data.local_storage.room.entity.NoteDTO
 import white.ball.data.local_storage.room.entity.TagDTO
-import white.ball.data.local_storage.room.entity.TaskDTO
 import white.ball.data.local_storage.room.entity.TimerDTO
 import white.ball.domain.model.Achievement
+import white.ball.domain.model.CoffeeCoin
 import white.ball.domain.model.NoteDomainModel
 import white.ball.domain.model.Tag
-import white.ball.domain.model.Task
 import white.ball.domain.model.Timer
 
 
@@ -26,7 +26,7 @@ fun NoteDTO.toNote(): NoteDomainModel = NoteDomainModel(
     noteId = this.noteId,
     title = this.title,
     content = this.content,
-    dateCreated = this.dateCreated,
+    createdDate = this.dateCreated,
     color = this.color,
     location = this.location,
 )
@@ -39,17 +39,14 @@ fun TagDTO.toTag(): Tag = Tag(
     price = this.price,
 )
 
-fun TaskDTO.toTask(): Task = Task(
-    taskId = this.taskId,
-    title = this.title,
-    color = this.color,
-    isDone = this.isDone,
-    location = this.location,
-    dateCreated = this.dateCreated,
-)
-
 fun TimerDTO.toTimer(): Timer = Timer(
     timerId = this.timerId,
     maxTime = this.maxTime,
     lefTime = this.leftTime,
+)
+
+fun CoffeeCoinDTO.toCoffeeCoin() = CoffeeCoin(
+    coffeeCoinId = this.coffeeCoinId,
+    title = this.title,
+    balance = this.balance,
 )

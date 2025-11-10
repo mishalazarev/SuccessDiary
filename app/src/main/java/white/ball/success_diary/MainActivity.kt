@@ -14,7 +14,6 @@ import white.ball.success_diary.presentation.navigation.MainNavController
 import white.ball.success_diary.presentation.view_model.MainViewModel
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 import white.ball.success_diary.presentation.view_model.ProfileViewModel
-import white.ball.success_diary.presentation.view_model.TaskListViewModel
 import white.ball.success_diary.presentation.ui.theme.SuccessDiaryTheme
 
 @AndroidEntryPoint
@@ -29,7 +28,6 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel: MainViewModel = hiltViewModel()
                 val noteBookViewModel: NoteBookViewModel = hiltViewModel()
                 val profileViewModel: ProfileViewModel = hiltViewModel()
-                val taskListViewModel: TaskListViewModel = hiltViewModel()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
@@ -38,7 +36,6 @@ class MainActivity : ComponentActivity() {
                         mainViewModel = mainViewModel,
                         noteBookViewModel = noteBookViewModel,
                         profileViewModel = profileViewModel,
-                        taskListViewModel = taskListViewModel,
                         innerPadding = innerPadding,
                     ) {
                         this.finish()
