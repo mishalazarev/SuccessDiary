@@ -66,7 +66,7 @@ class TimerWorker(
         .Builder(context, CHANNEL_ID)
         .setContentTitle("Таймер")
         .setContentText(text)
-        .setSmallIcon(R.drawable.icon_music_play)
+        .setSmallIcon(R.drawable.icon_music_clicked)
         .setOngoing(true)
         .build()
     private fun createNotificationChannel() {

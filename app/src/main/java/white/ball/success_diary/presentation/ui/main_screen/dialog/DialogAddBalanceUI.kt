@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.ui.main_screen
+package white.ball.success_diary.presentation.ui.main_screen.dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

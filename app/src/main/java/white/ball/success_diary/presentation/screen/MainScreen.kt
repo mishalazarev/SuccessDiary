@@ -30,7 +30,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import white.ball.success_diary.R
 import white.ball.success_diary.platform.app.service.TimerWorker
-import white.ball.success_diary.presentation.ui.main_screen.TimerButtonUI
+import white.ball.success_diary.presentation.ui.main_screen.button.TimerButtonUI
 import white.ball.success_diary.presentation.ui.main_screen.TopAppBarMainUI
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
@@ -42,7 +42,7 @@ fun MainScreen(
 ) {
     Scaffold { innerPadding ->
 
-        val isOpenButtonTimer by mainViewModel.isTimerRunning.collectAsState(false)
+        val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
 
         val minutesTimeLeft by remember { mutableIntStateOf(16) }
 
@@ -63,6 +63,7 @@ fun MainScreen(
             val sec = mainSecondsLeft % 60
             String.format("%02d:%02d", min, sec)
         } else "$minutesTimeLeft:00"
+
 
         Column(
             modifier = Modifier
@@ -89,7 +90,7 @@ fun MainScreen(
             ) {
 
                 TimerButtonUI(
-                    isOpenButtonTimer
+                    isTimerRunning
                 ) {
                     val inputMainData = Data.Builder()
                         .putInt(TimerWorker.MAIN_KEY_MINUTES, minutesTimeLeft)
@@ -103,7 +104,7 @@ fun MainScreen(
 
                     mainViewModel.setTimer()
 
-                    if (isOpenButtonTimer) {
+                    if (isTimerRunning) {
                         currentWorkId?.let { id ->
                             workManager.cancelWorkById(id)
                             setCurrentWorkId(null)
@@ -119,7 +120,9 @@ fun MainScreen(
                         color = Color.White,
                         fontSize = 96.sp,
                         fontFamily = FontFamily(Font(R.font.post_no_bills_colombo))
-                    )
+                    ),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
                 )
             }
         }

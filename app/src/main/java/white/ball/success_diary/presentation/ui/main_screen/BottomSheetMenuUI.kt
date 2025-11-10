@@ -75,36 +75,6 @@ fun BottomSheetMenuUI() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(R.drawable.icon_music_play),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Text(
-                    text = "Мелодии",
-                    style = bottomSheetTextStyle
-                )
-            }
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
-                color = LineCoffeeCoinBalanceColor
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable {
-
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
                     painter = painterResource(R.drawable.decor_history),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)

@@ -62,6 +62,10 @@ class MainViewModel @Inject constructor(
         _isOpenDialogBalance.value = !_isOpenDialogBalance.value
     }
 
+    fun setDialogMusicStore(turn: Boolean) {
+        _isOpenDialogTagCollection.value = turn
+    }
+
     suspend fun addTag(tag: Tag) {
         tagUseCases.createTagUseCase(tag)
     }

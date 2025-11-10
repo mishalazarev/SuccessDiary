@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.ui.main_screen
+package white.ball.success_diary.presentation.ui.main_screen.button
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -41,6 +42,7 @@ fun BalanceUI(
 
     Box(
         modifier = Modifier
+            .padding(top = 16.dp)
             .size(140.dp, 40.dp)
             .clip(RoundedCornerShape(20.dp))
             .clickable {

@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.ui.main_screen
+package white.ball.success_diary.presentation.ui.main_screen.button
 
 import androidx.compose.animation.core.EaseInBack
 import androidx.compose.animation.core.animateDpAsState
