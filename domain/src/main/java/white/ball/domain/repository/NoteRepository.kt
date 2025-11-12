@@ -6,7 +6,7 @@ import white.ball.domain.model.NoteDomainModel
 interface NoteRepository {
     fun getNoteList(): Flow<List<NoteDomainModel>>
 
-    suspend fun addNote(noteModelUI: NoteDomainModel)
+    suspend fun addNote(noteModelUI: NoteDomainModel): Long
 
     suspend fun deleteNote(noteModelUI: NoteDomainModel)
 

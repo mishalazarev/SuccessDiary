@@ -1,7 +1,6 @@
 package white.ball.success_diary.presentation.ui.note_book.swipe
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
@@ -29,10 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import white.ball.domain.extension_model.ItemLocation
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.domain.extension_model.swipe.DirectionSwipe
@@ -44,7 +40,7 @@ import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 
 @Composable
-fun SwipeContainer(
+fun SwipeNoteContainer(
     note: NoteModelUI,
     noteBookViewModel: NoteBookViewModel,
     navController: NavController,

@@ -2,6 +2,7 @@ package white.ball.domain.model
 
 import white.ball.domain.extension_model.ItemLocation
 import white.ball.domain.extension_model.PageColor
+import white.ball.domain.model.additional.TaskDomainModel
 
 
 data class NoteDomainModel(
@@ -11,5 +12,6 @@ data class NoteDomainModel(
     val createdDate: String,
     var color: PageColor,
     var location: ItemLocation,
+    var taskList: List<TaskDomainModel>
 )
 

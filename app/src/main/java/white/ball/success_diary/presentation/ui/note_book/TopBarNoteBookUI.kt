@@ -148,6 +148,7 @@ fun TopBarNoteBookUI(
                 onClick = {
                     selectedButton?.let {
                         noteBookViewModel.setSelectedButton(it)
+                        noteBookViewModel.clearDeletedNotes()
                     }
                 },
                 modifier = Modifier

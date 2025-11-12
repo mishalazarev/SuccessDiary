@@ -1,5 +1,6 @@
 package white.ball.success_diary.presentation.ui.note_book
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -87,7 +88,24 @@ fun BottomSheetNoteMenuUI(
             ) {
                 TextButton(
                     onClick = {
+                        noteBookViewModel.addTask()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = LineCoffeeCoinBalanceColor
+                    ),
+                    modifier = textBottomModifier,
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text(
+                        text = "Добавить задачу",
+                        style = bottomSheetTextStyle
+                    )
+                }
+
+                TextButton(
+                    onClick = {
                         val addJob = scope.async(Dispatchers.IO) {
+                            Log.e("tag", "BottomSheetNoteMenuUI: ${note?.taskList?.size}", )
                             note?.let {
                                 noteBookViewModel.addNote(it)
                             }

@@ -11,7 +11,7 @@ data class NoteDTO(
     val noteId: Long,
     var title: String,
     var content: String,
-    var dateCreated: String,
+    var createdDate: String,
     var color: PageColor,
     var location: ItemLocation,
 )

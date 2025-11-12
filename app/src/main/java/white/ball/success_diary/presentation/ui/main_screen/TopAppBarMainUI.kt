@@ -50,32 +50,56 @@ fun TopAppBarMainUI(
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
+
+        TextButton(
+            onClick = {
+                if (isTimerRunning) {
+
+                } else {
+                    mainViewModel.setDialogMusicStore(true)
+                }
+            },
+            shape = CircleShape
+        ) {
+            Image(
+                painter = painterResource(
+                    if (isTimerRunning)
+                        R.drawable.icon_music_clicked
+                    else
+                        R.drawable.icon_music_default
+                ),
+                contentDescription = null,
+            )
+        }
+
+        AnimatedVisibility(
+            visible = !isTimerRunning,
+            enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
+            exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
+        ) {
+            BalanceUI(
+                mainViewModel = mainViewModel
+            ) {
+                ShowDialogAddBalanceUI(
+                    mainViewModel = mainViewModel
+                )
+            }
+        }
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
 
-            TextButton(
-                onClick = {
-                    if (isTimerRunning) {
-
-                    } else {
-                        mainViewModel.setDialogMusicStore(true)
-                    }
-                },
-                shape = CircleShape
+            AnimatedVisibility(
+                visible = !isTimerRunning,
+                enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
+                exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
             ) {
-                Image(
-                    painter = painterResource(
-                        if (isTimerRunning)
-                            R.drawable.icon_music_clicked
-                        else
-                            R.drawable.icon_music_default
-                    ),
-                    contentDescription = null,
-                )
+                BottomSheetMenuUI()
             }
+
 
             AnimatedVisibility(
                 visible = !isTimerRunning,
@@ -98,29 +122,6 @@ fun TopAppBarMainUI(
                     )
                 }
             }
-        }
-
-        AnimatedVisibility(
-            visible = !isTimerRunning,
-            enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
-            exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
-        ) {
-            BalanceUI(
-                mainViewModel = mainViewModel
-            ) {
-                ShowDialogAddBalanceUI(
-                    mainViewModel = mainViewModel
-                )
-            }
-        }
-
-
-        AnimatedVisibility(
-            visible = !isTimerRunning,
-            enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
-            exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
-        ) {
-            BottomSheetMenuUI()
         }
 
     }

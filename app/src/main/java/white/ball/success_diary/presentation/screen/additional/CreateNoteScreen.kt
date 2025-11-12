@@ -1,15 +1,16 @@
 package white.ball.success_diary.presentation.screen.additional
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.note_book.BlockTaskItemUI
 import white.ball.success_diary.presentation.ui.note_book.BottomSheetNoteMenuUI
 import white.ball.success_diary.presentation.ui.note_book.ChangeColorDialogUI
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
@@ -91,70 +93,82 @@ fun CreateNoteScreen(
             }
         }
     ) { innerPadding ->
-        Column(
+        LazyColumn (
             modifier = Modifier
                 .fillMaxSize()
                 .background(clickedNote?.color ?: PageWhiteColor)
                 .padding(innerPadding)
         ) {
 
-            OutlinedTextField(
-                value = clickedNote?.title ?: "",
-                onValueChange = { text ->
-                    noteBookViewModel.setTitle(text)
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Заголовок".uppercase(),
-                        style = TextStyle(
-                            color = BottomBarItemDefaultColor,
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontFamily = FontFamily(Font(R.font.roboto))
-                        )
+            clickedNote?.taskList?.let {
+                Log.e("tag", "CreateNoteScreen: ${clickedNote?.taskList?.size}", )
+                items(it.size) { index ->
+                    val currentTask = it[index]
+                    BlockTaskItemUI(
+                        noteBookViewModel = noteBookViewModel,
+                        task = currentTask,
                     )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Transparent,
-                ),
-                textStyle = TextStyle(
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.Black,
+                }
+            }
+            item {
+                OutlinedTextField(
+                    value = clickedNote?.title ?: "",
+                    onValueChange = { text ->
+                        noteBookViewModel.setTitle(text)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    placeholder = {
+                        Text(
+                            text = "Заголовок".uppercase(),
+                            style = TextStyle(
+                                color = BottomBarItemDefaultColor,
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontFamily = FontFamily(Font(R.font.roboto))
+                            )
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedBorderColor = Color.Transparent,
+                    ),
+                    textStyle = TextStyle(
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.Black,
+                    )
                 )
-            )
 
-            OutlinedTextField(
-                value = clickedNote?.content ?: "",
-                onValueChange = { text ->
-                    noteBookViewModel.setContent(text)
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 16.dp),
-                placeholder = {
-                    Text(
-                        text = "Описание".uppercase(),
-                        style = TextStyle(
-                            color = BottomBarItemDefaultColor,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraBold
+                OutlinedTextField(
+                    value = clickedNote?.content ?: "",
+                    onValueChange = { text ->
+                        noteBookViewModel.setContent(text)
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp, bottom = 30.dp),
+                    placeholder = {
+                        Text(
+                            text = "Описание".uppercase(),
+                            style = TextStyle(
+                                color = BottomBarItemDefaultColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold
+                            )
                         )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedBorderColor = Color.Transparent,
+                    ),
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black,
                     )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Transparent,
-                ),
-                textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
                 )
-            )
+            }
         }
     }
 }

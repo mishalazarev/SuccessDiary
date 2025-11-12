@@ -11,4 +11,5 @@ fun NoteModelUI.toNote(): NoteDomainModel = NoteDomainModel(
     createdDate = this.createdDate,
     color = this.color.toDomainColor(),
     location = this.location,
+    taskList = this.taskList
 )

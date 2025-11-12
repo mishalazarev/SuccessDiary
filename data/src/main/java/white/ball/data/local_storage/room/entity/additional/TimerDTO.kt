@@ -1,4 +1,4 @@
-package white.ball.data.local_storage.room.entity
+package white.ball.data.local_storage.room.entity.additional
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

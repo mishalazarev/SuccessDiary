@@ -1,5 +1,6 @@
 package white.ball.success_diary.presentation.view_model
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,12 +16,16 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import white.ball.domain.extension_model.ItemLocation
 import white.ball.domain.extension_model.swipe.DirectionSwipe
+import white.ball.domain.model.additional.TaskDomainModel
 import white.ball.domain.use_case.model.NoteUseCases
 import white.ball.success_diary.presentation.model.NoteModelUI
 import white.ball.success_diary.presentation.model_ui.GroupItemsByLocation
 import white.ball.success_diary.presentation.util.mapper.toNote
 import white.ball.success_diary.presentation.util.mapper.toNoteModelUI
 import javax.inject.Inject
+import kotlin.math.log
+
+
 
 @HiltViewModel
 class NoteBookViewModel @Inject constructor(
@@ -84,7 +89,13 @@ class NoteBookViewModel @Inject constructor(
     }
 
     suspend fun addNote(note: NoteModelUI) {
-        noteUseCases.addNoteUseCase(note.toNote())
+        val noteDomain = note.toNote()
+        val noteId = noteUseCases.addNoteUseCase(noteDomain)
+
+        _clickedNote.value = _clickedNote.value?.copy(
+            noteId = noteId,
+            taskList = _clickedNote.value?.taskList?.map { it.copy(noteId = noteId) } ?: emptyList()
+        )
     }
 
 
@@ -118,6 +129,46 @@ class NoteBookViewModel @Inject constructor(
         manualFiltered(note)
 
         editNote(note)
+    }
+
+    fun addTask() {
+        val taskList = _clickedNote.value?.taskList?.toMutableList() ?: mutableListOf()
+
+
+        taskList.add(TaskDomainModel(noteId = _clickedNote.value?.noteId ?: 0))
+
+        _clickedNote.value = _clickedNote.value?.copy(
+            taskList = taskList
+        )
+    }
+
+    fun setTask(task: TaskDomainModel) {
+        val updatedTaskList = _clickedNote.value
+            ?.taskList
+            ?.toMutableList()
+            ?.map {
+                if (it.localId == task.localId) {
+                    it.copy(
+                        title = task.title,
+                        isDone = task.isDone
+                    )
+                } else {
+                    it
+                }
+            }
+
+            _clickedNote.value = _clickedNote.value?.copy(taskList = updatedTaskList ?: emptyList())
+    }
+
+    fun deleteTask(task: TaskDomainModel) {
+        val updatedTask = _clickedNote.value?.taskList
+            ?.filter { it.taskId != task.taskId }
+
+        updatedTask?.let {
+            _clickedNote.value = _clickedNote.value?.copy(
+                taskList = it
+            )
+        }
     }
 
     fun setTitle(text: String) {
@@ -157,6 +208,19 @@ class NoteBookViewModel @Inject constructor(
         } else {
             _isSelectedFilteredButton.value = button
             locationListener.value = button.location
+        }
+    }
+
+    fun clearDeletedNotes() {
+        viewModelScope.launch (Dispatchers.IO) {
+            val deletedNotes = _noteList.value.filter { it.location == ItemLocation.DELETED }
+
+            deletedNotes.forEach { note ->
+                noteUseCases.deleteNoteUseCase(note.toNote())
+            }
+
+            _noteList.value = _noteList.value.filter { it.location != ItemLocation.DELETED }
+
         }
     }
 }
