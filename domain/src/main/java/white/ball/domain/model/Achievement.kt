@@ -1,14 +1,14 @@
 package white.ball.domain.model
 
 import white.ball.domain.extension_model.AchievementMeasurement
+import white.ball.domain.model.additional.AchievementTask
 
 
 data class Achievement(
     val achievementId: Long,
-    val name: String,
-    val isDoneTaskList: LinkedHashMap<Int, Boolean>,
-    val maxEventList: LinkedHashMap<Int, Int>,
+    val title: String,
+    val imageResId: Int,
     val measurement: AchievementMeasurement,
-    val currentEvent: Int,
-    val maxEvent: Int,
+    var current: Int,
+    val achievementTaskList: List<AchievementTask>
 )

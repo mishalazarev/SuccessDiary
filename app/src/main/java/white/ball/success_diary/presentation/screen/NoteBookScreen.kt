@@ -73,7 +73,6 @@ fun NoteBookScreen(
 
             LazyColumn(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxWidth()
                     .padding(top = 7.dp)
             ) {

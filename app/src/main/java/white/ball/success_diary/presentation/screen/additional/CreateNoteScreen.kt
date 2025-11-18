@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.note_book.BlockTaskItemUI
 import white.ball.success_diary.presentation.ui.note_book.BottomSheetNoteMenuUI
 import white.ball.success_diary.presentation.ui.note_book.ChangeColorDialogUI
+import white.ball.success_diary.presentation.ui.note_book.swipe.SwipeTaskContainer
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
@@ -101,12 +101,12 @@ fun CreateNoteScreen(
         ) {
 
             clickedNote?.taskList?.let {
-                Log.e("tag", "CreateNoteScreen: ${clickedNote?.taskList?.size}", )
-                items(it.size) { index ->
+                items(it.size,) { index ->
                     val currentTask = it[index]
-                    BlockTaskItemUI(
+                    Log.e("tag", "CreateNoteScreen: ${currentTask.taskId} ${currentTask.title}", )
+                    SwipeTaskContainer(
+                        taskByNoteDomainModel = currentTask,
                         noteBookViewModel = noteBookViewModel,
-                        task = currentTask,
                     )
                 }
             }

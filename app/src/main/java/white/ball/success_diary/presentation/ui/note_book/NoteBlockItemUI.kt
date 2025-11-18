@@ -45,7 +45,7 @@ fun NoteItemUI(
             ),
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .padding(start = 10.dp, top = 10.dp)
+                .padding(start = 10.dp, top = 10.dp, end = 10.dp)
         )
 
         Row(

@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
@@ -77,7 +78,7 @@ fun BottomSheetNoteMenuUI(
 
     if (isOpenBottomSheet) {
         ModalBottomSheet(
-            onDismissRequest = { isOpenBottomSheet = false},
+            onDismissRequest = { isOpenBottomSheet = false },
             sheetState = bottomSheetState,
             containerColor = BottomBarColor,
         ) {
@@ -104,20 +105,18 @@ fun BottomSheetNoteMenuUI(
 
                 TextButton(
                     onClick = {
-                        val addJob = scope.async(Dispatchers.IO) {
-                            Log.e("tag", "BottomSheetNoteMenuUI: ${note?.taskList?.size}", )
+                        scope.launch(Dispatchers.IO) {
                             note?.let {
                                 noteBookViewModel.addNote(it)
                             }
-                        }
 
-                        scope.async(Dispatchers.Main) {
-                            addJob.await()
-                            navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
-                                popUpTo(0) {
-                                    inclusive = true
+                            withContext(Dispatchers.Main) {
+                                navController.navigate(ScreenNavigation.NOTE_BOOK_SCREEN.route) {
+                                    popUpTo(0) {
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
                                 }
-                                launchSingleTop = true
                             }
 
                             noteBookViewModel.setContent("")
@@ -138,7 +137,7 @@ fun BottomSheetNoteMenuUI(
 
                 TextButton(
                     onClick = {
-                        val deleteJob = scope.async (Dispatchers.IO) {
+                        val deleteJob = scope.async(Dispatchers.IO) {
                             note?.let {
                                 noteBookViewModel.deleteNote(it)
                             }

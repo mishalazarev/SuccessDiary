@@ -11,6 +11,7 @@ import white.ball.data.local_storage.room.entity.AchievementDTO
 import white.ball.data.local_storage.room.entity.CoffeeCoinDTO
 import white.ball.data.local_storage.room.entity.NoteDTO
 import white.ball.data.local_storage.room.entity.TagDTO
+import white.ball.data.local_storage.room.entity.additional.AchievementTaskDTO
 import white.ball.data.local_storage.room.entity.additional.TaskDTO
 import white.ball.data.local_storage.room.entity.additional.TimerDTO
 import white.ball.data.local_storage.room.util.convert.AchievementConverter
@@ -18,7 +19,7 @@ import white.ball.data.local_storage.room.util.convert.TimerConverter
 
 @Database(entities = [
     NoteDTO::class, TimerDTO::class, CoffeeCoinDTO::class, TaskDTO::class,
-    TagDTO::class, AchievementDTO::class], version = 1, exportSchema = false)
+    TagDTO::class, AchievementDTO::class, AchievementTaskDTO::class], version = 1, exportSchema = false)
 @TypeConverters(
     TimerConverter::class, AchievementConverter::class,
 )

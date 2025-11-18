@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import white.ball.domain.model.additional.TaskDomainModel
+import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
@@ -28,7 +28,7 @@ import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 @Composable
 fun BlockTaskItemUI (
     noteBookViewModel: NoteBookViewModel,
-    task: TaskDomainModel,
+    task: TaskByNoteDomainModel,
 ) {
 
     Row(
@@ -40,6 +40,8 @@ fun BlockTaskItemUI (
         OutlinedTextField(
             value = task.title,
             onValueChange = { text ->
+
+                Log.e("tag", "setTask: localId: ${task.localId}\nid: ${task.noteId}", )
                 val updatedTask = task.copy(
                     title = text
                 )

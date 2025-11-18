@@ -35,6 +35,15 @@ val PageBlueColor = Color(0xFF9EFFFF)
 val PagePurpleColor = Color(0xFFB69CFF)
 val PageWhiteColor = Color(0xFFFFFFFF)
 
+// Profile
+
+val AchievementBlockColor = Color(0xFFBF7230)
+val ProgressBarBackgroundColor = Color(0xFFA64D00)
+val ProgressBarTrackLinearColor = Color(0xFFFFB473)
+
+
+
+
 
 
 

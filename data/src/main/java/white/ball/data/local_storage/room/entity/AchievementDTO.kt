@@ -5,14 +5,12 @@ import androidx.room.PrimaryKey
 import white.ball.domain.extension_model.AchievementMeasurement
 
 
-@Entity("achievement")
+@Entity
 data class AchievementDTO(
     @PrimaryKey(autoGenerate = true)
     val achievementId: Long,
-    val name: String,
-    val isDoneTaskList: LinkedHashMap<Int, Boolean>,
-    val maxEventList: LinkedHashMap<Int, Int>,
+    val title: String,
+    val imageResId: Int,
     val measurement: AchievementMeasurement,
-    val currentEvent: Int,
-    val maxEvent: Int,
+    var current: Int,
 )

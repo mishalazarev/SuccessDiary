@@ -8,13 +8,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
+import white.ball.data.local_storage.room.dao.AchievementDao
 import white.ball.data.local_storage.room.dao.CoffeeCoinDao
 import white.ball.data.local_storage.room.dao.NoteDao
 import white.ball.data.local_storage.room.dao.TagDao
 import white.ball.data.local_storage.room.database.SuccessDiaryDatabase
+import white.ball.data.local_storage.room.implementation.AchievementImpl
 import white.ball.data.local_storage.room.implementation.CoffeeCoinImpl
 import white.ball.data.local_storage.room.implementation.NoteImpl
 import white.ball.data.local_storage.room.implementation.TagImpl
+import white.ball.domain.repository.AchievementRepository
 import white.ball.domain.repository.CoffeeCoinRepository
 import white.ball.domain.repository.NoteRepository
 import white.ball.domain.repository.TagRepository
@@ -53,6 +56,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideAchievementDao(database: SuccessDiaryDatabase): AchievementDao {
+        return database.achievementDao()
+    }
+
+    @Provides
+    @Singleton
     fun providesNoteRepositoryImpl(noteDao: NoteDao): NoteRepository {
         return NoteImpl(noteDao)
     }
@@ -69,6 +78,11 @@ object DatabaseModule {
         return CoffeeCoinImpl(coffeeCoinDao)
     }
 
-    private const val NAME_DATABASE = "room"
+    @Provides
+    @Singleton
+    fun providesAchievementImpl(achievementDao: AchievementDao): AchievementRepository {
+        return AchievementImpl(achievementDao)
+    }
 
+    private const val NAME_DATABASE = "room"
 }

@@ -6,25 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import white.ball.domain.extension_model.ItemLocation
-import white.ball.domain.extension_model.swipe.DirectionSwipe
-import white.ball.domain.model.additional.TaskDomainModel
+import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.domain.use_case.model.NoteUseCases
 import white.ball.success_diary.presentation.model.NoteModelUI
 import white.ball.success_diary.presentation.model_ui.GroupItemsByLocation
 import white.ball.success_diary.presentation.util.mapper.toNote
 import white.ball.success_diary.presentation.util.mapper.toNoteModelUI
 import javax.inject.Inject
-import kotlin.math.log
-
 
 
 @HiltViewModel
@@ -86,16 +81,33 @@ class NoteBookViewModel @Inject constructor(
         }
 
         _clickedNote.value = currentNote
+
+        viewModelScope.launch(Dispatchers.IO) {
+            getTaskListByNoteId(currentNote.noteId)
+        }
     }
 
     suspend fun addNote(note: NoteModelUI) {
-        val noteDomain = note.toNote()
-        val noteId = noteUseCases.addNoteUseCase(noteDomain)
+        try {
+            val noteDomain = note.toNote()
+            val noteId = noteUseCases.addNoteUseCase(noteDomain)
 
-        _clickedNote.value = _clickedNote.value?.copy(
-            noteId = noteId,
-            taskList = _clickedNote.value?.taskList?.map { it.copy(noteId = noteId) } ?: emptyList()
-        )
+            _clickedNote.value = _clickedNote.value?.copy(
+                noteId = noteId,
+                taskList = _clickedNote.value?.taskList?.map { it.copy(noteId = noteId) }
+                    ?: emptyList()
+            )
+        } catch (e: Exception) {
+            Log.e("NoteBookViewModel", "Error adding note", e)
+        }
+    }
+
+
+    fun getTaskListByNoteId(noteId: Long) {
+        val taskList = noteUseCases.getTaskListByNoteIdUseCase(noteId)
+        Log.e("tag", "getTaskListByNoteId: ${taskList.size}")
+        _clickedNote.value = _clickedNote.value?.copy(taskList = taskList)
+
     }
 
 
@@ -135,17 +147,16 @@ class NoteBookViewModel @Inject constructor(
         val taskList = _clickedNote.value?.taskList?.toMutableList() ?: mutableListOf()
 
 
-        taskList.add(TaskDomainModel(noteId = _clickedNote.value?.noteId ?: 0))
+        taskList.add(TaskByNoteDomainModel(noteId = _clickedNote.value?.noteId ?: 0))
 
         _clickedNote.value = _clickedNote.value?.copy(
             taskList = taskList
         )
     }
 
-    fun setTask(task: TaskDomainModel) {
+    fun setTask(task: TaskByNoteDomainModel) {
         val updatedTaskList = _clickedNote.value
             ?.taskList
-            ?.toMutableList()
             ?.map {
                 if (it.localId == task.localId) {
                     it.copy(
@@ -155,20 +166,22 @@ class NoteBookViewModel @Inject constructor(
                 } else {
                     it
                 }
-            }
+            } ?: emptyList()
 
-            _clickedNote.value = _clickedNote.value?.copy(taskList = updatedTaskList ?: emptyList())
+        _clickedNote.value = _clickedNote.value?.copy(taskList = updatedTaskList)
     }
 
-    fun deleteTask(task: TaskDomainModel) {
+    suspend fun deleteTask(task: TaskByNoteDomainModel) {
         val updatedTask = _clickedNote.value?.taskList
-            ?.filter { it.taskId != task.taskId }
+            ?.filter { it.localId != task.localId }
 
         updatedTask?.let {
             _clickedNote.value = _clickedNote.value?.copy(
                 taskList = it
             )
         }
+
+        noteUseCases.deleteTaskUseCase(task)
     }
 
     fun setTitle(text: String) {
@@ -212,7 +225,7 @@ class NoteBookViewModel @Inject constructor(
     }
 
     fun clearDeletedNotes() {
-        viewModelScope.launch (Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val deletedNotes = _noteList.value.filter { it.location == ItemLocation.DELETED }
 
             deletedNotes.forEach { note ->

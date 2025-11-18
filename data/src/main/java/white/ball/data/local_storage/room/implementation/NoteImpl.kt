@@ -1,16 +1,18 @@
 package white.ball.data.local_storage.room.implementation
 
-import kotlinx.coroutines.Dispatchers
+import android.util.Log
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import white.ball.data.local_storage.room.dao.NoteDao
-import white.ball.data.local_storage.room.entity.agregate.NoteWithTasksDTO
+import white.ball.data.local_storage.room.entity.additional.TaskDTO
 import white.ball.data.local_storage.room.util.mapper.toNote
 import white.ball.data.local_storage.room.util.mapper.toNoteDTO
-import white.ball.data.local_storage.room.util.mapper.toNoteWithTasksDTO
 import white.ball.data.local_storage.room.util.mapper.toTaskDTO
+import white.ball.data.local_storage.room.util.mapper.toTaskDomainModel
 import white.ball.domain.model.NoteDomainModel
+import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.domain.repository.NoteRepository
 import javax.inject.Inject
 
@@ -26,32 +28,43 @@ class NoteImpl @Inject constructor(
 
     override suspend fun addNote(noteModelUI: NoteDomainModel): Long {
         val noteDTO = noteModelUI.toNoteDTO()
-        val noteId = noteDao.insertNote(noteDTO)
-
-        val tasksDTO = noteModelUI.taskList.map { it.copy(noteId = noteId).toTaskDTO(noteId) }
-        if (tasksDTO.isNotEmpty()) {
-            noteDao.insertTaskList(tasksDTO)
-        }
-
-        return noteId
+        val newNoteId = noteDao.insertNote(noteDTO)
+        val tasksDTO: List<TaskDTO> = noteModelUI.taskList.map { task: TaskByNoteDomainModel -> task.toTaskDTO(newNoteId) }
+        noteDao.insertTaskList(tasksDTO)
+        Log.e("tag", "addNote: ${noteModelUI.taskList.size}", )
+        return noteDTO.noteId
     }
 
     override suspend fun editNote(noteModelUI: NoteDomainModel) {
         val noteDTO = noteModelUI.toNoteDTO()
+        noteDao.insertNote(noteDTO)
+        val tasksDTO: List<TaskDTO> = noteModelUI.taskList.map { task: TaskByNoteDomainModel -> task.toTaskDTO(noteModelUI.noteId) }
+        noteDao.insertTaskList(tasksDTO)
+    }
 
-        noteDao.editNote(noteDTO)
-        noteDao.deleteTasksByNoteId(noteModelUI.noteId)
+    @Insert(onConflict = REPLACE)
+    override suspend fun insertTask(taskByNoteDomainModel: TaskByNoteDomainModel) {
+        noteDao.insertTask(taskByNoteDomainModel.toTaskDTO())
+    }
 
-        val newTasksDTO = noteModelUI.taskList.map {
-            it.copy(noteId = noteModelUI.noteId).toTaskDTO(noteModelUI.noteId)
-        }
-        if (newTasksDTO.isNotEmpty()) {
-            noteDao.insertTaskList(newTasksDTO)
-        }
+    override fun getNoteWithTasksById(noteId: Long): Flow<NoteDomainModel> {
+        return noteDao.getNoteWithTasksById(noteId).map { it.toNote() }
+    }
+
+    override fun getTaskListByNoteId(noteId: Long): List<TaskByNoteDomainModel> {
+        return noteDao.getTaskListByNoteId(noteId).map { it.toTaskDomainModel()  }
     }
 
     override suspend fun deleteNote(noteModelUI: NoteDomainModel) {
         val noteDTO = noteModelUI.toNoteDTO()
         noteDao.deleteNote(noteDTO)
+    }
+
+    override suspend fun deleteTask(taskByNoteDomainModel: TaskByNoteDomainModel) {
+        noteDao.deleteTask(taskByNoteDomainModel.toTaskDTO())
+    }
+
+    override suspend fun insertTaskList(taskByNoteDomainModel: List<TaskByNoteDomainModel>) {
+        noteDao.insertTaskList(taskByNoteDomainModel.map { it.toTaskDTO() })
     }
 }
