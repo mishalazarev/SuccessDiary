@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.main_screen.TimerPickerUI
 import white.ball.success_diary.presentation.ui.main_screen.model.CardTagUI
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
@@ -65,7 +66,7 @@ fun DialogTagCollectionDialogUI(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Режим таймера",
+                        text = "Таймер",
                         color = Color.White,
                         style = TextStyle(
                             fontSize = 20.sp,
@@ -75,21 +76,55 @@ fun DialogTagCollectionDialogUI(
                     )
                 }
 
-                LazyHorizontalGrid(
-                    rows = GridCells.Fixed(2),
+                Column(
                     modifier = Modifier
-                        .height(220.dp)
-                        .padding(9.dp)
+                        .padding(start = 20.dp, top = 9.dp)
                 ) {
-                    items(availableTag.size) { index ->
-                        val currentTag = availableTag[index]
-                        CardTagUI(
-                            tag = currentTag,
-                            mainViewModel = mainViewModel,
-                            isSelected = isSelectedTag == currentTag
+                    Text(
+                        text = "Тэг",
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(Font(R.font.roboto))
                         )
-                    }
+                    )
                 }
+
+                    LazyHorizontalGrid(
+                        rows = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .height(220.dp)
+                            .padding(9.dp)
+                    ) {
+                        items(availableTag.size) { index ->
+                            val currentTag = availableTag[index]
+                            CardTagUI(
+                                tag = currentTag,
+                                mainViewModel = mainViewModel,
+                                isSelected = isSelectedTag == currentTag
+                            )
+                        }
+                    }
+
+                Column(
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 9.dp)
+                ) {
+                    Text(
+                        text = "Время",
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(Font(R.font.roboto))
+                        )
+                    )
+                }
+
+                    TimerPickerUI(
+                        mainViewModel = mainViewModel
+                    )
             }
         }
     }

@@ -7,6 +7,8 @@ enum class ScreenNavigation (val route: String) {
     PROFILE_SCREEN("profile_screen"),
     // Secondary
     CREATE_NOTE_SCREEN("create_note_screen"),
-    CREATE_TASK_SCREEN("create_task_screen"),
+    NEWS_SCREEN("news_screen"),
+    ABOUT_US_SCREEN("about_us_screen"),
+    STORE_SCREEN("store_screen"),
 
 }

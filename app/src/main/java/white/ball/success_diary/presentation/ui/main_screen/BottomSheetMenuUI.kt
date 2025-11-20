@@ -29,13 +29,17 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetMenuUI() {
+fun BottomSheetMenuUI(
+    navController: NavController,
+) {
     val bottomSheetState = rememberModalBottomSheetState()
     var isOpenBottomSheet by remember { mutableStateOf(false) }
     val bottomSheetTextStyle = TextStyle(
@@ -68,40 +72,7 @@ fun BottomSheetMenuUI() {
             Row(
                 modifier = Modifier
                     .clickable {
-
-                    }
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.decor_history),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Text(
-                    text = "История",
-                    style = bottomSheetTextStyle
-                )
-            }
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .clickable {
-
-                    }
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
-                color = LineCoffeeCoinBalanceColor
-            )
-
-            Row(
-                modifier = Modifier
-                    .clickable {
-
+                        navController.navigate(ScreenNavigation.NEWS_SCREEN.route)
                     }
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -131,14 +102,14 @@ fun BottomSheetMenuUI() {
             Row(
                 modifier = Modifier
                     .clickable {
-
+                        navController.navigate(ScreenNavigation.STORE_SCREEN.route)
                     }
                     .fillMaxWidth()
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(R.drawable.decor_hashtag),
+                    painter = painterResource(R.drawable.decor_store),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -146,7 +117,7 @@ fun BottomSheetMenuUI() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Магазин тэгов",
+                    text = "Магазин",
                     style = bottomSheetTextStyle
                 )
             }
@@ -161,7 +132,7 @@ fun BottomSheetMenuUI() {
             Row(
                 modifier = Modifier
                     .clickable {
-
+                        navController.navigate(ScreenNavigation.ABOUT_US_SCREEN.route)
                     }
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -176,7 +147,7 @@ fun BottomSheetMenuUI() {
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Настройки",
+                    text = "О нас",
                     style = bottomSheetTextStyle
                 )
             }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import white.ball.success_diary.presentation.ui.main_screen.button.BalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonMusicUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonTagUI
@@ -24,7 +25,8 @@ import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
 fun TopAppBarMainUI(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    navController: NavController,
 ) {
 
     val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
@@ -69,7 +71,9 @@ fun TopAppBarMainUI(
                 enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
                 exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
             ) {
-                BottomSheetMenuUI()
+                BottomSheetMenuUI(
+                    navController = navController,
+                )
             }
 
             AnimatedVisibility(

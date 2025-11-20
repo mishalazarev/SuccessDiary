@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
     private val _selectedTag = MutableStateFlow<Tag?>(null)
     val selectedTag: Flow<Tag?> = _selectedTag
 
-    private val _selectedTime = MutableStateFlow(0)
+    private val _selectedTime = MutableStateFlow(20)
     val selectedTime: Flow<Int> = _selectedTime
 
 
@@ -174,6 +174,11 @@ class MainViewModel @Inject constructor(
     fun setSelectedTag(tag: Tag) {
         _selectedTag.value = tag
     }
+
+    fun setSelectedTime(time: Int) {
+        _selectedTime.value = time
+    }
+
 
     suspend fun updateBalance(balance: Int) {
         coffeeCoinUseCases.updateBalanceUseCase(balance)

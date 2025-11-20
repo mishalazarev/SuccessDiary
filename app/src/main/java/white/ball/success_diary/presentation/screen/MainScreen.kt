@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -38,14 +39,15 @@ import java.util.UUID
 
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    navController: NavController,
 ) {
 
     Scaffold { innerPadding ->
 
         val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
 
-        val minutesTimeLeft by remember { mutableIntStateOf(16) }
+        val timerTime by mainViewModel.selectedTime.collectAsState(45)
 
         val context = LocalContext.current
 
@@ -63,7 +65,7 @@ fun MainScreen(
             val min = mainSecondsLeft / 60
             val sec = mainSecondsLeft % 60
             String.format("%02d:%02d", min, sec)
-        } else "$minutesTimeLeft:00"
+        } else "$timerTime:00"
 
         Column(
             modifier = Modifier
@@ -78,7 +80,8 @@ fun MainScreen(
                     .padding(top = 15.dp)
             ) {
                 TopAppBarMainUI(
-                    mainViewModel = mainViewModel
+                    mainViewModel = mainViewModel,
+                    navController = navController,
                 )
             }
 
@@ -94,7 +97,7 @@ fun MainScreen(
                     isTimerRunning = isTimerRunning
                 ) {
                     val inputMainData = Data.Builder()
-                        .putInt(TimerWorker.MAIN_KEY_MINUTES, minutesTimeLeft)
+                        .putInt(TimerWorker.MAIN_KEY_MINUTES, timerTime)
                         .build()
 
                     val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()

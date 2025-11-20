@@ -35,14 +35,9 @@ fun DialogMusicCollectionUI(
     mainViewModel: MainViewModel
 ) {
 
-    val musicCollection by mainViewModel.musicList.collectAsState(emptyList())
-
-    val selectedMusicPlay by mainViewModel.selectedPlayMusic.collectAsState(0)
-
     Dialog(
         onDismissRequest = {
             mainViewModel.setDialogMusicStore(false)
-            mainViewModel.stopMusic()
         }
     ) {
         Card(
@@ -65,7 +60,7 @@ fun DialogMusicCollectionUI(
                         .background(MainBackgroundColor)
                         .height(50.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Top
                 ) {
                     Text(
                         text = "Музыка",
@@ -78,24 +73,6 @@ fun DialogMusicCollectionUI(
                     )
                 }
 
-                LazyRow (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 9.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    items(musicCollection.size) { index ->
-                        val currentMusic = musicCollection[index]
-
-                        CardMusicUI(
-                            mainViewModel = mainViewModel,
-                            music = currentMusic,
-                            isPlayMusic = selectedMusicPlay == currentMusic.rawResId,
-                        )
-
-                    }
-                }
             }
         }
     }

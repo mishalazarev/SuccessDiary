@@ -12,7 +12,10 @@ import white.ball.success_diary.presentation.bottom_bar.BottomNavigationBar
 import white.ball.success_diary.presentation.screen.MainScreen
 import white.ball.success_diary.presentation.screen.NoteBookScreen
 import white.ball.success_diary.presentation.screen.ProfileScreen
+import white.ball.success_diary.presentation.screen.additional.AboutUsScreen
 import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
+import white.ball.success_diary.presentation.screen.additional.NewsScreen
+import white.ball.success_diary.presentation.screen.additional.StoreScreen
 import white.ball.success_diary.presentation.view_model.MainViewModel
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 import white.ball.success_diary.presentation.view_model.ProfileViewModel
@@ -33,7 +36,8 @@ fun MainNavController(
             route = ScreenNavigation.MAIN_SCREEN.route
         ) {
             MainScreen(
-                mainViewModel = mainViewModel
+                mainViewModel = mainViewModel,
+                navController = navController,
             )
         }
 
@@ -53,7 +57,7 @@ fun MainNavController(
                 profileViewModel = profileViewModel
             )
         }
-
+        // Additional
         composable (
             route = ScreenNavigation.CREATE_NOTE_SCREEN.route
         ) {
@@ -61,6 +65,29 @@ fun MainNavController(
                 noteBookViewModel = noteBookViewModel,
                 navController = navController,
                 innerPadding = innerPadding,
+            )
+        }
+
+        composable (
+            route = ScreenNavigation.NEWS_SCREEN.route
+        ) {
+            NewsScreen(
+            )
+        }
+
+        composable (
+            route = ScreenNavigation.STORE_SCREEN.route
+        ) {
+            StoreScreen(
+                mainViewModel = mainViewModel,
+                navController = navController,
+            )
+        }
+
+        composable (
+            route = ScreenNavigation.ABOUT_US_SCREEN.route
+        ) {
+            AboutUsScreen(
             )
         }
     }

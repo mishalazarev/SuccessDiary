@@ -22,9 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.PageBlueColor
@@ -71,10 +75,12 @@ fun DialogChangeColorUI(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Выберите цвет",
+                        text = "Цвет блокнота",
                         style = TextStyle(
-                            color = Color.Black,
-                            fontSize = 24.sp
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                            fontFamily = FontFamily(Font(R.font.roboto))
                         )
                     )
                 }
