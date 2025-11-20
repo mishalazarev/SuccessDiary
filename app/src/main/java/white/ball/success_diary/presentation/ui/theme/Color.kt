@@ -17,6 +17,8 @@ val BottomBarColor = Color(0xFFFFB473)
 val BottomBarItemClickedColor = Color(0xFF06246F)
 val BottomBarItemDefaultColor = Color(0xFF70727B)
 
+val CardDefaultColor = Color(0xFFEAEDEF)
+
 
 // MainScreen
 val LineCoffeeCoinBalanceColor = Color(0xFFBF7130)

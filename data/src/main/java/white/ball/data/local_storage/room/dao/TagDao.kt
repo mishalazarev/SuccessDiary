@@ -3,6 +3,7 @@ package white.ball.data.local_storage.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -14,10 +15,13 @@ interface TagDao {
     @Query("SELECT * FROM tag")
     fun getTagList(): Flow<List<TagDTO>>
 
-    @Insert
-    suspend fun addTag(tagDTO: TagDTO)
+    @Insert(onConflict = REPLACE)
+    suspend fun insertTag(tagDTO: TagDTO)
 
-    @Update
+    @Insert(onConflict = REPLACE)
+    suspend fun insertTagList(tagList: List<TagDTO>)
+
+    @Update(onConflict = REPLACE)
     suspend fun updateTag(tagDTO: TagDTO)
 
     @Delete

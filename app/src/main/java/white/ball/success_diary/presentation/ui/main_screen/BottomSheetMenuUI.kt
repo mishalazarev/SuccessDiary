@@ -138,6 +138,36 @@ fun BottomSheetMenuUI() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
+                    painter = painterResource(R.drawable.decor_hashtag),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Магазин тэгов",
+                    style = bottomSheetTextStyle
+                )
+            }
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                color = LineCoffeeCoinBalanceColor
+            )
+
+            Row(
+                modifier = Modifier
+                    .clickable {
+
+                    }
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
                     painter = painterResource(R.drawable.decor_setting),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)

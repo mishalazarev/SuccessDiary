@@ -90,7 +90,8 @@ fun MainScreen(
             ) {
 
                 TimerButtonUI(
-                    isTimerRunning
+                    mainViewModel = mainViewModel,
+                    isTimerRunning = isTimerRunning
                 ) {
                     val inputMainData = Data.Builder()
                         .putInt(TimerWorker.MAIN_KEY_MINUTES, minutesTimeLeft)

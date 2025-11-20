@@ -6,7 +6,9 @@ import white.ball.domain.model.Tag
 interface TagRepository {
     fun getTagList(): Flow<List<Tag>>
 
-    suspend fun addTag(tag: Tag)
+    suspend fun insertTag(tag: Tag)
+
+    suspend fun insertTagList(tagList: List<Tag>)
 
     suspend fun updateTag(tag: Tag)
 

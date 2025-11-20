@@ -11,26 +11,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
+import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
 fun TimerButtonUI(
-//    backgroundColor: Int,
-    isStartedButton: Boolean,
+    mainViewModel: MainViewModel,
+    isTimerRunning: Boolean,
     onClick: () -> Unit
 ) {
 
+    val selectedTag by mainViewModel.selectedTag.collectAsState(null)
+
     val buttonSizeAnimation by animateDpAsState(
-        targetValue = if (isStartedButton) {
+        targetValue = if (isTimerRunning) {
             300.dp
         } else {
             200.dp
@@ -42,10 +47,10 @@ fun TimerButtonUI(
     )
 
     val tagSizeAnimation by animateDpAsState(
-        targetValue = if (isStartedButton) {
-            220.dp
+        targetValue = if (isTimerRunning) {
+            200.dp
         } else {
-            140.dp
+            120.dp
         },
         animationSpec = tween (
             durationMillis = 400,
@@ -56,7 +61,7 @@ fun TimerButtonUI(
     Box(
         modifier = Modifier
             .size(buttonSizeAnimation)
-            .background(color = if (isStartedButton) {
+            .background(color = if (isTimerRunning) {
                 ClickedButtonTimerColor
             } else {
                 DefaultButtonTimerColor
@@ -67,7 +72,7 @@ fun TimerButtonUI(
                 shape = CircleShape
             )
             .padding(10.dp)
-            .background(color = if (isStartedButton) {
+            .background(color = if (isTimerRunning) {
                 ClickedButtonTimerColor
             } else {
                 DefaultButtonTimerColor
@@ -78,8 +83,8 @@ fun TimerButtonUI(
             },
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.tag_dumbbells),
+        AsyncImage(
+            model = selectedTag?.imageResId ?: R.drawable.tag_dumbbells,
             contentDescription = null,
             modifier = Modifier
                 .size(tagSizeAnimation)

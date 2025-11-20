@@ -19,9 +19,14 @@ class TagImpl @Inject constructor(
         }
     }
 
-    override suspend fun addTag(tag: Tag) {
+    override suspend fun insertTag(tag: Tag) {
         val tagDTO = tag.toTagDTO()
-        tagDao.addTag(tagDTO)
+        tagDao.insertTag(tagDTO)
+    }
+
+    override suspend fun insertTagList(tagList: List<Tag>) {
+        val tagDTOList = tagList.map { it.toTagDTO() }
+        tagDao.insertTagList(tagDTOList)
     }
 
     override suspend fun updateTag(tag: Tag) {

@@ -123,8 +123,9 @@ class TagCollection {
         Tag(
             tagId = 16,
             title = "Книга",
+            status = ItemStatus.AVAILABLE,
             imageResId = R.drawable.tag_book,
-            price = 1200,
+            price = 0,
         ),
 
         Tag(

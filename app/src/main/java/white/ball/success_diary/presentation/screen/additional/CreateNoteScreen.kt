@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.note_book.BottomSheetNoteMenuUI
-import white.ball.success_diary.presentation.ui.note_book.ChangeColorDialogUI
+import white.ball.success_diary.presentation.ui.note_book.dialog.DialogChangeColorUI
 import white.ball.success_diary.presentation.ui.note_book.swipe.SwipeTaskContainer
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
@@ -52,7 +52,7 @@ fun CreateNoteScreen(
     val isOpenChangeColorDialog by noteBookViewModel.isOpenDialogChangeColor.collectAsState(false)
 
     if (isOpenChangeColorDialog) {
-        ChangeColorDialogUI(
+        DialogChangeColorUI(
             noteBookViewModel = noteBookViewModel
         )
     }

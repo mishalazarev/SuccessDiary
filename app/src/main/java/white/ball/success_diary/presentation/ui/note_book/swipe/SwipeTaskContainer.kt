@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.note_book.BlockTaskItemUI
+import white.ball.success_diary.presentation.ui.note_book.model.BlockTaskUI
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
 
@@ -78,7 +78,7 @@ fun SwipeTaskContainer(
                 }
             }
         ) {
-            BlockTaskItemUI(
+            BlockTaskUI(
                 noteBookViewModel = noteBookViewModel,
                 task = taskByNoteDomainModel,
             )
