@@ -2,6 +2,7 @@ package white.ball.success_diary.presentation.screen
 
 import android.icu.text.CaseMap
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,15 +51,14 @@ fun ProfileScreen(
                 .fillMaxSize()
                 .background(MainBackgroundColor)
                 .padding(innerPadding)
-                .padding(start = 5.dp, end = 5.dp, bottom = 100.dp),
+                .padding(bottom = 80.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             item {
                 Text(
                     text = "Достижения",
                     modifier = Modifier
-                        .padding(vertical = 16.dp),
+                        .padding(vertical = 9.dp),
                     style = TextStyle(
                         color = Color.DarkGray,
                         fontSize = 20.sp,
@@ -74,17 +74,16 @@ fun ProfileScreen(
             }
 
             item {
-
                 Button(
                     onClick = {
-                        scope.launch (Dispatchers.IO) {
+                        scope.launch(Dispatchers.IO) {
                             profileViewModel.getReward()
                         }
                     },
                     modifier = Modifier
                         .height(60.dp)
                         .fillMaxWidth()
-                        .padding(top = 16.dp),
+                        .padding(top = 16.dp, start = 5.dp, end = 5.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isGetReward)
                             DefaultButtonTimerColor

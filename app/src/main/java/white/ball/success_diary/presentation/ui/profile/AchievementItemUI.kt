@@ -37,7 +37,7 @@ fun AchievementItemUI(
 
     Column(
         modifier = Modifier
-            .padding(top = 9.dp)
+            .padding(top = 9.dp, start = 5.dp, end = 5.dp)
             .fillMaxWidth()
             .background(AchievementBlockColor, RoundedCornerShape(10.dp))
             .padding(top = 9.dp),

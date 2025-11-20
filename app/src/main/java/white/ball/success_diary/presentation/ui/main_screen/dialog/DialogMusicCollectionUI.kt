@@ -22,7 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.theme.BottomBarColor
+import white.ball.success_diary.presentation.ui.main_screen.card.CardMusicUI
+import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
@@ -49,17 +50,17 @@ fun DialogMusicCollectionUI(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(BottomBarColor)
+                        .background(MainBackgroundColor)
                         .height(50.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Магазин музыки",
+                        text = "Музыка",
                         style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.SemiBold,
                             color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily(Font(R.font.roboto))
                         )
                     )
@@ -70,7 +71,7 @@ fun DialogMusicCollectionUI(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-
+                    CardMusicUI()
                 }
             }
         }

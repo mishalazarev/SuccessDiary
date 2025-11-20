@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import white.ball.domain.collection.achievement.AchievementCollection
+import white.ball.domain.collection.AchievementCollection
 import white.ball.domain.model.Achievement
 import white.ball.domain.model.additional.AchievementTask
 import white.ball.domain.use_case.model.AchievementUseCases
@@ -20,13 +20,12 @@ class ProfileViewModel @Inject constructor(
     private val coffeeCoinUseCases: CoffeeCoinUseCases,
 ) : ViewModel() {
 
-    private val achievementCollection = AchievementCollection()
-
     private val _achievementList = MutableStateFlow<List<Achievement>>(emptyList())
     val achievementList: Flow<List<Achievement>> = _achievementList
 
     private val _isGetReward = MutableStateFlow(false)
     val isGetReward: Flow<Boolean> = _isGetReward
+    private val achievementCollection = AchievementCollection()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,9 +34,8 @@ class ProfileViewModel @Inject constructor(
                     val source = achievementCollection.achievements
 
                     val insertedIds = mutableListOf<Long>()
-                    for (ach in source) {
-                        val newId =
-                            achievementUseCases.insertAchievementUseCase(ach) // returns Long
+                    for (achievement in source) {
+                        val newId = achievementUseCases.insertAchievementUseCase(achievement)
                         insertedIds.add(newId)
                     }
 

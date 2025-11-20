@@ -40,6 +40,7 @@ import java.util.UUID
 fun MainScreen(
     mainViewModel: MainViewModel
 ) {
+
     Scaffold { innerPadding ->
 
         val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
@@ -63,7 +64,6 @@ fun MainScreen(
             val sec = mainSecondsLeft % 60
             String.format("%02d:%02d", min, sec)
         } else "$minutesTimeLeft:00"
-
 
         Column(
             modifier = Modifier

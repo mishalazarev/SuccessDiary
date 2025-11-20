@@ -67,11 +67,11 @@ fun BottomSheetMenuUI() {
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
                     .clickable {
 
-                    },
+                    }
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -90,6 +90,9 @@ fun BottomSheetMenuUI() {
 
             HorizontalDivider(
                 modifier = Modifier
+                    .clickable {
+
+                    }
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
                 color = LineCoffeeCoinBalanceColor
@@ -97,11 +100,11 @@ fun BottomSheetMenuUI() {
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
                     .clickable {
 
-                    },
+                    }
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -114,6 +117,36 @@ fun BottomSheetMenuUI() {
 
                 Text(
                     text = "Новости",
+                    style = bottomSheetTextStyle
+                )
+            }
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                color = LineCoffeeCoinBalanceColor
+            )
+
+            Row(
+                modifier = Modifier
+                    .clickable {
+
+                    }
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.decor_setting),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = "Настройки",
                     style = bottomSheetTextStyle
                 )
             }

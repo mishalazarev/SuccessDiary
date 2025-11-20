@@ -7,17 +7,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import white.ball.domain.extension_model.TagStatus
+import white.ball.domain.collection.MusicCollection
+import white.ball.domain.collection.TagCollection
+import white.ball.domain.extension_model.ItemStatus
 import white.ball.domain.model.CoffeeCoin
 import white.ball.domain.model.Tag
 import white.ball.domain.use_case.model.CoffeeCoinUseCases
+import white.ball.domain.use_case.model.MusicUseCases
 import white.ball.domain.use_case.model.TagUseCases
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val tagUseCases: TagUseCases,
-    private val coffeeCoinUseCases: CoffeeCoinUseCases
+    private val coffeeCoinUseCases: CoffeeCoinUseCases,
+    val musicUseCases: MusicUseCases,
 ) : ViewModel() {
 
     private val _coffeeCoins = MutableStateFlow<CoffeeCoin?>(null)
@@ -38,6 +42,13 @@ class MainViewModel @Inject constructor(
     private val _isOpenDialogTagCollection = MutableStateFlow(false)
     val isOpenDialogTagCollection: Flow<Boolean> = _isOpenDialogTagCollection
 
+    private val _isOpenDialogMusicCollection = MutableStateFlow(false)
+    val isOpenDialogMusicCollection: Flow<Boolean> = _isOpenDialogMusicCollection
+
+
+    private val tagCollection = TagCollection()
+    private val musicCollection = MusicCollection()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             coffeeCoinUseCases.getCoffeeCoinsUseCase().collect { coffeeCoin ->
@@ -45,6 +56,18 @@ class MainViewModel @Inject constructor(
                     coffeeCoinUseCases.createCoffeeCoinUseCase(CoffeeCoin())
                 } else {
                     _coffeeCoins.value = coffeeCoin
+                }
+            }
+        }
+
+        viewModelScope.launch (Dispatchers.IO) {
+            musicUseCases.getMusicListUseCase().collect { musicList ->
+                if (musicList == null) {
+                    musicUseCases.insertMusicListUseCase(
+                        musicCollection.musicCollection.map {
+                            it
+                        }
+                    )
                 }
             }
         }
@@ -63,6 +86,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun setDialogMusicStore(turn: Boolean) {
+       _isOpenDialogMusicCollection.value = turn
+    }
+
+    fun setDialogTagCollection(turn: Boolean) {
         _isOpenDialogTagCollection.value = turn
     }
 
@@ -78,7 +105,7 @@ class MainViewModel @Inject constructor(
         _coffeeCoins.value?.let { coffeeCoin ->
             if (tag.price > coffeeCoin.balance) return false
 
-            tag.status = TagStatus.AVAILABLE
+            tag.status = ItemStatus.AVAILABLE
             tagUseCases.updateTagUseCase(tag)
             return true
         }

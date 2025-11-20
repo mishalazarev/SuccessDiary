@@ -25,13 +25,13 @@ import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun TagCollectionDialogUI(
+fun DialogTagCollectionDialogUI(
     mainViewModel: MainViewModel
 ) {
 
     Dialog(
         onDismissRequest = {
-
+            mainViewModel.setDialogTagCollection(false)
         }
     ) {
         Card(

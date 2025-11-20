@@ -1,4 +1,4 @@
-package white.ball.domain.collection.achievement
+package white.ball.domain.collection
 
 import white.ball.domain.R
 import white.ball.domain.extension_model.AchievementMeasurement
