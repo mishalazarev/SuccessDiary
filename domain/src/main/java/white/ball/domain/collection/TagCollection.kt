@@ -195,14 +195,14 @@ class TagCollection {
             tagId = 26,
             title = "Затмение",
             imageResId = R.drawable.tag_moon_mist,
-            price = 1500,
+            price = 600,
         ),
 
         Tag(
             tagId = 27,
             title = "Планеты",
-            imageResId = R.drawable.tag_moon_mist,
-            price = 600,
+            imageResId = R.drawable.tag_solar_system_orbit,
+            price = 1500,
         ),
 
         Tag(

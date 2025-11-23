@@ -4,9 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.view_model.MainViewModel
@@ -14,33 +15,23 @@ import white.ball.success_diary.presentation.view_model.MainViewModel
 @Composable
 fun ButtonMusicUI(
     mainViewModel: MainViewModel,
-    openMusicDialog: @Composable () -> Unit
 ) {
-
-    val isOpenDialogMusic by mainViewModel.isOpenDialogMusicCollection.collectAsState(false)
-    val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
-
-    if (isOpenDialogMusic) {
-        openMusicDialog()
-    }
+    var imageResId by remember { mutableIntStateOf( R.drawable.icon_music_default) }
 
     TextButton(
         onClick = {
-            if (isOpenDialogMusic && !isTimerRunning) {
-
+            if (mainViewModel.isPlayingMusic()) {
+                mainViewModel.stopLongMusic()
+                imageResId = R.drawable.icon_music_default
             } else {
-                mainViewModel.setDialogMusicStore(true)
+                mainViewModel.playLongMusic()
+                imageResId = R.drawable.icon_music_clicked
             }
         },
         shape = CircleShape
     ) {
         Image(
-            painter = painterResource(
-                if (isTimerRunning)
-                    R.drawable.icon_music_clicked
-                else
-                    R.drawable.icon_music_default
-            ),
+            painter = painterResource(imageResId),
             contentDescription = null,
         )
     }

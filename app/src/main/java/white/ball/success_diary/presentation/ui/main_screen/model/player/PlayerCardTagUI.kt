@@ -1,6 +1,5 @@
-package white.ball.success_diary.presentation.ui.main_screen.model
+package white.ball.success_diary.presentation.ui.main_screen.model.player
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,7 @@ import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun CardTagUI(
+fun PlayerCardTagUI(
     tag: Tag,
     isSelected: Boolean,
     mainViewModel: MainViewModel,

@@ -14,7 +14,6 @@ import white.ball.success_diary.presentation.screen.NoteBookScreen
 import white.ball.success_diary.presentation.screen.ProfileScreen
 import white.ball.success_diary.presentation.screen.additional.AboutUsScreen
 import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
-import white.ball.success_diary.presentation.screen.additional.NewsScreen
 import white.ball.success_diary.presentation.screen.additional.StoreScreen
 import white.ball.success_diary.presentation.view_model.MainViewModel
 import white.ball.success_diary.presentation.view_model.NoteBookViewModel
@@ -69,13 +68,6 @@ fun MainNavController(
         }
 
         composable (
-            route = ScreenNavigation.NEWS_SCREEN.route
-        ) {
-            NewsScreen(
-            )
-        }
-
-        composable (
             route = ScreenNavigation.STORE_SCREEN.route
         ) {
             StoreScreen(
@@ -88,6 +80,7 @@ fun MainNavController(
             route = ScreenNavigation.ABOUT_US_SCREEN.route
         ) {
             AboutUsScreen(
+                versionApp = "1.0.0"
             )
         }
     }

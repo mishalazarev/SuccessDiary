@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material3.Card
@@ -27,19 +28,22 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.main_screen.TimerPickerUI
-import white.ball.success_diary.presentation.ui.main_screen.model.CardTagUI
+import white.ball.success_diary.presentation.ui.main_screen.model.player.PlayerCardMusicUI
+import white.ball.success_diary.presentation.ui.main_screen.model.player.PlayerCardTagUI
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun DialogTagCollectionDialogUI(
+fun DialogPlayerCollectionUI(
     mainViewModel: MainViewModel
 ) {
 
     val availableTag by mainViewModel.availableTag.collectAsState(emptyList())
+    val selectedTag by mainViewModel.selectedTag.collectAsState(null)
 
-    val isSelectedTag by mainViewModel.selectedTag.collectAsState(null)
+    val availableMusic by mainViewModel.availableMusic.collectAsState(emptyList())
+    val selectedMusic by mainViewModel.selectedPlayMusic.collectAsState(null)
 
     Dialog(
         onDismissRequest = {
@@ -49,7 +53,7 @@ fun DialogTagCollectionDialogUI(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp),
+                .height(550.dp),
             colors = CardDefaults.cardColors(
                 containerColor = CardDefaultColor
             )
@@ -78,10 +82,42 @@ fun DialogTagCollectionDialogUI(
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 20.dp, top = 9.dp)
+                        .padding(start = 20.dp, top = 16.dp)
                 ) {
                     Text(
-                        text = "Тэг",
+                        text = "Музыка",
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(Font(R.font.roboto))
+                        )
+                    )
+                }
+
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                ) {
+                    items(availableMusic.size) { index ->
+                        val currentMusic = availableMusic[index]
+                        PlayerCardMusicUI(
+                            music = currentMusic,
+                            isSelected = selectedMusic == currentMusic.rawResId,
+                            mainViewModel = mainViewModel
+                        ) {
+                            mainViewModel.selectedMusic(currentMusic.rawResId)
+                        }
+                    }
+                }
+
+
+                Column(
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 16.dp)
+                ) {
+                    Text(
+                        text = "Тэги",
                         color = Color.Black,
                         style = TextStyle(
                             fontSize = 14.sp,
@@ -94,22 +130,22 @@ fun DialogTagCollectionDialogUI(
                     LazyHorizontalGrid(
                         rows = GridCells.Fixed(2),
                         modifier = Modifier
-                            .height(220.dp)
+                            .height(210.dp)
                             .padding(9.dp)
                     ) {
                         items(availableTag.size) { index ->
                             val currentTag = availableTag[index]
-                            CardTagUI(
+                            PlayerCardTagUI(
                                 tag = currentTag,
                                 mainViewModel = mainViewModel,
-                                isSelected = isSelectedTag == currentTag
+                                isSelected = selectedTag == currentTag
                             )
                         }
                     }
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 20.dp, top = 9.dp)
+                        .padding(start = 20.dp, top = 16.dp)
                 ) {
                     Text(
                         text = "Время",

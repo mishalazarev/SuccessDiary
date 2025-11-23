@@ -3,6 +3,7 @@ package white.ball.success_diary.presentation.ui.main_screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,44 +37,38 @@ fun TimerPickerUI(
         numberList[index % numberList.size]
     }
 
-    val selectedTime by mainViewModel.selectedTime.collectAsState(45)
+    val selectedTime by mainViewModel.selectedTime.collectAsState(20)
 
-    val numbersListState = rememberLazyListState(
+    val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = infiniteNumberList.size / 2
     )
 
-    LaunchedEffect(numbersListState.isScrollInProgress) {
-        if (!numbersListState.isScrollInProgress) {
-            val centerIndex = (numbersListState.firstVisibleItemIndex + 2)
-                .coerceIn(0, infiniteNumberList.size - 1)
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (!listState.isScrollInProgress) {
+            val layoutInfo = listState.layoutInfo
+            val center = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
 
-            val realValue = infiniteNumberList[centerIndex]
-            mainViewModel.setSelectedTime(realValue)
-        }
-    }
+            val closest = layoutInfo.visibleItemsInfo.minByOrNull { item ->
+                kotlin.math.abs((item.offset + item.size / 2) - center)
+            }
 
-    LaunchedEffect(selectedTime) {
-        val index = infiniteNumberList.indexOfFirst { it == selectedTime }
-        if (index != -1) {
-
-            val safeIndex = (index - 2).coerceIn(0, infiniteNumberList.size - 1)
-
-            numbersListState.animateScrollToItem(safeIndex)
+            closest?.let {
+                mainViewModel.setSelectedTime(infiniteNumberList[it.index])
+            }
         }
     }
 
     LazyRow(
-        state = numbersListState,
+        state = listState,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 9.dp)
-        ,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(top = 9.dp),
+        contentPadding = PaddingValues(horizontal = 120.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         items(infiniteNumberList.size) { index ->
             val currentNumber = infiniteNumberList[index]
-            val isSelected = selectedTime == currentNumber
+            val isSelected = currentNumber == selectedTime
 
             Box(
                 modifier = Modifier
@@ -85,11 +80,9 @@ fun TimerPickerUI(
             ) {
                 Text(
                     text = currentNumber.toString(),
-                    style = TextStyle(
-                        color = if (isSelected) MainBackgroundColor else Color.DarkGray,
-                        fontSize = if (isSelected) 26.sp else 16.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                    ),
+                    color = if (isSelected) MainBackgroundColor else Color.DarkGray,
+                    fontSize = if (isSelected) 26.sp else 16.sp,
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )
             }
         }

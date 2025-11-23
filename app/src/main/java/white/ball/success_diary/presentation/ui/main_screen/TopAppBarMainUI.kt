@@ -18,9 +18,8 @@ import androidx.navigation.NavController
 import white.ball.success_diary.presentation.ui.main_screen.button.BalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonMusicUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonTagUI
-import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogMusicCollectionUI
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogAddBalanceUI
-import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogTagCollectionDialogUI
+import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
@@ -40,11 +39,7 @@ fun TopAppBarMainUI(
 
         ButtonMusicUI(
             mainViewModel = mainViewModel
-        ) {
-            DialogMusicCollectionUI(
-                mainViewModel = mainViewModel
-            )
-        }
+        )
 
         AnimatedVisibility(
             visible = !isTimerRunning,
@@ -84,7 +79,7 @@ fun TopAppBarMainUI(
                 ButtonTagUI(
                     mainViewModel = mainViewModel
                 ) {
-                    DialogTagCollectionDialogUI(
+                    DialogPlayerCollectionUI(
                         mainViewModel = mainViewModel
                     )
                 }

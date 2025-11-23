@@ -11,6 +11,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import white.ball.domain.collection.MusicCollection
 import white.ball.domain.collection.TagCollection
@@ -36,15 +39,30 @@ class MainViewModel @Inject constructor(
     val coffeeCoin: Flow<CoffeeCoin?> = _coffeeCoins
 
     // Music
-    private var mediaPlayer: MediaPlayer? = null
+    private var mediaPlayerShortMusic: MediaPlayer? = null
+    private var mediaPlayerLongMusic: MediaPlayer? = null
 
     private var playMusicJob: Job? = null
 
     private val _musicList = MutableStateFlow<List<Music>>(emptyList())
     val musicList: Flow<List<Music>> = _musicList
 
-    private val _selectedPlayMusic = MutableStateFlow(0)
-    val selectedPlayMusic: Flow<Int> = _selectedPlayMusic
+    private val _availableMusic = _musicList
+        .map { list ->
+            list.filter { it.status == ItemStatus.AVAILABLE }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+    val availableMusic: Flow<List<Music>> = _availableMusic
+
+    private val _selectedPlayMusic = MutableStateFlow<Int?>(null)
+    val selectedPlayMusic: Flow<Int?> = _selectedPlayMusic
+
+    private val _selectedShortPlayMusic = MutableStateFlow<Int?>(null)
+    val selectedShortPlayMusic: Flow<Int?> = _selectedShortPlayMusic
 
     // Tag
     private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
@@ -75,10 +93,6 @@ class MainViewModel @Inject constructor(
 
     private val _isOpenDialogTagCollection = MutableStateFlow(false)
     val isOpenDialogTagCollection: Flow<Boolean> = _isOpenDialogTagCollection
-
-    private val _isOpenDialogMusicCollection = MutableStateFlow(false)
-    val isOpenDialogMusicCollection: Flow<Boolean> = _isOpenDialogMusicCollection
-
 
     private val tagCollection = TagCollection()
     private val musicCollection = MusicCollection()
@@ -116,6 +130,14 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
+        viewModelScope.launch {
+            _availableMusic.collect { list ->
+                if (list.isNotEmpty() && _selectedPlayMusic.value == null) {
+                    _selectedPlayMusic.value = list[0].rawResId
+                }
+            }
+        }
     }
 
     fun setTimer() {
@@ -126,45 +148,68 @@ class MainViewModel @Inject constructor(
         _selectedNavigationBottomBarIndex.value = index
     }
 
-    fun setSelectedOnTeenSecondsMusic(musicResId: Int) {
-        if (musicResId == _selectedPlayMusic.value) {
-            stopMusic()
+    fun selectedMusic(musicRawResId: Int) {
+        _selectedPlayMusic.value = musicRawResId
+    }
+
+    fun selectedAndPlayShortMusic(musicResId: Int) {
+        if (musicResId == _selectedShortPlayMusic.value) {
+            stopLongMusic()
             return
         }
 
-        stopMusic()
+        stopLongMusic()
 
-        _selectedPlayMusic.value = musicResId
+        _selectedShortPlayMusic.value = musicResId
 
         playMusicJob = viewModelScope.launch {
-            mediaPlayer = MediaPlayer.create(context, musicResId)
-            mediaPlayer?.start()
+            mediaPlayerShortMusic = MediaPlayer.create(context, musicResId)
+            mediaPlayerShortMusic?.start()
 
             delay(10_000)
 
-            stopMusic()
+            stopShortMusic()
         }
-
-        _selectedTag.value = tagCollection.tagList[8]
     }
 
-    fun stopMusic() {
+    fun stopShortMusic() {
         playMusicJob?.cancel()
         playMusicJob = null
 
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        mediaPlayerShortMusic?.stop()
+        mediaPlayerShortMusic?.release()
+        mediaPlayerShortMusic = null
 
-        _selectedPlayMusic.value = 0
+        _selectedShortPlayMusic.value = 0
     }
+
+
+    fun playLongMusic() {
+        playMusicJob = viewModelScope.launch {
+            _selectedPlayMusic.value?.let {
+                mediaPlayerShortMusic = MediaPlayer.create(context, it)
+            }
+
+            mediaPlayerShortMusic?.let {
+                it.isLooping = true
+                it.start()
+            }
+        }
+    }
+
+    fun stopLongMusic() {
+        playMusicJob?.cancel()
+        playMusicJob = null
+
+        mediaPlayerShortMusic?.stop()
+        mediaPlayerShortMusic?.release()
+        mediaPlayerShortMusic = null
+    }
+
+    fun isPlayingMusic() = mediaPlayerShortMusic?.isPlaying ?: false
 
     fun setDialogBalance() {
         _isOpenDialogBalance.value = !_isOpenDialogBalance.value
-    }
-
-    fun setDialogMusicStore(turn: Boolean) {
-        _isOpenDialogMusicCollection.value = turn
     }
 
     fun setDialogTagCollection(turn: Boolean) {

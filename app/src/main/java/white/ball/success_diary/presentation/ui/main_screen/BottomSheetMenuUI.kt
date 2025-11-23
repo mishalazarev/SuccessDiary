@@ -72,36 +72,6 @@ fun BottomSheetMenuUI(
             Row(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate(ScreenNavigation.NEWS_SCREEN.route)
-                    }
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.decor_news),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Text(
-                    text = "Новости",
-                    style = bottomSheetTextStyle
-                )
-            }
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
-                color = LineCoffeeCoinBalanceColor
-            )
-
-            Row(
-                modifier = Modifier
-                    .clickable {
                         navController.navigate(ScreenNavigation.STORE_SCREEN.route)
                     }
                     .fillMaxWidth()

@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.ui.main_screen.model
+package white.ball.success_diary.presentation.ui.main_screen.model.store
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,23 +33,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import white.ball.domain.model.Music
 import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun CardMusicUI(
+fun StoreCardMusicUI(
     mainViewModel: MainViewModel,
     music: Music,
     isPlayMusic: Boolean,
+    index: Int,
 ) {
+
+    val scope = rememberCoroutineScope()
 
     Card(
         modifier = Modifier
             .height(300.dp)
-            .padding(start = 10.dp)
+            .padding(
+                start = if (index != 0)
+                    10.dp
+                else
+                    0.dp
+            )
     ) {
         Column(
             modifier = Modifier
@@ -65,9 +76,9 @@ fun CardMusicUI(
                     .clip(RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp))
                     .clickable {
                         if (isPlayMusic) {
-                            mainViewModel.stopMusic()
+                            mainViewModel.stopShortMusic()
                         } else {
-                            mainViewModel.setSelectedOnTeenSecondsMusic(music.rawResId)
+                            mainViewModel.selectedAndPlayShortMusic(music.rawResId)
                         }
                     },
                 contentAlignment = Alignment.Center,
@@ -83,15 +94,13 @@ fun CardMusicUI(
 
                 Image(
                     painter = painterResource(
-                        if (isPlayMusic) {
+                        if (isPlayMusic)
                             R.drawable.icon_pause
-                        } else {
+                        else
                             R.drawable.icon_play
-                        }
                     ),
                     contentDescription = null
                 )
-
             }
 
 
@@ -117,10 +126,11 @@ fun CardMusicUI(
                 ),
             )
 
-
             Button(
                 onClick = {
-
+                    scope.launch(Dispatchers.IO) {
+                        mainViewModel.buyMusic(music)
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,7 +138,7 @@ fun CardMusicUI(
                 shape = RoundedCornerShape(5.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
-                    containerColor = DefaultButtonTimerColor
+                    containerColor = if (music.price == 0) BottomBarItemDefaultColor else DefaultButtonTimerColor
                 )
             ) {
                 Row(
@@ -138,16 +148,18 @@ fun CardMusicUI(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = music.price.toString()
+                        text = if (music.price == 0) "Доступно" else music.price.toString()
                     )
 
-                    Image(
-                        painter = painterResource(R.drawable.decor_coffee_coin),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(30.dp)
-                            .padding(start = 9.dp)
-                    )
+                    if (music.price != 0) {
+                        Image(
+                            painter = painterResource(R.drawable.decor_coffee_coin),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(start = 9.dp)
+                        )
+                    }
                 }
             }
         }

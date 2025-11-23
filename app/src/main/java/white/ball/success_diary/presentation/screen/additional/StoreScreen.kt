@@ -9,17 +9,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import white.ball.domain.extension_model.navigation.ScreenNavigation
-import white.ball.success_diary.presentation.ui.main_screen.model.CardMusicUI
+import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.main_screen.model.store.StoreCardMusicUI
+import white.ball.success_diary.presentation.ui.main_screen.model.store.StoreCardTagUI
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
+import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
@@ -29,40 +43,79 @@ fun StoreScreen(
 ) {
 
     val musicCollection by mainViewModel.musicList.collectAsState(emptyList())
+    val selectedMusicPlay by mainViewModel.selectedShortPlayMusic.collectAsState(0)
 
-    val selectedMusicPlay by mainViewModel.selectedPlayMusic.collectAsState(0)
+    val tagCollection by mainViewModel.tagList.collectAsState(emptyList())
 
-    Scaffold() { innerPadding ->
-        Column(
+    Scaffold { innerPadding ->
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
             modifier = Modifier
-                .padding(innerPadding)
-                .background(CardDefaultColor)
                 .fillMaxSize()
+                .background(CardDefaultColor)
+                .padding(innerPadding)
+                .padding(horizontal = 6.dp)
+                .padding(bottom = 80.dp)
+
         ) {
-            LazyRow (
-                modifier = Modifier
-                    .height(400.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                items(musicCollection.size) { index ->
-                    val currentMusic = musicCollection[index]
 
-                    CardMusicUI(
-                        mainViewModel = mainViewModel,
-                        music = currentMusic,
-                        isPlayMusic = selectedMusicPlay == currentMusic.rawResId,
+            item(span = { GridItemSpan(3) }) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                        .background(MainBackgroundColor, RoundedCornerShape(5.dp)),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Магазин",
+                        color = Color.White,
+                        style = TextStyle(
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(Font(R.font.roboto))
+                        )
                     )
-
                 }
+
+                LazyRow(
+                    modifier = Modifier
+                        .height(370.dp)
+                        .fillMaxWidth()
+                        .padding(top = 70.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    items(musicCollection.size) { index ->
+                        val currentMusic = musicCollection[index]
+
+                        StoreCardMusicUI(
+                            mainViewModel = mainViewModel,
+                            music = currentMusic,
+                            isPlayMusic = selectedMusicPlay == currentMusic.rawResId,
+                            index = index,
+                        )
+                    }
+                }
+            }
+
+            items(tagCollection.size) { index ->
+                val currentTag = tagCollection[index]
+                StoreCardTagUI(
+                    tag = currentTag,
+                    mainViewModel = mainViewModel,
+                    index = index,
+                )
             }
         }
     }
 
+
     BackHandler {
-        mainViewModel.stopMusic()
+        mainViewModel.stopLongMusic()
         navController.navigate(ScreenNavigation.MAIN_SCREEN.route) {
             popUpTo(ScreenNavigation.MAIN_SCREEN.route) {
                 inclusive = true

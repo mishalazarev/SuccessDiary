@@ -9,5 +9,5 @@ data class Music(
     val imageResId: Int,
     val rawResId: Int,
     val price: Int,
-    var status: ItemStatus,
+    var status: ItemStatus = ItemStatus.CLOSE,
 )
