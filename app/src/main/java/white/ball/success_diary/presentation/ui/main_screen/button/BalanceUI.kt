@@ -1,3 +1,4 @@
+
 package white.ball.success_diary.presentation.ui.main_screen.button
 
 import androidx.compose.foundation.Image
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +46,8 @@ fun BalanceUI(
     Box(
         modifier = Modifier
             .padding(top = 16.dp)
-            .size(140.dp, 40.dp)
+            .width(150.dp)
+            .height(40.dp)
             .clip(RoundedCornerShape(20.dp))
             .clickable {
                 mainViewModel.setDialogBalance()
@@ -52,7 +56,8 @@ fun BalanceUI(
     ) {
         Box(
             modifier = Modifier
-                .size(138.dp, 30.dp)
+                .fillMaxWidth()
+                .height( 30.dp)
                 .background(LineCoffeeCoinBalanceColor, RoundedCornerShape(35.dp)),
         )
 

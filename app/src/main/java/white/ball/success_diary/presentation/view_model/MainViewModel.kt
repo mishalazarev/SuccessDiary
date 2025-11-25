@@ -356,13 +356,12 @@ class MainViewModel @Inject constructor(
     }
 
     suspend fun takePrize() {
-        _timerFinish.value = false
 
         var updatedBalance = (_coffeeCoins.value?.balance ?: 0) + _selectedTime.value
         val timeNow = LocalDateTime.now().second
 
         if ((_focusTimeCoffee.value?.focusTime ?: 0) < timeNow) {
-            updatedBalance *= 3
+            updatedBalance += _selectedTime.value * 3
             _coffeeCoins.value = _coffeeCoins.value?.copy(
                 balance = updatedBalance
             )

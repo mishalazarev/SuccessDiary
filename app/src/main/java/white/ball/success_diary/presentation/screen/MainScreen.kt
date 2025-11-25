@@ -108,12 +108,6 @@ fun MainScreen(
                             }
                         }
                 )
-
-                if (isOpenDialogCustomizeTimer) {
-                    DialogPlayerCollectionUI(
-                        mainViewModel = mainViewModel
-                    )
-                }
             }
         }
     }
