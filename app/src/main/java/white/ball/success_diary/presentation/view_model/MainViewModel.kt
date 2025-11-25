@@ -25,12 +25,15 @@ import white.ball.domain.collection.MusicCollection
 import white.ball.domain.collection.TagCollection
 import white.ball.domain.extension_model.ItemStatus
 import white.ball.domain.model.CoffeeCoin
+import white.ball.domain.model.FocusTime
 import white.ball.domain.model.Music
 import white.ball.domain.model.Tag
 import white.ball.domain.use_case.model.CoffeeCoinUseCases
+import white.ball.domain.use_case.model.FocusTimeUseCases
 import white.ball.domain.use_case.model.MusicUseCases
 import white.ball.domain.use_case.model.TagUseCases
 import white.ball.success_diary.platform.app.service.TimerWorker
+import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
 
@@ -40,7 +43,8 @@ class MainViewModel @Inject constructor(
     private val context: Context,
     private val tagUseCases: TagUseCases,
     private val coffeeCoinUseCases: CoffeeCoinUseCases,
-    val musicUseCases: MusicUseCases,
+    private val musicUseCases: MusicUseCases,
+    private val focusTimeUseCases: FocusTimeUseCases,
 ) : ViewModel() {
 
     private val _coffeeCoins = MutableStateFlow<CoffeeCoin?>(null)
@@ -110,6 +114,11 @@ class MainViewModel @Inject constructor(
     private val _isOpenDialogCustomizeTimerCollection = MutableStateFlow(false)
     val isOpenDialogCustomizeTimerCollection: Flow<Boolean> = _isOpenDialogCustomizeTimerCollection
 
+    // focusTime up 3
+
+    private val _focusTimeCoffee = MutableStateFlow<FocusTime?>(null)
+    val focusTimeCoffee: Flow<FocusTime?> = _focusTimeCoffee
+
     private val tagCollection = TagCollection()
     private val musicCollection = MusicCollection()
 
@@ -152,6 +161,12 @@ class MainViewModel @Inject constructor(
                 if (list.isNotEmpty() && _selectedPlayMusic.value == null) {
                     _selectedPlayMusic.value = list[0].rawResId
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            focusTimeUseCases.getFocusTimeUseCase().collect {
+                _focusTimeCoffee.value = it
             }
         }
 
@@ -275,6 +290,28 @@ class MainViewModel @Inject constructor(
         return true
     }
 
+    suspend fun buyFocusTimeCoffee(time: Int) = when (time) {
+        24 -> {
+            focusTimeUseCases.insertFocusTimeUseCase(
+                FocusTime(
+                    focusTimeId = 0,
+                    focusTime = LocalDateTime.now().plusHours(24).second
+                )
+            )
+        }
+
+        3 -> {
+            focusTimeUseCases.insertFocusTimeUseCase(
+                FocusTime(
+                    focusTimeId = 0,
+                    focusTime = LocalDateTime.now().plusDays(3).second
+                )
+            )
+        }
+
+        else -> throw IllegalArgumentException("illegal time for focus time coffee")
+    }
+
     fun startTimer() {
 
         if (_isStartTimer.value) return
@@ -320,10 +357,25 @@ class MainViewModel @Inject constructor(
 
     suspend fun takePrize() {
         _timerFinish.value = false
-        val updatedBalance = (_coffeeCoins.value?.balance ?: 0) + _selectedTime.value
+
+        var updatedBalance = (_coffeeCoins.value?.balance ?: 0) + _selectedTime.value
+        val timeNow = LocalDateTime.now().second
+
+        if ((_focusTimeCoffee.value?.focusTime ?: 0) < timeNow) {
+            updatedBalance *= 3
+            _coffeeCoins.value = _coffeeCoins.value?.copy(
+                balance = updatedBalance
+            )
+        } else {
+            _focusTimeCoffee.value?.let {
+                focusTimeUseCases.deleteFocusTimeUseCase(it)
+            }
+        }
+
         _coffeeCoins.value = _coffeeCoins.value?.copy(
             balance = updatedBalance
         )
+
         coffeeCoinUseCases.updateBalanceUseCase(updatedBalance)
     }
 }

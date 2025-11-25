@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -72,10 +73,9 @@ fun DialogTimerFinish(
                     )
                 )
 
-
                 Row(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
@@ -85,7 +85,8 @@ fun DialogTimerFinish(
                         style = TextStyle(
                             color = TextBalanceColor,
                             fontSize = 24.sp,
-                            fontFamily = FontFamily(Font(R.font.roboto))
+                            fontFamily = FontFamily(Font(R.font.roboto)),
+                            fontWeight = FontWeight.ExtraBold,
                         )
                     )
 
@@ -96,6 +97,11 @@ fun DialogTimerFinish(
                             .padding(start = 9.dp)
                     )
                 }
+
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                )
 
                 Button(
                     onClick = {

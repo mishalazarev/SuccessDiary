@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.threeten.bp.LocalDateTime
 import white.ball.success_diary.platform.app.service.TimerWorker
 import white.ball.success_diary.presentation.navigation.MainNavController
 import white.ball.success_diary.presentation.view_model.MainViewModel
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
             }
 
         }
+
 
 
         if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)

@@ -44,7 +44,7 @@ import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun DialogAddBalanceUI(
+fun DialogCoffeeShopUI(
     mainViewModel: MainViewModel
 ) {
 
@@ -155,7 +155,7 @@ fun DialogAddBalanceUI(
                             onClick = {
                                 scope.launch(Dispatchers.IO) {
                                     coffeeCoin?.let {
-                                        mainViewModel.updateBalance(it.balance + 45)
+                                        mainViewModel.buyFocusTimeCoffee(24)
                                     }
                                 }
                             },
@@ -227,7 +227,9 @@ fun DialogAddBalanceUI(
 
                         Button(
                             onClick = {
-
+                                scope.launch (Dispatchers.IO) {
+                                    mainViewModel.buyFocusTimeCoffee(3)
+                                }
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = LineCoffeeCoinBalanceColor,
