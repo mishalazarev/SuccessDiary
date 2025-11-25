@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,10 +12,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import white.ball.domain.extension_model.bottom_bar.BottomBar
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
@@ -29,7 +26,7 @@ fun BottomNavigationBar(
     navController: NavController,
 ) {
     val selectedNavigationIndex by mainViewModel.selectedNavigationBottomBarIndex.collectAsState(0)
-    val isOpenTimer by mainViewModel.isTimerRunning.collectAsState(false)
+    val isOpenTimer by mainViewModel.isStartTimer.collectAsState(false)
 
     val bottomBarArray = BottomBar.entries.toTypedArray()
 

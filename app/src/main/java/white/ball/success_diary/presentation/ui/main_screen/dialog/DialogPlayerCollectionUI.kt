@@ -47,7 +47,7 @@ fun DialogPlayerCollectionUI(
 
     Dialog(
         onDismissRequest = {
-            mainViewModel.setDialogTagCollection(false)
+            mainViewModel.setDialogCustomizeTimer(false)
         }
     ) {
         Card(

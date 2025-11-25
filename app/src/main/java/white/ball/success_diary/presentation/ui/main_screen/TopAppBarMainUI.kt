@@ -5,19 +5,26 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import white.ball.domain.extension_model.navigation.ScreenNavigation
+import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.main_screen.button.BalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonMusicUI
-import white.ball.success_diary.presentation.ui.main_screen.button.ButtonTagUI
+import white.ball.success_diary.presentation.ui.main_screen.button.ButtonPlayerCustomizeTimerUI
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogAddBalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
 import white.ball.success_diary.presentation.view_model.MainViewModel
@@ -28,7 +35,7 @@ fun TopAppBarMainUI(
     navController: NavController,
 ) {
 
-    val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
+    val isTimerRunning by mainViewModel.isStartTimer.collectAsState(false)
 
     Row(
         modifier = Modifier
@@ -66,8 +73,14 @@ fun TopAppBarMainUI(
                 enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
                 exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
             ) {
-                BottomSheetMenuUI(
-                    navController = navController,
+                Image(
+                    painter = painterResource(R.drawable.icon_store),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clickable {
+                            navController.navigate(ScreenNavigation.STORE_SCREEN.route)
+                        }
                 )
             }
 
@@ -76,7 +89,7 @@ fun TopAppBarMainUI(
                 enter = fadeIn(tween(durationMillis = 300, easing = LinearEasing)),
                 exit = fadeOut(tween(durationMillis = 300, easing = LinearEasing)),
             ) {
-                ButtonTagUI(
+                ButtonPlayerCustomizeTimerUI(
                     mainViewModel = mainViewModel
                 ) {
                     DialogPlayerCollectionUI(

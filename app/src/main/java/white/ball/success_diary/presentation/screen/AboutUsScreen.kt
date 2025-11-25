@@ -1,4 +1,4 @@
-package white.ball.success_diary.presentation.screen.additional
+package white.ball.success_diary.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
+import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 
 @Composable
 fun AboutUsScreen(
@@ -34,7 +35,7 @@ fun AboutUsScreen(
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
-                .background(CardDefaultColor)
+                .background(MainBackgroundColor)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogTimerFinish
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
@@ -31,6 +32,8 @@ fun TimerButtonUI(
     isTimerRunning: Boolean,
     onClick: () -> Unit
 ) {
+    val isTimerFinish by mainViewModel.timerFinish.collectAsState(false)
+    val selectedTime by mainViewModel.selectedTime.collectAsState(0)
 
     val selectedTag by mainViewModel.selectedTag.collectAsState(null)
 
@@ -88,6 +91,13 @@ fun TimerButtonUI(
             contentDescription = null,
             modifier = Modifier
                 .size(tagSizeAnimation)
+        )
+    }
+
+    if (isTimerFinish) {
+        DialogTimerFinish(
+            coffeeCoin = selectedTime,
+            mainViewModel = mainViewModel
         )
     }
 }

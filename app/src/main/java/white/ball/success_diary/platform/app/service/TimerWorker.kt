@@ -1,101 +1,128 @@
 package white.ball.success_diary.platform.app.service
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+import android.content.pm.ServiceInfo
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import white.ball.success_diary.R
-
 
 class TimerWorker(
     private val context: Context,
-    workerParams: WorkerParameters
-) : CoroutineWorker(
-    context,
-    workerParams
-) {
+    private val workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams) {
+
+    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    private var mediaPlayer: MediaPlayer? = null
 
     override suspend fun doWork(): Result {
-        val mainMinutes = inputData.getInt(MAIN_KEY_MINUTES, DEFAULT_VALUE)
-
-        val totalSeconds = mainMinutes * SIXTY
-
         createNotificationChannel()
 
-        setForeground(createForegroundInfo("Осталось $mainMinutes"))
+        setForeground(connectToForegroundInfo("Таймер запущен"))
 
-        var secondsLeft = totalSeconds
-        while (secondsLeft > ZERO) {
-            val minutesLeft = secondsLeft / SIXTY
-            val secondsRem = secondsLeft % SIXTY
+        var secondsLeft = workerParams.inputData.getInt(TIME_KEY, 1) * SIXTY
 
-            setProgress(workDataOf(MAIN_TIME_LEFT_KEY to secondsLeft))
+        try {
+            while (secondsLeft != -1 && !isStopped) {
+                val minutes = secondsLeft / SIXTY
+                val seconds = secondsLeft % SIXTY
 
-            val text = String.format("%02d:%02d", minutesLeft, secondsRem)
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(NOTIFICATION_ID, buildNotification(text))
+                val timeFormat = String.format("%02d:%02d", minutes, seconds)
 
-            setForeground(createForegroundInfo(text))
-            delay(1000L)
-            secondsLeft -= 1
+                setProgress(workDataOf(TIME_PROGRESS to secondsLeft))
+
+                notificationManager.notify(NOTIFICATION_ID, createNotification(timeFormat))
+
+                delay(1_000)
+                secondsLeft -= 1
+            }
+        } catch (e: Exception) {
+            notificationManager.cancel(NOTIFICATION_ID)
+            return Result.failure()
+
         }
 
+        playSound()
+        delay(1_500)
+        stopSound()
+
+        notificationManager.cancel(NOTIFICATION_ID)
         return Result.success()
     }
-    private fun createForegroundInfo(text: String): ForegroundInfo {
-        val notification = buildNotification(text)
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ForegroundInfo(
-                NOTIFICATION_ID,
-                notification,
-                FOREGROUND_SERVICE_TYPE_DATA_SYNC
-                )
-        } else {
-            ForegroundInfo(NOTIFICATION_ID, notification)
+    private fun playSound() {
+            mediaPlayer = MediaPlayer.create(context, R.raw.sound_time_finish)
+            mediaPlayer?.apply {
+                start()
+        }
+
+        mediaPlayer = null
+    }
+
+    private fun stopSound() {
+        mediaPlayer?.apply {
+            stop()
+            release()
         }
     }
 
-    private fun buildNotification(text: String) = NotificationCompat
-        .Builder(context, CHANNEL_ID)
-        .setContentTitle("Таймер")
-        .setContentText(text)
-        .setSmallIcon(R.drawable.icon_music_clicked)
-        .setOngoing(true)
-        .build()
-    private fun createNotificationChannel() {
 
-        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                NAME_CHANNEL,
+                "Таймер",
                 NotificationManager.IMPORTANCE_LOW
             )
 
-            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
+    fun connectToForegroundInfo(text: String): ForegroundInfo {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ForegroundInfo(
+                NOTIFICATION_ID,
+                createNotification(text),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(
+                NOTIFICATION_ID,
+                createNotification(text)
+            )
+        }
+    }
+
+
+    fun createNotification(time: String): Notification {
+        return NotificationCompat
+            .Builder(context, CHANNEL_ID)
+            .setContentTitle("Таймер")
+            .setContentText(time)
+            .setSmallIcon(R.drawable.notebook_success)
+            .setOngoing(true)
+            .build()
+    }
+
+
     companion object {
-
         const val NOTIFICATION_ID = 101
-        const val CHANNEL_ID = "timer_channel_id"
-        const val NAME_CHANNEL = "channel"
-        const val MAIN_KEY_MINUTES = "main_key_minutes"
+        const val CHANNEL_ID = "timer_channel"
 
-        const val MAIN_TIME_LEFT_KEY = "main_time_left"
-
-        const val DEFAULT_VALUE = 1
+        const val TIME_KEY = "time_key"
+        const val TIME_PROGRESS = "time_progress"
         const val SIXTY = 60
-
-        const val ZERO = 0
     }
 }

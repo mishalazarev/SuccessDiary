@@ -1,6 +1,7 @@
 package white.ball.success_diary.presentation.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,30 +13,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import kotlinx.coroutines.launch
 import white.ball.success_diary.R
-import white.ball.success_diary.platform.app.service.TimerWorker
 import white.ball.success_diary.presentation.ui.main_screen.button.TimerButtonUI
 import white.ball.success_diary.presentation.ui.main_screen.TopAppBarMainUI
+import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
-import java.util.UUID
 
 @Composable
 fun MainScreen(
@@ -45,27 +39,23 @@ fun MainScreen(
 
     Scaffold { innerPadding ->
 
-        val isTimerRunning by mainViewModel.isTimerRunning.collectAsState(false)
-
+        val isTimerRunning by mainViewModel.isStartTimer.collectAsState(false)
         val timerTime by mainViewModel.selectedTime.collectAsState(45)
+        val secondsLeft by mainViewModel.timeLeft.collectAsState(-1)
 
-        val context = LocalContext.current
+        val isOpenDialogCustomizeTimer by mainViewModel.isOpenDialogCustomizeTimerCollection.collectAsState(
+            false
+        )
 
-        val workManager = WorkManager.getInstance(context)
+        val scope = rememberCoroutineScope()
 
-        val (currentWorkId, setCurrentWorkId) = remember { mutableStateOf<UUID?>(null) }
-
-        val workInfo = currentWorkId?.let { id ->
-            workManager.getWorkInfoByIdLiveData(id).observeAsState().value
-        }
-
-        val mainSecondsLeft = workInfo?.progress?.getInt(TimerWorker.MAIN_TIME_LEFT_KEY, -1) ?: -1
-
-        val timeText = if (mainSecondsLeft >= 0) {
-            val min = mainSecondsLeft / 60
-            val sec = mainSecondsLeft % 60
+        val timeText = if (secondsLeft >= 0) {
+            val min = secondsLeft / 60
+            val sec = secondsLeft % 60
             String.format("%02d:%02d", min, sec)
         } else "$timerTime:00"
+
+
 
         Column(
             modifier = Modifier
@@ -73,7 +63,6 @@ fun MainScreen(
                 .background(MainBackgroundColor)
                 .padding(innerPadding)
         ) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,30 +80,16 @@ fun MainScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 TimerButtonUI(
                     mainViewModel = mainViewModel,
                     isTimerRunning = isTimerRunning
                 ) {
-                    val inputMainData = Data.Builder()
-                        .putInt(TimerWorker.MAIN_KEY_MINUTES, timerTime)
-                        .build()
-
-                    val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
-                        .setInputData(inputMainData)
-                        .build()
-
-                    workManager.enqueue(workRequest)
-
-                    mainViewModel.setTimer()
-
                     if (isTimerRunning) {
-                        currentWorkId?.let { id ->
-                            workManager.cancelWorkById(id)
-                            setCurrentWorkId(null)
+                        scope.launch {
+                            mainViewModel.stopTimer()
                         }
                     } else {
-                        setCurrentWorkId(workRequest.id)
+                        mainViewModel.startTimer()
                     }
                 }
 
@@ -127,7 +102,18 @@ fun MainScreen(
                     ),
                     modifier = Modifier
                         .padding(top = 16.dp)
+                        .clickable {
+                            if (!isTimerRunning) {
+                                mainViewModel.setDialogCustomizeTimer(true)
+                            }
+                        }
                 )
+
+                if (isOpenDialogCustomizeTimer) {
+                    DialogPlayerCollectionUI(
+                        mainViewModel = mainViewModel
+                    )
+                }
             }
         }
     }

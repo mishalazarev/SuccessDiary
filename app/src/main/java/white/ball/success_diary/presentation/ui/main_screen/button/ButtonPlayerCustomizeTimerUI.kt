@@ -16,12 +16,12 @@ import white.ball.success_diary.R
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
-fun ButtonTagUI(
+fun ButtonPlayerCustomizeTimerUI(
     mainViewModel: MainViewModel,
     openTagCollection: @Composable () -> Unit
 ) {
 
-    val isOpenTagCollection by mainViewModel.isOpenDialogTagCollection.collectAsState(false)
+    val isOpenTagCollection by mainViewModel.isOpenDialogCustomizeTimerCollection.collectAsState(false)
 
     if (isOpenTagCollection) {
         openTagCollection()
@@ -29,7 +29,7 @@ fun ButtonTagUI(
 
     TextButton(
         onClick = {
-            mainViewModel.setDialogTagCollection(true)
+            mainViewModel.setDialogCustomizeTimer(true)
         },
         shape = CircleShape
     ) {
@@ -38,7 +38,7 @@ fun ButtonTagUI(
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 9.dp)
-                .rotate(-90f)
+                .rotate(90f)
                 .clip(CircleShape)
         )
     }

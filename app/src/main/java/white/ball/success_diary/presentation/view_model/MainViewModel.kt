@@ -3,7 +3,11 @@ package white.ball.success_diary.presentation.view_model
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +16,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -24,6 +30,8 @@ import white.ball.domain.model.Tag
 import white.ball.domain.use_case.model.CoffeeCoinUseCases
 import white.ball.domain.use_case.model.MusicUseCases
 import white.ball.domain.use_case.model.TagUseCases
+import white.ball.success_diary.platform.app.service.TimerWorker
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +48,6 @@ class MainViewModel @Inject constructor(
 
     // Music
     private var mediaPlayerShortMusic: MediaPlayer? = null
-    private var mediaPlayerLongMusic: MediaPlayer? = null
 
     private var playMusicJob: Job? = null
 
@@ -77,8 +84,15 @@ class MainViewModel @Inject constructor(
     val selectedNavigationBottomBarIndex: Flow<Int> = _selectedNavigationBottomBarIndex
 
     // Timer
-    private val _isOpenTimer = MutableStateFlow(false)
-    val isTimerRunning: Flow<Boolean> = _isOpenTimer
+
+    private var timerWorkId: UUID? = null
+    private var workManager: WorkManager
+
+    private val _timeLeft = MutableStateFlow(-1)
+    val timeLeft: StateFlow<Int> = _timeLeft
+
+    private val _isStartTimer = MutableStateFlow(false)
+    val isStartTimer: Flow<Boolean> = _isStartTimer
 
     private val _selectedTag = MutableStateFlow<Tag?>(null)
     val selectedTag: Flow<Tag?> = _selectedTag
@@ -86,13 +100,15 @@ class MainViewModel @Inject constructor(
     private val _selectedTime = MutableStateFlow(20)
     val selectedTime: Flow<Int> = _selectedTime
 
+    private val _timerFinish = MutableStateFlow(false)
+    val timerFinish: Flow<Boolean> = _timerFinish
 
     // dialogs
     private val _isOpenDialogBalance = MutableStateFlow(false)
     val isOpenDialogBalance: Flow<Boolean> = _isOpenDialogBalance
 
-    private val _isOpenDialogTagCollection = MutableStateFlow(false)
-    val isOpenDialogTagCollection: Flow<Boolean> = _isOpenDialogTagCollection
+    private val _isOpenDialogCustomizeTimerCollection = MutableStateFlow(false)
+    val isOpenDialogCustomizeTimerCollection: Flow<Boolean> = _isOpenDialogCustomizeTimerCollection
 
     private val tagCollection = TagCollection()
     private val musicCollection = MusicCollection()
@@ -138,10 +154,12 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
+        workManager = WorkManager.getInstance(context)
     }
 
-    fun setTimer() {
-        _isOpenTimer.value = !_isOpenTimer.value
+    fun setTimer(turn: Boolean) {
+        _isStartTimer.value = turn
     }
 
     fun setSelectedNavigationBottomBarIndex(index: Int) {
@@ -183,7 +201,6 @@ class MainViewModel @Inject constructor(
         _selectedShortPlayMusic.value = 0
     }
 
-
     fun playLongMusic() {
         playMusicJob = viewModelScope.launch {
             _selectedPlayMusic.value?.let {
@@ -212,8 +229,8 @@ class MainViewModel @Inject constructor(
         _isOpenDialogBalance.value = !_isOpenDialogBalance.value
     }
 
-    fun setDialogTagCollection(turn: Boolean) {
-        _isOpenDialogTagCollection.value = turn
+    fun setDialogCustomizeTimer(turn: Boolean) {
+        _isOpenDialogCustomizeTimerCollection.value = turn
     }
 
     fun setSelectedTag(tag: Tag) {
@@ -224,33 +241,89 @@ class MainViewModel @Inject constructor(
         _selectedTime.value = time
     }
 
-
     suspend fun updateBalance(balance: Int) {
         coffeeCoinUseCases.updateBalanceUseCase(balance)
     }
 
     suspend fun buyTag(tag: Tag): Boolean {
-        _coffeeCoins.value?.let { coffeeCoin ->
-            if (tag.price > coffeeCoin.balance) return false
+        val coin = _coffeeCoins.value ?: return false
+        if (tag.price > coin.balance) return false
 
-            tagUseCases.updateTagUseCase(tag)
-            return true
-        }
-        return false
+        tagUseCases.updateTagUseCase(
+            tag.copy(
+                status = ItemStatus.AVAILABLE,
+                price = 0,
+            )
+        )
+
+        updateBalance(coin.balance - tag.price)
+        return true
     }
 
     suspend fun buyMusic(music: Music): Boolean {
-        if (music.price > (_coffeeCoins.value?.balance ?: 0)) return false
+        val coin = _coffeeCoins.value ?: return false
+        if (music.price > coin.balance) return false
 
-        _musicList.value.let {
-            _musicList.value = it.map {
-                if (it.title == music.title) {
-                    it.copy(status = ItemStatus.AVAILABLE)
-                } else {
-                    it
-                }
+        musicUseCases.updateMusicUseCase(
+            music.copy(
+                status = ItemStatus.AVAILABLE,
+                price = 0,
+            )
+        )
+
+        updateBalance(coin.balance - music.price)
+        return true
+    }
+
+    fun startTimer() {
+
+        if (_isStartTimer.value) return
+        _isStartTimer.value = true
+
+        val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
+            .setInputData(workDataOf(TimerWorker.TIME_KEY to _selectedTime.value))
+            .build()
+
+        timerWorkId = workRequest.id
+
+        workManager.enqueue(workRequest)
+
+        observeTimer()
+    }
+
+    private fun observeTimer() {
+        timerWorkId?.let { id ->
+            viewModelScope.launch {
+                delay(1_000)
+                workManager.getWorkInfoByIdLiveData(id)
+                    .asFlow()
+                    .collectLatest {
+                        if (it != null) {
+
+                            _timeLeft.value = it.progress.getInt(TimerWorker.TIME_PROGRESS, 1)
+
+                            if (it.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+                                _isStartTimer.value = false
+                            }
+                        }
+                    }
             }
-            return true
         }
+    }
+
+    suspend fun stopTimer() {
+        setTimer(false)
+        workManager.cancelAllWork()
+        delay(500)
+        _timeLeft.value = _selectedTime.value * 60
+    }
+
+    suspend fun takePrize() {
+        _timerFinish.value = false
+        val updatedBalance = (_coffeeCoins.value?.balance ?: 0) + _selectedTime.value
+        _coffeeCoins.value = _coffeeCoins.value?.copy(
+            balance = updatedBalance
+        )
+        coffeeCoinUseCases.updateBalanceUseCase(updatedBalance)
     }
 }

@@ -52,10 +52,14 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material3)
     // Module
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.compose.ui.text.google.fonts)
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -93,5 +97,4 @@ dependencies {
     // ThreeTenABP (LocalDateTime)
     implementation(libs.threetenabp)
     // swipe
-    implementation("androidx.compose.material3:material3:1.3.0")
 }
