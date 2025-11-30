@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.main_screen.button.TimerButtonUI
 import white.ball.success_diary.presentation.ui.main_screen.TopAppBarMainUI
-import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
@@ -40,18 +39,14 @@ fun MainScreen(
     Scaffold { innerPadding ->
 
         val isTimerRunning by mainViewModel.isStartTimer.collectAsState(false)
-        val timerTime by mainViewModel.selectedTime.collectAsState(45)
-        val secondsLeft by mainViewModel.timeLeft.collectAsState(-1)
-
-        val isOpenDialogCustomizeTimer by mainViewModel.isOpenDialogCustomizeTimerCollection.collectAsState(
-            false
-        )
+        val timerTime by mainViewModel.selectedTime.collectAsState(1)
+        val timerSecondsLeft by mainViewModel.timerLeft.collectAsState(timerTime * 60)
 
         val scope = rememberCoroutineScope()
 
-        val timeText = if (secondsLeft >= 0) {
-            val min = secondsLeft / 60
-            val sec = secondsLeft % 60
+        val timeText = if (timerSecondsLeft >= 0) {
+            val min = timerSecondsLeft / 60
+            val sec = timerSecondsLeft % 60
             String.format("%02d:%02d", min, sec)
         } else "$timerTime:00"
 
@@ -86,8 +81,9 @@ fun MainScreen(
                 ) {
                     if (isTimerRunning) {
                         scope.launch {
-                            mainViewModel.stopTimer()
+                            mainViewModel.pauseTimer()
                         }
+                        mainViewModel.setDialogGiveUp(true)
                     } else {
                         mainViewModel.startTimer()
                     }

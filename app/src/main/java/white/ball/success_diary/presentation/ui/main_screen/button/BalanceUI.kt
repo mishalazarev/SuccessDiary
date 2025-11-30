@@ -32,26 +32,16 @@ import white.ball.success_diary.presentation.view_model.MainViewModel
 @Composable
 fun BalanceUI(
     mainViewModel: MainViewModel,
-    openAddBalance: @Composable () -> Unit
 ) {
 
     val coffeeCoin by mainViewModel.coffeeCoin.collectAsState(null)
-
-    val isOpenBalanceDialog by mainViewModel.isOpenDialogBalance.collectAsState(false)
-
-    if (isOpenBalanceDialog) {
-        openAddBalance()
-    }
 
     Box(
         modifier = Modifier
             .padding(top = 16.dp)
             .width(150.dp)
             .height(40.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .clickable {
-                mainViewModel.setDialogBalance()
-            },
+            .clip(RoundedCornerShape(20.dp)),
         contentAlignment = Alignment.Center,
     ) {
         Box(

@@ -9,18 +9,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
 import white.ball.data.local_storage.room.dao.CoffeeCoinDao
-import white.ball.data.local_storage.room.dao.FocusTimeDao
 import white.ball.data.local_storage.room.dao.MusicDao
 import white.ball.data.local_storage.room.dao.NoteDao
 import white.ball.data.local_storage.room.dao.TagDao
 import white.ball.data.local_storage.room.database.SuccessDiaryDatabase
 import white.ball.data.local_storage.room.implementation.CoffeeCoinImpl
-import white.ball.data.local_storage.room.implementation.FocusTimeImpl
 import white.ball.data.local_storage.room.implementation.MusicImpl
 import white.ball.data.local_storage.room.implementation.NoteImpl
 import white.ball.data.local_storage.room.implementation.TagImpl
 import white.ball.domain.repository.CoffeeCoinRepository
-import white.ball.domain.repository.FocusTimeRepository
 import white.ball.domain.repository.MusicRepository
 import white.ball.domain.repository.NoteRepository
 import white.ball.domain.repository.TagRepository
@@ -59,12 +56,6 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesFocusTimeDao(database: SuccessDiaryDatabase): FocusTimeDao {
-        return database.focusTimeDao()
-    }
-
-    @Provides
-    @Singleton
     fun providesMusicDao(database: SuccessDiaryDatabase): MusicDao {
         return database.musicDao()
     }
@@ -79,12 +70,6 @@ object DatabaseModule {
     @Singleton
     fun providesTagRepositoryImpl(tagDao: TagDao): TagRepository {
         return TagImpl(tagDao)
-    }
-
-    @Provides
-    @Singleton
-    fun providesFocusTimeImpl(focusTimeDao: FocusTimeDao): FocusTimeRepository {
-        return FocusTimeImpl(focusTimeDao)
     }
 
     @Provides

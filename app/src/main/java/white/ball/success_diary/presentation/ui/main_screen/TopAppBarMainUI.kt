@@ -25,7 +25,6 @@ import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.main_screen.button.BalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonMusicUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonPlayerCustomizeTimerUI
-import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogCoffeeShopUI
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
 import white.ball.success_diary.presentation.view_model.MainViewModel
 
@@ -55,11 +54,7 @@ fun TopAppBarMainUI(
         ) {
             BalanceUI(
                 mainViewModel = mainViewModel
-            ) {
-                DialogCoffeeShopUI(
-                    mainViewModel = mainViewModel
-                )
-            }
+            )
         }
 
         Column(

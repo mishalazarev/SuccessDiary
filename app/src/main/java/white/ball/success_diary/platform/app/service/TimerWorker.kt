@@ -8,14 +8,11 @@ import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import white.ball.success_diary.R
 
 class TimerWorker(
@@ -23,7 +20,8 @@ class TimerWorker(
     private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
-    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -32,21 +30,28 @@ class TimerWorker(
 
         setForeground(connectToForegroundInfo("Таймер запущен"))
 
-        var secondsLeft = workerParams.inputData.getInt(TIME_KEY, 1) * SIXTY
+        var timerSecondsLeft = workerParams.inputData.getInt(TIMER_KEY, 1)
+        var timerCancelSecondsLeft = workerParams.inputData.getInt(TIMER_CANCEL_KEY, 10)
 
         try {
-            while (secondsLeft != -1 && !isStopped) {
-                val minutes = secondsLeft / SIXTY
-                val seconds = secondsLeft % SIXTY
+            while (timerSecondsLeft > 0 && !isStopped) {
+                val minutes = timerSecondsLeft / SIXTY
+                val seconds = timerSecondsLeft % SIXTY
 
                 val timeFormat = String.format("%02d:%02d", minutes, seconds)
 
-                setProgress(workDataOf(TIME_PROGRESS to secondsLeft))
+                setProgress(
+                    workDataOf(
+                        TIMER_PROGRESS to timerSecondsLeft,
+                        TIMER_CANCEL_PROGRESS_KEY to timerCancelSecondsLeft
+                    )
+                )
 
                 notificationManager.notify(NOTIFICATION_ID, createNotification(timeFormat))
 
                 delay(1_000)
-                secondsLeft -= 1
+                timerSecondsLeft -= 1
+                timerCancelSecondsLeft -= 1
             }
         } catch (e: Exception) {
             notificationManager.cancel(NOTIFICATION_ID)
@@ -63,9 +68,9 @@ class TimerWorker(
     }
 
     private fun playSound() {
-            mediaPlayer = MediaPlayer.create(context, R.raw.sound_time_finish)
-            mediaPlayer?.apply {
-                start()
+        mediaPlayer = MediaPlayer.create(context, R.raw.sound_time_finish)
+        mediaPlayer?.apply {
+            start()
         }
 
         mediaPlayer = null
@@ -77,7 +82,6 @@ class TimerWorker(
             release()
         }
     }
-
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -96,7 +100,8 @@ class TimerWorker(
             ForegroundInfo(
                 NOTIFICATION_ID,
                 createNotification(text),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
         } else {
             ForegroundInfo(
                 NOTIFICATION_ID,
@@ -111,7 +116,7 @@ class TimerWorker(
             .Builder(context, CHANNEL_ID)
             .setContentTitle("Таймер")
             .setContentText(time)
-            .setSmallIcon(R.drawable.notebook_success)
+            .setSmallIcon(R.drawable.success_diary)
             .setOngoing(true)
             .build()
     }
@@ -121,8 +126,13 @@ class TimerWorker(
         const val NOTIFICATION_ID = 101
         const val CHANNEL_ID = "timer_channel"
 
-        const val TIME_KEY = "time_key"
-        const val TIME_PROGRESS = "time_progress"
+        const val TIMER_KEY = "timer_key"
+        const val TIMER_PROGRESS = "timer_progress"
+
+        const val TIMER_CANCEL_KEY = "timer_cancel_key"
+
+        const val TIMER_CANCEL_PROGRESS_KEY = "timer_cancel_progress_key"
+
         const val SIXTY = 60
     }
 }

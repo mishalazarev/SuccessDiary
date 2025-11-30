@@ -1,17 +1,13 @@
 package white.ball.data.local_storage.room.util.mapper
 
 import white.ball.data.local_storage.room.entity.CoffeeCoinDTO
-import white.ball.data.local_storage.room.entity.FocusTimeDTO
 import white.ball.data.local_storage.room.entity.MusicDTO
 import white.ball.data.local_storage.room.entity.TagDTO
 import white.ball.data.local_storage.room.entity.additional.TaskDTO
 import white.ball.domain.model.CoffeeCoin
-import white.ball.domain.model.FocusTime
 import white.ball.domain.model.Music
 import white.ball.domain.model.Tag
 import white.ball.domain.model.additional.TaskByNoteDomainModel
-
-
 
 fun Tag.toTagDTO() = TagDTO(
     tagId = this.tagId,
@@ -43,9 +39,4 @@ fun Music.toMusicDTO() = MusicDTO(
     price = this.price,
     status = this.status,
     imageResId = this.imageResId,
-)
-
-fun FocusTime.toFocusTimeDTO() = FocusTimeDTO(
-    focusTimeId = this.focusTimeId,
-    focusTime = this.focusTime,
 )

@@ -3,7 +3,6 @@ package white.ball.success_diary.presentation.view_model
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import white.ball.domain.collection.MusicCollection
 import white.ball.domain.collection.TagCollection
 import white.ball.domain.extension_model.ItemStatus
@@ -29,11 +29,9 @@ import white.ball.domain.model.FocusTime
 import white.ball.domain.model.Music
 import white.ball.domain.model.Tag
 import white.ball.domain.use_case.model.CoffeeCoinUseCases
-import white.ball.domain.use_case.model.FocusTimeUseCases
 import white.ball.domain.use_case.model.MusicUseCases
 import white.ball.domain.use_case.model.TagUseCases
 import white.ball.success_diary.platform.app.service.TimerWorker
-import java.time.LocalDateTime
 import java.util.UUID
 import javax.inject.Inject
 
@@ -44,7 +42,6 @@ class MainViewModel @Inject constructor(
     private val tagUseCases: TagUseCases,
     private val coffeeCoinUseCases: CoffeeCoinUseCases,
     private val musicUseCases: MusicUseCases,
-    private val focusTimeUseCases: FocusTimeUseCases,
 ) : ViewModel() {
 
     private val _coffeeCoins = MutableStateFlow<CoffeeCoin?>(null)
@@ -89,11 +86,13 @@ class MainViewModel @Inject constructor(
 
     // Timer
 
-    private var timerWorkId: UUID? = null
+    private var activeWorkId: UUID? = null
+    private var pausedSeconds: Int? = null
+
     private var workManager: WorkManager
 
-    private val _timeLeft = MutableStateFlow(-1)
-    val timeLeft: StateFlow<Int> = _timeLeft
+    private val _timerLeft = MutableStateFlow(20 * 60)
+    val timerLeft: StateFlow<Int> = _timerLeft
 
     private val _isStartTimer = MutableStateFlow(false)
     val isStartTimer: Flow<Boolean> = _isStartTimer
@@ -107,20 +106,23 @@ class MainViewModel @Inject constructor(
     private val _timerFinish = MutableStateFlow(false)
     val timerFinish: Flow<Boolean> = _timerFinish
 
-    // dialogs
-    private val _isOpenDialogBalance = MutableStateFlow(false)
-    val isOpenDialogBalance: Flow<Boolean> = _isOpenDialogBalance
+    private var timerObserverJob: Job? = null
 
+    // dialogs
     private val _isOpenDialogCustomizeTimerCollection = MutableStateFlow(false)
     val isOpenDialogCustomizeTimerCollection: Flow<Boolean> = _isOpenDialogCustomizeTimerCollection
+
+    private val _isOpenDialogGiveUp = MutableStateFlow(false)
+    val isOpenDialogGiveUp: Flow<Boolean> = _isOpenDialogGiveUp
+
 
     // focusTime up 3
 
     private val _focusTimeCoffee = MutableStateFlow<FocusTime?>(null)
-    val focusTimeCoffee: Flow<FocusTime?> = _focusTimeCoffee
 
     private val tagCollection = TagCollection()
     private val musicCollection = MusicCollection()
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -164,14 +166,9 @@ class MainViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
-            focusTimeUseCases.getFocusTimeUseCase().collect {
-                _focusTimeCoffee.value = it
-            }
-        }
-
         workManager = WorkManager.getInstance(context)
     }
+
 
     fun setTimer(turn: Boolean) {
         _isStartTimer.value = turn
@@ -240,8 +237,9 @@ class MainViewModel @Inject constructor(
 
     fun isPlayingMusic() = mediaPlayerShortMusic?.isPlaying ?: false
 
-    fun setDialogBalance() {
-        _isOpenDialogBalance.value = !_isOpenDialogBalance.value
+
+    fun setTimerFinish(turn: Boolean) {
+        _timerFinish.value = turn
     }
 
     fun setDialogCustomizeTimer(turn: Boolean) {
@@ -254,7 +252,13 @@ class MainViewModel @Inject constructor(
 
     fun setSelectedTime(time: Int) {
         _selectedTime.value = time
+        _timerLeft.value = time * 60
     }
+
+    fun setDialogGiveUp(turn: Boolean) {
+        _isOpenDialogGiveUp.value = turn
+    }
+
 
     suspend fun updateBalance(balance: Int) {
         coffeeCoinUseCases.updateBalanceUseCase(balance)
@@ -290,38 +294,21 @@ class MainViewModel @Inject constructor(
         return true
     }
 
-    suspend fun buyFocusTimeCoffee(time: Int) = when (time) {
-        24 -> {
-            focusTimeUseCases.insertFocusTimeUseCase(
-                FocusTime(
-                    focusTimeId = 0,
-                    focusTime = LocalDateTime.now().plusHours(24).second
-                )
-            )
-        }
-
-        3 -> {
-            focusTimeUseCases.insertFocusTimeUseCase(
-                FocusTime(
-                    focusTimeId = 0,
-                    focusTime = LocalDateTime.now().plusDays(3).second
-                )
-            )
-        }
-
-        else -> throw IllegalArgumentException("illegal time for focus time coffee")
-    }
-
     fun startTimer() {
+        setTimer(true)
 
-        if (_isStartTimer.value) return
-        _isStartTimer.value = true
+        val secondsToStart = pausedSeconds ?: (_selectedTime.value * 60)
 
         val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
-            .setInputData(workDataOf(TimerWorker.TIME_KEY to _selectedTime.value))
+            .setInputData(
+                workDataOf(
+                    TimerWorker.TIMER_KEY to _timerLeft.value
+                )
+            )
             .build()
 
-        timerWorkId = workRequest.id
+        activeWorkId = workRequest.id
+        pausedSeconds = null
 
         workManager.enqueue(workRequest)
 
@@ -329,52 +316,67 @@ class MainViewModel @Inject constructor(
     }
 
     private fun observeTimer() {
-        timerWorkId?.let { id ->
-            viewModelScope.launch {
+        timerObserverJob?.cancel()
+
+        activeWorkId?.let { id ->
+            timerObserverJob = viewModelScope.launch {
                 delay(1_000)
-                workManager.getWorkInfoByIdLiveData(id)
-                    .asFlow()
-                    .collectLatest {
-                        if (it != null) {
+                workManager.getWorkInfoByIdFlow(id)
+                    .collectLatest { info ->
 
-                            _timeLeft.value = it.progress.getInt(TimerWorker.TIME_PROGRESS, 1)
+                        info ?: return@collectLatest
 
-                            if (it.state == androidx.work.WorkInfo.State.SUCCEEDED) {
-                                _isStartTimer.value = false
-                            }
+                        _timerLeft.value = info.progress.getInt(
+                            TimerWorker.TIMER_PROGRESS,
+                            _selectedTime.value * 60
+                        )
+
+                        if (info.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+                            stopLongMusic()
+                            _isStartTimer.value = false
+                            _timerFinish.value = true
+                            _timerLeft.value = _selectedTime.value * 60
                         }
                     }
             }
         }
     }
 
-    suspend fun stopTimer() {
+    fun pauseTimer() {
         setTimer(false)
-        workManager.cancelAllWork()
-        delay(500)
-        _timeLeft.value = _selectedTime.value * 60
+
+        val id = activeWorkId ?: return
+
+        pausedSeconds = _timerLeft.value
+
+        workManager.cancelWorkById(id)
+
+        activeWorkId = null
+    }
+
+    fun stopTimer() {
+        setTimer(false)
+
+        activeWorkId?.let { workManager.cancelWorkById(it) }
+        activeWorkId = null
+        pausedSeconds = null
+
+        _timerLeft.value = _selectedTime.value * 60
     }
 
     suspend fun takePrize() {
-
+        val nowEpoch = System.currentTimeMillis() / 1000L
         var updatedBalance = (_coffeeCoins.value?.balance ?: 0) + _selectedTime.value
-        val timeNow = LocalDateTime.now().second
+        val focusEpoch = _focusTimeCoffee.value?.focusTime?.toLong() ?: 0L
 
-        if ((_focusTimeCoffee.value?.focusTime ?: 0) < timeNow) {
-            updatedBalance += _selectedTime.value * 3
-            _coffeeCoins.value = _coffeeCoins.value?.copy(
-                balance = updatedBalance
-            )
-        } else {
-            _focusTimeCoffee.value?.let {
-                focusTimeUseCases.deleteFocusTimeUseCase(it)
+        withContext(Dispatchers.IO) {
+            if (focusEpoch < nowEpoch) {
+                updatedBalance += _selectedTime.value * 3
             }
+            coffeeCoinUseCases.updateBalanceUseCase(updatedBalance)
         }
-
-        _coffeeCoins.value = _coffeeCoins.value?.copy(
-            balance = updatedBalance
-        )
-
-        coffeeCoinUseCases.updateBalanceUseCase(updatedBalance)
+        _coffeeCoins.value = _coffeeCoins.value?.copy(balance = updatedBalance)
     }
 }
+
+

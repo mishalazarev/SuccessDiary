@@ -3,7 +3,6 @@ package white.ball.success_diary.presentation.ui.main_screen.button
 import androidx.compose.animation.core.EaseInBack
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import white.ball.success_diary.R
+import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogAreYouSureGiveUp
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogTimerFinish
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
@@ -36,6 +35,9 @@ fun TimerButtonUI(
     val selectedTime by mainViewModel.selectedTime.collectAsState(0)
 
     val selectedTag by mainViewModel.selectedTag.collectAsState(null)
+
+    val isOpenDialogGiveUp by mainViewModel.isOpenDialogGiveUp.collectAsState(false)
+
 
     val buttonSizeAnimation by animateDpAsState(
         targetValue = if (isTimerRunning) {
@@ -60,6 +62,12 @@ fun TimerButtonUI(
             easing = EaseInBack
         )
     )
+
+    if (isOpenDialogGiveUp) {
+        DialogAreYouSureGiveUp(
+            mainViewModel = mainViewModel
+        )
+    }
 
     Box(
         modifier = Modifier

@@ -2,11 +2,14 @@
 agp = "8.13.0"
 coilCompose = "2.7.0"
 gson = "2.13.2"
+junitJupiterApi = "6.0.1"
+junitJupiterEngine = "6.0.1"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
+kotlinxCoroutinesTest = "1.10.2"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
@@ -14,6 +17,11 @@ composeBom = "2024.09.00"
 ksp = "2.0.21-1.0.27"
 material3 = "1.4.0"
 materialIconsExtended = "1.7.8"
+mockitoCore = "5.20.0"
+mockitoInline = "5.2.0"
+mockitoKotlin = "x.x.x"
+mockitoKotlinVersion = "6.1.0"
+mockitoMockitoKotlin = "6.1.0"
 navigationCompose = "2.9.5"
 room = "2.8.3"
 hilt = "2.57.1"
@@ -50,6 +58,12 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiterEngine" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

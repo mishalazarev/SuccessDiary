@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -39,6 +40,7 @@ fun BlockNoteUI(
         Text(
             text = note.title,
             style = TextStyle(
+                color = Color.Black,
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Normal,
                 fontFamily = FontFamily(Font(R.font.roboto)),
@@ -56,6 +58,7 @@ fun BlockNoteUI(
             Text(
                 text = note.createdDate,
                 style = TextStyle(
+                    color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
                     fontFamily = FontFamily(Font(R.font.roboto))

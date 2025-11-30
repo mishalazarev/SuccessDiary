@@ -21,14 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import white.ball.domain.extension_model.ItemLocation
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.domain.extension_model.swipe.DirectionSwipe
@@ -46,10 +45,8 @@ fun SwipeNoteContainer(
     navController: NavController,
 ) {
     val locationListener by noteBookViewModel.locationListener.collectAsState()
-    var isRemoved by remember(note.noteId) { mutableStateOf(false) }
-    var swipeDirection by remember(note.noteId) { mutableStateOf(DirectionSwipe.NONE) }
-
-    val scope = rememberCoroutineScope()
+    var isRemoved by remember { mutableStateOf(false) }
+    var swipeDirection by remember { mutableStateOf(DirectionSwipe.NONE) }
 
     val swipeState = rememberSwipeToDismissBoxState(
         confirmValueChange = { targetValue ->
@@ -95,9 +92,6 @@ fun SwipeNoteContainer(
                                     RoundedCornerShape(10.dp)
                                 )
                         )
-                        scope.launch {
-                            swipeState.reset()
-                        }
                     }
 
                     SwipeToDismissBoxValue.EndToStart -> {
@@ -114,9 +108,6 @@ fun SwipeNoteContainer(
                                         RoundedCornerShape(10.dp)
                                     )
                             )
-                            scope.launch {
-                                swipeState.reset()
-                            }
                         }
                     }
 
@@ -135,6 +126,7 @@ fun SwipeNoteContainer(
 
     LaunchedEffect(key1 = isRemoved) {
         if (isRemoved) {
+            delay(400)
             when (locationListener) {
                 ItemLocation.MAIN -> {
                     if (swipeDirection == DirectionSwipe.RIGHT) {
@@ -150,6 +142,11 @@ fun SwipeNoteContainer(
                     }
                 }
             }
+
         }
+
+        isRemoved = false
+        swipeDirection = DirectionSwipe.NONE
+        swipeState.reset()
     }
 }

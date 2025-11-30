@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -44,8 +45,9 @@ fun DialogTimerFinish(
 
     Dialog(
         onDismissRequest = {
-            scope.launch (Dispatchers.IO) {
+            scope.launch {
                 mainViewModel.takePrize()
+                mainViewModel.setTimerFinish(false)
             }
         }
     ) {
@@ -69,7 +71,8 @@ fun DialogTimerFinish(
                     style = TextStyle(
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily(Font(R.font.play_write_cursive))
+                        fontFamily = FontFamily(Font(R.font.play_write_cursive)),
+                        color = Color.Black
                     )
                 )
 
@@ -107,10 +110,12 @@ fun DialogTimerFinish(
                     onClick = {
                         scope.launch (Dispatchers.IO) {
                             mainViewModel.takePrize()
+                            mainViewModel.setTimerFinish(false)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = DefaultButtonTimerColor
+                        containerColor = DefaultButtonTimerColor,
+                        contentColor = Color.White,
                     ),
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
@@ -118,7 +123,7 @@ fun DialogTimerFinish(
                         .padding(10.dp)
                 ) {
                     Text(
-                        text = "Забрать".uppercase()
+                        text = "Забрать".uppercase(),
                     )
                 }
             }

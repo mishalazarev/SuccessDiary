@@ -79,7 +79,6 @@ fun NoteBookScreen(
 
                 items(
                     items = noteListFiltered,
-                    key = { note -> note.noteId }
                 ) { currentNote ->
                     SwipeNoteContainer(
                         note = currentNote,

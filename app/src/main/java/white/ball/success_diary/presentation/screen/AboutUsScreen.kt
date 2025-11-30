@@ -141,7 +141,15 @@ fun AboutUsScreen(
                     ), modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
+                                try {
+                                    val appLink = "https://www.rustore.ru/catalog/app/white.ball.success_diary"
+                                    val uri = appLink.toUri()
 
+                                    val showMarket = Intent(Intent.ACTION_VIEW, uri)
+                                    context.startActivity(showMarket)
+                                } catch (e: ActivityNotFoundException) {
+
+                                }
                             }
                             .padding(start = 9.dp, top = 9.dp, bottom = 9.dp))
 
