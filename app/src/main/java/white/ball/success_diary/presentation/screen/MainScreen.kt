@@ -83,7 +83,7 @@ fun MainScreen(
                         scope.launch {
                             mainViewModel.pauseTimer()
                         }
-                        mainViewModel.setDialogGiveUp(true)
+                        mainViewModel.setAction(MainViewModel.DIALOG_GIVE_UP,true)
                     } else {
                         mainViewModel.startTimer()
                     }
@@ -100,7 +100,7 @@ fun MainScreen(
                         .padding(top = 16.dp)
                         .clickable {
                             if (!isTimerRunning) {
-                                mainViewModel.setDialogCustomizeTimer(true)
+                                mainViewModel.setAction(MainViewModel.DIALOG_CUSTOMIZE_TIMER_COLLECTION,true)
                             }
                         }
                 )

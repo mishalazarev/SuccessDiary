@@ -47,7 +47,7 @@ fun DialogPlayerCollectionUI(
 
     Dialog(
         onDismissRequest = {
-            mainViewModel.setDialogCustomizeTimer(false)
+            mainViewModel.setAction(MainViewModel.DIALOG_CUSTOMIZE_TIMER_COLLECTION,false)
         }
     ) {
         Card(

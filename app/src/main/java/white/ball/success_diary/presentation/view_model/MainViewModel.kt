@@ -169,11 +169,6 @@ class MainViewModel @Inject constructor(
         workManager = WorkManager.getInstance(context)
     }
 
-
-    fun setTimer(turn: Boolean) {
-        _isStartTimer.value = turn
-    }
-
     fun setSelectedNavigationBottomBarIndex(index: Int) {
         _selectedNavigationBottomBarIndex.value = index
     }
@@ -237,15 +232,6 @@ class MainViewModel @Inject constructor(
 
     fun isPlayingMusic() = mediaPlayerShortMusic?.isPlaying ?: false
 
-
-    fun setTimerFinish(turn: Boolean) {
-        _timerFinish.value = turn
-    }
-
-    fun setDialogCustomizeTimer(turn: Boolean) {
-        _isOpenDialogCustomizeTimerCollection.value = turn
-    }
-
     fun setSelectedTag(tag: Tag) {
         _selectedTag.value = tag
     }
@@ -255,10 +241,13 @@ class MainViewModel @Inject constructor(
         _timerLeft.value = time * 60
     }
 
-    fun setDialogGiveUp(turn: Boolean) {
-        _isOpenDialogGiveUp.value = turn
+    fun setAction(key: String, turn: Boolean) = when (key) {
+        TIMER_FINISH -> _timerFinish.value = turn
+        DIALOG_CUSTOMIZE_TIMER_COLLECTION -> _isOpenDialogCustomizeTimerCollection.value = turn
+        START_TIMER -> _isStartTimer.value = turn
+        DIALOG_GIVE_UP -> _isOpenDialogGiveUp.value = turn
+        else -> throw IllegalArgumentException("Unknown key")
     }
-
 
     suspend fun updateBalance(balance: Int) {
         coffeeCoinUseCases.updateBalanceUseCase(balance)
@@ -295,9 +284,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun startTimer() {
-        setTimer(true)
-
-        val secondsToStart = pausedSeconds ?: (_selectedTime.value * 60)
+        setAction(START_TIMER, true)
 
         val workRequest = OneTimeWorkRequestBuilder<TimerWorker>()
             .setInputData(
@@ -343,19 +330,17 @@ class MainViewModel @Inject constructor(
     }
 
     fun pauseTimer() {
-        setTimer(false)
+        setAction(START_TIMER, false)
 
         val id = activeWorkId ?: return
 
         pausedSeconds = _timerLeft.value
-
         workManager.cancelWorkById(id)
-
         activeWorkId = null
     }
 
     fun stopTimer() {
-        setTimer(false)
+        setAction(START_TIMER,false)
 
         activeWorkId?.let { workManager.cancelWorkById(it) }
         activeWorkId = null
@@ -376,6 +361,14 @@ class MainViewModel @Inject constructor(
             coffeeCoinUseCases.updateBalanceUseCase(updatedBalance)
         }
         _coffeeCoins.value = _coffeeCoins.value?.copy(balance = updatedBalance)
+    }
+
+    companion object {
+
+        const val DIALOG_GIVE_UP = "dialog_give_up"
+        const val START_TIMER = "start_timer"
+        const val TIMER_FINISH = "timer_finish"
+        const val DIALOG_CUSTOMIZE_TIMER_COLLECTION = "dialog_customize_timer_collection"
     }
 }
 

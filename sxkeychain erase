@@ -1,0 +1,22 @@
+[33m66fd1ff[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m version 0.1.0 release
+[33m2dc1a26[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m version 0.0.9.9 alpha
+[33mf8ea45a[m version 0.0.9.8 will do AboutUsScreen
+[33m83c8b4e[m version 0.0.9.7will create 3x focus and about us
+[33mb2cbbdd[m version 0.0.9.6 fix TimerWorker
+[33m2fee07c[m version 0.0.9.5 three screens remain to be created
+[33m896c129[m version 0.0.9.4 create horizontalTimerPicker
+[33m74a1780[m version 0.0.9.3 start inserting music
+[33md60629c[m version 0.0.9.2 start to create tag list
+[33m76ba693[m version 0.0.9.1 try to save Tasks in Note
+[33m28e5223[m version 0.0.9 plastering works with MainScreen
+[33m9275414[m version 0.0.8 upgraded NoteBookScreen
+[33m7569fad[m version 0.0.7 try to upgrade NoteBookScreen
+[33m2bdcae9[m version 0.0.6 done NoteBookScreen
+[33m9c55731[m version 0.0.5 try to fix Room problems
+[33m8b6ff78[m version 0.0.4 try to fix WorkManager
+[33m9ad6043[m verstion 0.0.3 main_screen proofreading
+[33me580dcd[m version 0.0.2 to launch project
+[33me1751de[m Update and rename README.md to license.md
+[33mce8381a[m Update README.md
+[33mf0b547b[m Create README.md
+[33mb760a10[m version 0.0.1 start commit

@@ -29,7 +29,7 @@ fun ButtonPlayerCustomizeTimerUI(
 
     TextButton(
         onClick = {
-            mainViewModel.setDialogCustomizeTimer(true)
+            mainViewModel.setAction(MainViewModel.DIALOG_CUSTOMIZE_TIMER_COLLECTION,true)
         },
         shape = CircleShape
     ) {
