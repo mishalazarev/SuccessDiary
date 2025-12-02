@@ -36,7 +36,7 @@ fun DialogAreYouSureGiveUp(
 
     Dialog(
         onDismissRequest = {
-            mainViewModel.setAction(MainViewModel.DIALOG_GIVE_UP,false)
+            mainViewModel.setDialogGiveUp(false)
         },
         content = {
             Card(
@@ -76,7 +76,7 @@ fun DialogAreYouSureGiveUp(
                     ) {
                         Button(
                             onClick = {
-                                mainViewModel.setAction(MainViewModel.DIALOG_GIVE_UP,false)
+                                mainViewModel.setDialogGiveUp(false)
                                 mainViewModel.stopTimer()
                             },
                             colors = ButtonDefaults.buttonColors(
@@ -96,7 +96,7 @@ fun DialogAreYouSureGiveUp(
 
                         Button(
                             onClick = {
-                                mainViewModel.setAction(MainViewModel.DIALOG_GIVE_UP,false)
+                                mainViewModel.setDialogGiveUp(false)
                                 mainViewModel.startTimer()
                             },
                             colors = ButtonDefaults.buttonColors(

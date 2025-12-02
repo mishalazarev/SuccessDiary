@@ -105,6 +105,7 @@ class NoteBookViewModel @Inject constructor(
 
     fun getTaskListByNoteId(noteId: Long) {
         val taskList = noteUseCases.getTaskListByNoteIdUseCase(noteId)
+        Log.e("tag", "getTaskListByNoteId: ${taskList.size}")
         _clickedNote.value = _clickedNote.value?.copy(taskList = taskList)
 
     }
@@ -144,6 +145,7 @@ class NoteBookViewModel @Inject constructor(
 
     fun addTask() {
         val taskList = _clickedNote.value?.taskList?.toMutableList() ?: mutableListOf()
+
 
         taskList.add(TaskByNoteDomainModel(noteId = _clickedNote.value?.noteId ?: 0))
 

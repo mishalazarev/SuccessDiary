@@ -47,7 +47,7 @@ fun DialogTimerFinish(
         onDismissRequest = {
             scope.launch {
                 mainViewModel.takePrize()
-                mainViewModel.setAction(MainViewModel.TIMER_FINISH,false)
+                mainViewModel.setTimerFinish(false)
             }
         }
     ) {
@@ -110,7 +110,7 @@ fun DialogTimerFinish(
                     onClick = {
                         scope.launch (Dispatchers.IO) {
                             mainViewModel.takePrize()
-                            mainViewModel.setAction(MainViewModel.TIMER_FINISH,false)
+                            mainViewModel.setTimerFinish(false)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
