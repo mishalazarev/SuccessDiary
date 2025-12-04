@@ -82,7 +82,7 @@ fun MainNavController(
                 navController = navController
             )
         }
-    ) { innerPadding ->
+    ) {
         NavHost(
             navController = navController,
             graph = graph,

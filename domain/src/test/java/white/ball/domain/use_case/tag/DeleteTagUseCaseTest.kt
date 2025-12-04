@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import white.ball.domain.extension_model.ItemStatus
 import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 
@@ -24,7 +25,8 @@ class DeleteTagUseCaseTest {
             tagId = 0,
             title = "",
             imageResId = 0,
-            price = 0
+            price = 0,
+            status = ItemStatus.CLOSE
         )
 
         deleteUseCase(testData)

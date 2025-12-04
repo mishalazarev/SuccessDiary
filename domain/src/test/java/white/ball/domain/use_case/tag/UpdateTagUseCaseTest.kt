@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import white.ball.domain.extension_model.ItemStatus
 import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 
@@ -25,6 +26,7 @@ class UpdateTagUseCaseTest {
             title = "",
             imageResId = 0,
             price = 0,
+            status = ItemStatus.CLOSE
         )
 
         updateUseCase(testData)

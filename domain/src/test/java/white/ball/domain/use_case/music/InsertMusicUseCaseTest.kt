@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import white.ball.domain.extension_model.ItemStatus
 import white.ball.domain.model.MusicDomainModel
 import white.ball.domain.repository.MusicRepository
 
@@ -32,6 +33,7 @@ class InsertMusicUseCaseTest {
                     rawResId = 0,
                     imageResId = 0,
                     price = 0,
+                    status = ItemStatus.CLOSE
                 )
             )
         }
