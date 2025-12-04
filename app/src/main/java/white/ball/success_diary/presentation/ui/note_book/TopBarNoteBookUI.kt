@@ -38,7 +38,7 @@ import white.ball.success_diary.R
 import white.ball.success_diary.presentation.model_ui.GroupItemsByLocation
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun TopBarNoteBookUI(

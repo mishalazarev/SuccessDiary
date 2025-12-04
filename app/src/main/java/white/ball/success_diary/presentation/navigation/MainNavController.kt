@@ -9,13 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.createGraph
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.bottom_bar.BottomNavigationBar
-import white.ball.success_diary.presentation.screen.MainScreen
-import white.ball.success_diary.presentation.screen.NoteBookScreen
+import white.ball.success_diary.presentation.screen.main.MainScreen
+import white.ball.success_diary.presentation.screen.note_book.NoteBookScreen
 import white.ball.success_diary.presentation.screen.AboutUsScreen
 import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
 import white.ball.success_diary.presentation.screen.additional.StoreScreen
-import white.ball.success_diary.presentation.view_model.MainViewModel
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun MainNavController(
@@ -70,7 +70,7 @@ fun MainNavController(
             route = ScreenNavigation.ABOUT_US_SCREEN.route
         ) {
             AboutUsScreen(
-                versionApp = "1.0.0"
+                versionApp = "1.1.0"
             )
         }
     }

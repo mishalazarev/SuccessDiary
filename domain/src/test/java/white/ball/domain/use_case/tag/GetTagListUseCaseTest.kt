@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Tag
+import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 
 class GetTagListUseCaseTest {
@@ -24,7 +24,7 @@ class GetTagListUseCaseTest {
 
     @Test
     fun `get tag list`() = runTest {
-        val testData: Flow<List<Tag>> = flow { emit(emptyList()) }
+        val testData: Flow<List<TagDomainModel>> = flow { emit(emptyList()) }
 
         val expected = testData.single()
 

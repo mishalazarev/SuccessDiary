@@ -24,16 +24,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import white.ball.domain.model.Music
+import white.ball.domain.model.MusicDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
 
 @Composable
 fun PlayerCardMusicUI(
-    music: Music,
+    musicDomainModel: MusicDomainModel,
     isSelected: Boolean,
-    mainViewModel: MainViewModel,
     onMusicSelected: () -> Unit,
 ) {
     Column(
@@ -54,10 +52,7 @@ fun PlayerCardMusicUI(
     ) {
         Card(
             modifier = Modifier
-                .size(width = 120.dp, height = 60.dp)
-                .clickable {
-                    mainViewModel.selectedMusic(music.rawResId)
-                },
+                .size(width = 120.dp, height = 60.dp),
             colors = CardDefaults.cardColors(
                 containerColor = (
                         if (isSelected)
@@ -69,7 +64,7 @@ fun PlayerCardMusicUI(
             shape = RoundedCornerShape(bottomEnd = 0.dp, bottomStart = 0.dp, topEnd = 10.dp, topStart = 10.dp)
         ) {
             AsyncImage(
-                model = music.imageResId,
+                model = musicDomainModel.imageResId,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize(),
@@ -78,7 +73,7 @@ fun PlayerCardMusicUI(
         }
 
         Text(
-            text = music.title,
+            text = musicDomainModel.title,
             modifier = Modifier
                 .padding(top = 6.dp, start = 2.dp, end = 2.dp),
             style = TextStyle(

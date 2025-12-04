@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import white.ball.domain.extension_model.TimerTime
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun TimerPickerUI(

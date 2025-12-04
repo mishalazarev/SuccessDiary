@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun ButtonMusicUI(

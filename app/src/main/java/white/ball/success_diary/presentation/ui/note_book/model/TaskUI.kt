@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.sp
 import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun BlockTaskUI (
-    noteBookViewModel: NoteBookViewModel,
     task: TaskByNoteDomainModel,
+    noteBookViewModel: NoteBookViewModel,
 ) {
 
     Row(
@@ -41,12 +41,11 @@ fun BlockTaskUI (
             value = task.title,
             onValueChange = { text ->
 
-                Log.e("tag", "setTask: localId: ${task.localId}\nid: ${task.noteId}", )
                 val updatedTask = task.copy(
                     title = text
                 )
 
-                noteBookViewModel.setTask(task = updatedTask)
+                noteBookViewModel.setTask(updatedTask)
             },
             modifier = Modifier
                 .weight(0.75f),

@@ -25,15 +25,16 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import white.ball.domain.model.Tag
+import white.ball.domain.collection.TagCollection
+import white.ball.domain.model.TagDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun StoreCardTagUI(
-    tag: Tag,
+    tag: TagDomainModel,
     mainViewModel: MainViewModel,
     index: Int,
 ) {

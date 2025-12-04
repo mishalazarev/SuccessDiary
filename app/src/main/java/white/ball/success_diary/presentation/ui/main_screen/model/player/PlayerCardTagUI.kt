@@ -15,22 +15,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import white.ball.domain.model.Tag
+import white.ball.domain.collection.TagCollection
+import white.ball.domain.model.TagDomainModel
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun PlayerCardTagUI(
-    tag: Tag,
+    tagDomainModel: TagDomainModel,
     isSelected: Boolean,
-    mainViewModel: MainViewModel,
+    onTagSelected: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .size(70.dp)
             .padding(start = 10.dp, top = 9.dp)
             .clickable {
-                mainViewModel.setSelectedTag(tag)
+                onTagSelected()
             },
         colors = CardDefaults.cardColors(
             containerColor = (
@@ -48,7 +49,7 @@ fun PlayerCardTagUI(
             verticalArrangement = Arrangement.Center
         ) {
             AsyncImage(
-                model = tag.imageResId,
+                model = tagDomainModel.imageResId,
                 contentDescription = null,
                 modifier = Modifier
                     .height(50.dp)

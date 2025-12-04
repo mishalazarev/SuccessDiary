@@ -10,10 +10,10 @@ import white.ball.data.local_storage.room.entity.CoffeeCoinDTO
 import white.ball.data.local_storage.room.entity.MusicDTO
 import white.ball.data.local_storage.room.entity.NoteDTO
 import white.ball.data.local_storage.room.entity.TagDTO
-import white.ball.data.local_storage.room.entity.additional.TaskDTO
+import white.ball.data.local_storage.room.entity.additional.TaskByNoteDTO
 
 @Database(entities = [
-    NoteDTO::class, CoffeeCoinDTO::class, TaskDTO::class, TagDTO::class,
+    NoteDTO::class, CoffeeCoinDTO::class, TaskByNoteDTO::class, TagDTO::class,
     MusicDTO::class], version = 1, exportSchema = false)
 abstract class SuccessDiaryDatabase : RoomDatabase() {
 

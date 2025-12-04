@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import white.ball.domain.extension_model.bottom_bar.BottomBar
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemClickedColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun BottomNavigationBar(

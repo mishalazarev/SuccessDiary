@@ -1,6 +1,7 @@
 package white.ball.domain.use_case.tag
 
-import white.ball.domain.model.Tag
+import white.ball.domain.collection.TagCollection
+import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 import javax.inject.Inject
 
@@ -8,7 +9,7 @@ class InsertTagListUseCase @Inject constructor(
     private val tagRepository: TagRepository
 ) {
 
-    suspend operator fun invoke(tagList: List<Tag>) {
+    suspend operator fun invoke(tagList: List<TagDomainModel>) {
         tagRepository.insertTagList(tagList)
     }
 }

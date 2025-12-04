@@ -3,13 +3,12 @@ package white.ball.domain.use_case.music
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Music
+import white.ball.domain.model.MusicDomainModel
 import white.ball.domain.repository.MusicRepository
 
 class UpdateMusicUseCaseTest {
@@ -24,9 +23,9 @@ class UpdateMusicUseCaseTest {
 
     @Test
     fun `update music when user bought`() = runTest {
-        val testData: Flow<Music> = flow {
+        val testData: Flow<MusicDomainModel> = flow {
             emit(
-                Music(
+                MusicDomainModel(
                     musicId = 0,
                     title = "",
                     artist = "",

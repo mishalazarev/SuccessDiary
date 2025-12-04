@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Tag
+import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 
 class InsertTagListUseCaseTest {
@@ -20,7 +20,7 @@ class InsertTagListUseCaseTest {
 
     @Test
     fun `insert tag list`() = runTest {
-        val testData: List<Tag> = emptyList()
+        val testData: List<TagDomainModel> = emptyList()
 
         insertListUseCase(testData)
 

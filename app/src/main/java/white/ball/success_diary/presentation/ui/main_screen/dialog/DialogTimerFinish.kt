@@ -34,7 +34,7 @@ import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.TextBalanceColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun DialogTimerFinish(

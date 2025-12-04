@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.note_book.BottomSheetNoteMenuUI
@@ -38,7 +40,7 @@ import white.ball.success_diary.presentation.ui.note_book.dialog.DialogChangeCol
 import white.ball.success_diary.presentation.ui.note_book.swipe.SwipeTaskContainer
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun CreateNoteScreen(
@@ -50,6 +52,8 @@ fun CreateNoteScreen(
     val clickedNote by noteBookViewModel.clickedNote.collectAsState(null)
 
     val isOpenChangeColorDialog by noteBookViewModel.isOpenDialogChangeColor.collectAsState(false)
+
+    val scope = rememberCoroutineScope()
 
     if (isOpenChangeColorDialog) {
         DialogChangeColorUI(
@@ -93,7 +97,7 @@ fun CreateNoteScreen(
             }
         }
     ) { innerPadding ->
-        LazyColumn (
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(clickedNote?.color ?: PageWhiteColor)
@@ -101,73 +105,77 @@ fun CreateNoteScreen(
         ) {
 
             clickedNote?.taskList?.let {
-                items(it.size,) { index ->
+                items(it.size) { index ->
                     val currentTask = it[index]
-                    Log.e("tag", "CreateNoteScreen: ${currentTask.taskId} ${currentTask.title}", )
                     SwipeTaskContainer(
                         taskByNoteDomainModel = currentTask,
                         noteBookViewModel = noteBookViewModel,
+                        onDeleteTask = {
+                            scope.launch {
+                                noteBookViewModel.deleteTask(currentTask)
+                            }
+                        }
                     )
                 }
-            }
-            item {
-                OutlinedTextField(
-                    value = clickedNote?.title ?: "",
-                    onValueChange = { text ->
-                        noteBookViewModel.setTitle(text)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    placeholder = {
-                        Text(
-                            text = "Заголовок".uppercase(),
-                            style = TextStyle(
-                                color = BottomBarItemDefaultColor,
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontFamily = FontFamily(Font(R.font.roboto))
+                item {
+                    OutlinedTextField(
+                        value = clickedNote?.title ?: "",
+                        onValueChange = { text ->
+                            noteBookViewModel.setTitle(text)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        placeholder = {
+                            Text(
+                                text = "Заголовок".uppercase(),
+                                style = TextStyle(
+                                    color = BottomBarItemDefaultColor,
+                                    fontSize = 25.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontFamily = FontFamily(Font(R.font.roboto))
+                                )
                             )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedBorderColor = Color.Transparent,
+                            focusedBorderColor = Color.Transparent,
+                        ),
+                        textStyle = TextStyle(
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.Black,
                         )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent,
-                    ),
-                    textStyle = TextStyle(
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.Black,
                     )
-                )
 
-                OutlinedTextField(
-                    value = clickedNote?.content ?: "",
-                    onValueChange = { text ->
-                        noteBookViewModel.setContent(text)
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 16.dp, bottom = 30.dp),
-                    placeholder = {
-                        Text(
-                            text = "Описание".uppercase(),
-                            style = TextStyle(
-                                color = BottomBarItemDefaultColor,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.ExtraBold
+                    OutlinedTextField(
+                        value = clickedNote?.content ?: "",
+                        onValueChange = { text ->
+                            noteBookViewModel.setContent(text)
+                        },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 16.dp, bottom = 30.dp),
+                        placeholder = {
+                            Text(
+                                text = "Описание".uppercase(),
+                                style = TextStyle(
+                                    color = BottomBarItemDefaultColor,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.ExtraBold
+                                )
                             )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedBorderColor = Color.Transparent,
+                            focusedBorderColor = Color.Transparent,
+                        ),
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
                         )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent,
-                    ),
-                    textStyle = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black,
                     )
-                )
+                }
             }
         }
     }

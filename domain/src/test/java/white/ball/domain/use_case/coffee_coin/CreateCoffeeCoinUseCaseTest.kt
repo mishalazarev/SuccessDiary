@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.CoffeeCoin
+import white.ball.domain.model.CoffeeCoinDomainModel
 import white.ball.domain.repository.CoffeeCoinRepository
 
 class CreateCoffeeCoinUseCaseTest {
@@ -20,7 +20,7 @@ class CreateCoffeeCoinUseCaseTest {
 
     @Test
     fun `create coffee coin`() = runTest {
-        val testData = CoffeeCoin(
+        val testData = CoffeeCoinDomainModel(
             coffeeCoinId = 0,
             balance = 0,
         )

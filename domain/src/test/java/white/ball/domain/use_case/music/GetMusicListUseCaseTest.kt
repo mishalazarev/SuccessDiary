@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Music
+import white.ball.domain.model.MusicDomainModel
 import white.ball.domain.repository.MusicRepository
 
 class GetMusicListUseCaseTest {
@@ -24,7 +24,7 @@ class GetMusicListUseCaseTest {
 
     @Test
     fun `get music list`() = runTest {
-        val testData: Flow<List<Music>> = flow { emit(emptyList()) }
+        val testData: Flow<List<MusicDomainModel>> = flow { emit(emptyList()) }
 
         val expected = testData.single()
 

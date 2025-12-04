@@ -38,7 +38,7 @@ import white.ball.success_diary.presentation.ui.theme.PagePurpleColor
 import white.ball.success_diary.presentation.ui.theme.PageRedColor
 import white.ball.success_diary.presentation.ui.theme.PageWhiteColor
 import white.ball.success_diary.presentation.ui.theme.PageYellowColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun DialogChangeColorUI(

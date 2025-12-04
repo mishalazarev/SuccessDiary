@@ -35,17 +35,18 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import white.ball.domain.model.Music
+import white.ball.domain.collection.MusicCollection
+import white.ball.domain.model.MusicDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun StoreCardMusicUI(
     mainViewModel: MainViewModel,
-    music: Music,
+    music: MusicDomainModel,
     isPlayMusic: Boolean,
     index: Int,
 ) {

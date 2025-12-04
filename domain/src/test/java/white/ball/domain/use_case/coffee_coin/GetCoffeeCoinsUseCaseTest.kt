@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.CoffeeCoin
+import white.ball.domain.model.CoffeeCoinDomainModel
 import white.ball.domain.repository.CoffeeCoinRepository
 
 class GetCoffeeCoinsUseCaseTest {
@@ -24,12 +24,12 @@ class GetCoffeeCoinsUseCaseTest {
 
     @Test
     fun `get coffee coins if to for first time create`() = runTest {
-        val testData = CoffeeCoin(
+        val testData = CoffeeCoinDomainModel(
                     coffeeCoinId = 0,
                     balance = 0,
                 )
 
-        val flowExpected: Flow<CoffeeCoin?> = flow { emit(testData) }
+        val flowExpected: Flow<CoffeeCoinDomainModel?> = flow { emit(testData) }
 
         val expected = flowExpected.single()
 

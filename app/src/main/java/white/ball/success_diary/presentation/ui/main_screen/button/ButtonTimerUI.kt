@@ -23,7 +23,7 @@ import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogTimerFi
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.DefaultButtonTimerColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun TimerButtonUI(
@@ -95,7 +95,7 @@ fun TimerButtonUI(
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
-            model = selectedTag?.imageResId ?: R.drawable.tag_dumbbells,
+            model = selectedTag ?: R.drawable.tag_dumbbells,
             contentDescription = null,
             modifier = Modifier
                 .size(tagSizeAnimation)

@@ -34,7 +34,7 @@ import white.ball.success_diary.presentation.ui.main_screen.model.store.StoreCar
 import white.ball.success_diary.presentation.ui.main_screen.model.store.StoreCardTagUI
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun StoreScreen(
@@ -42,10 +42,10 @@ fun StoreScreen(
     navController: NavController,
 ) {
 
-    val musicCollection by mainViewModel.musicList.collectAsState(emptyList())
+    val musicList by mainViewModel.musicList.collectAsState(emptyList())
     val selectedMusicPlay by mainViewModel.selectedShortPlayMusic.collectAsState(0)
 
-    val tagCollection by mainViewModel.tagList.collectAsState(emptyList())
+    val tagList by mainViewModel.tagList.collectAsState(emptyList())
 
     Scaffold { innerPadding ->
 
@@ -89,8 +89,8 @@ fun StoreScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    items(musicCollection.size) { index ->
-                        val currentMusic = musicCollection[index]
+                    items(musicList.size) { index ->
+                        val currentMusic = musicList[index]
 
                         StoreCardMusicUI(
                             mainViewModel = mainViewModel,
@@ -102,8 +102,8 @@ fun StoreScreen(
                 }
             }
 
-            items(tagCollection.size) { index ->
-                val currentTag = tagCollection[index]
+            items(tagList.size) { index ->
+                val currentTag = tagList[index]
                 StoreCardTagUI(
                     tag = currentTag,
                     mainViewModel = mainViewModel,

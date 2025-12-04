@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Music
+import white.ball.domain.model.MusicDomainModel
 import white.ball.domain.repository.MusicRepository
 
 class InsertMusicUseCaseTest {
@@ -23,9 +23,9 @@ class InsertMusicUseCaseTest {
 
     @Test
     fun `update music when user bought`() = runTest {
-        val testData: Flow<Music> = flow {
+        val testData: Flow<MusicDomainModel> = flow {
             emit(
-                Music(
+                MusicDomainModel(
                     musicId = 0,
                     title = "",
                     artist = "",

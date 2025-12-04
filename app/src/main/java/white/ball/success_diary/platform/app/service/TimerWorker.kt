@@ -31,19 +31,17 @@ class TimerWorker(
         setForeground(connectToForegroundInfo("Таймер запущен"))
 
         var timerSecondsLeft = workerParams.inputData.getInt(TIMER_KEY, 1)
-        var timerCancelSecondsLeft = workerParams.inputData.getInt(TIMER_CANCEL_KEY, 10)
 
         try {
             while (timerSecondsLeft > 0 && !isStopped) {
-                val minutes = timerSecondsLeft / SIXTY
-                val seconds = timerSecondsLeft % SIXTY
+                val minutes = timerSecondsLeft / 60
+                val seconds = timerSecondsLeft % 60
 
                 val timeFormat = String.format("%02d:%02d", minutes, seconds)
 
                 setProgress(
                     workDataOf(
                         TIMER_PROGRESS to timerSecondsLeft,
-                        TIMER_CANCEL_PROGRESS_KEY to timerCancelSecondsLeft
                     )
                 )
 
@@ -51,17 +49,14 @@ class TimerWorker(
 
                 delay(1_000)
                 timerSecondsLeft -= 1
-                timerCancelSecondsLeft -= 1
             }
+
+            playSound()
         } catch (e: Exception) {
             notificationManager.cancel(NOTIFICATION_ID)
+            stopSound()
             return Result.failure()
-
         }
-
-        playSound()
-        delay(1_500)
-        stopSound()
 
         notificationManager.cancel(NOTIFICATION_ID)
         return Result.success()
@@ -69,11 +64,11 @@ class TimerWorker(
 
     private fun playSound() {
         mediaPlayer = MediaPlayer.create(context, R.raw.sound_time_finish)
-        mediaPlayer?.apply {
-            start()
+        mediaPlayer?.setOnCompletionListener {
+            stopSound()
         }
+        mediaPlayer?.start()
 
-        mediaPlayer = null
     }
 
     private fun stopSound() {
@@ -81,7 +76,9 @@ class TimerWorker(
             stop()
             release()
         }
+        mediaPlayer = null
     }
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -90,7 +87,6 @@ class TimerWorker(
                 "Таймер",
                 NotificationManager.IMPORTANCE_LOW
             )
-
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -128,11 +124,5 @@ class TimerWorker(
 
         const val TIMER_KEY = "timer_key"
         const val TIMER_PROGRESS = "timer_progress"
-
-        const val TIMER_CANCEL_KEY = "timer_cancel_key"
-
-        const val TIMER_CANCEL_PROGRESS_KEY = "timer_cancel_progress_key"
-
-        const val SIXTY = 60
     }
 }

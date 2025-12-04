@@ -1,16 +1,17 @@
 package white.ball.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import white.ball.domain.model.Tag
+import white.ball.domain.collection.TagCollection
+import white.ball.domain.model.TagDomainModel
 
 interface TagRepository {
-    fun getTagList(): Flow<List<Tag>>
+    fun getTagList(): Flow<List<TagDomainModel>>
 
-    suspend fun insertTag(tag: Tag)
+    suspend fun insertTag(tag: TagDomainModel)
 
-    suspend fun insertTagList(tagList: List<Tag>)
+    suspend fun insertTagList(tag: List<TagDomainModel>)
 
-    suspend fun updateTag(tag: Tag)
+    suspend fun updateTag(tag: TagDomainModel)
 
-    suspend fun deleteTag(tag: Tag)
+    suspend fun deleteTag(tag: TagDomainModel)
 }

@@ -1,15 +1,15 @@
 package white.ball.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import white.ball.domain.model.Music
+import white.ball.domain.model.MusicDomainModel
 
 interface MusicRepository {
 
-    fun getMusicList(): Flow<List<Music>>
+    fun getMusicList(): Flow<List<MusicDomainModel>>
 
-    suspend fun insertMusicList(musicList: List<Music>)
+    suspend fun insertMusicList(music: List<MusicDomainModel>)
 
-    suspend fun insertMusic(music: Music)
+    suspend fun insertMusic(music: MusicDomainModel)
 
-    suspend fun updateMusic(music: Music)
+    suspend fun updateMusic(music: MusicDomainModel)
 }

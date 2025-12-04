@@ -2,87 +2,77 @@ package white.ball.domain.collection
 
 import white.ball.domain.R
 import white.ball.domain.extension_model.ItemStatus
-import white.ball.domain.model.Music
 
-class MusicCollection {
+enum class MusicCollection (
+    var musicId: Long = 0,
+    val title: String,
+    val artist: String = "Без автора",
+    val imageResId: Int,
+    val rawResId: Int,
+    var status: ItemStatus = ItemStatus.CLOSE,
+    var price: Int,
+) {
 
-    private val _musicList = mutableListOf(
-        Music (
-            musicId = 0,
+    ATMOSPHERE_NIGHT(
             title = "Атмосфера ночи",
-            artist = "Без автора",
             imageResId = R.drawable.album_atmosphere_of_the_night_sample,
             rawResId = R.raw.music_atmosphere_of_the_night_sample,
             price = 300,
         ),
 
-        Music (
-            musicId = 1,
+        RAIN_IN_CITY(
             title = "Дождь в городе",
-            artist = "Без автора",
             imageResId = R.drawable.album_cities_in_the_rain,
             rawResId = R.raw.music_cities_in_the_rain,
             price = 0,
             status = ItemStatus.AVAILABLE
         ),
 
-        Music (
-            musicId = 2,
+        CRACKLE_FIRE_IN_FIREPLACE(
             title = "Треск огня в камине",
-            artist = "Без автора",
             imageResId = R.drawable.album_crackling_fire_fireplace,
             rawResId = R.raw.music_crackling_fire_fireplace,
             price = 600,
         ),
 
-        Music (
-            musicId = 3,
+        ECHOES_OF_HORROR(
             title = "Отголоски ужаса",
-            artist = "Без автора",
             imageResId = R.drawable.album_echoes_of_dread,
             rawResId = R.raw.music_echoes_of_dread,
             price = 600,
         ),
 
-        Music (
-            musicId = 4,
+        SOUND_NIGHT(
             title = "Звуки ночи",
-            artist = "Без автора",
             imageResId = R.drawable.album_sound_of_the_night_song_cicadas_in_the_foreground,
             rawResId = R.raw.music_sound_of_the_night_song_cicadas_in_the_foreground,
             price = 600,
         ),
 
-        Music (
-            musicId = 5,
+        HIDDEN_DIVING(
             title = "Скрытое погружение",
-            artist = "Без автора",
             imageResId = R.drawable.album_veiled_descent,
             rawResId = R.raw.music_veiled_descent,
             price = 600,
         ),
 
-        Music (
-            musicId = 6,
+        WHISPER_IN_RAIN(
             title = "Шепот под дождем",
-            artist = "Без автора",
             imageResId = R.drawable.album_whispers_in_the_rain,
             rawResId = R.raw.music_whispers_in_the_rain,
             price = 600,
-        ),
-    )
-    val musicList: List<Music> = _musicList
+        );
+
+    companion object {
+
+        fun getRawResId(title: String) = MusicCollection.entries
+            .first { it.title == title }
+            .rawResId
+
+        fun getImageResId(title: String) = MusicCollection.entries
+            .first { it.title == title }
+            .imageResId
 
 
-    fun buyMusic(titleMusic: String): Music {
-        return _musicList
-            .filter { it.title == titleMusic }
-            .map {
-                it.copy(
-                    status = ItemStatus.AVAILABLE
-                )
-            }
-            .first()
     }
-
 }

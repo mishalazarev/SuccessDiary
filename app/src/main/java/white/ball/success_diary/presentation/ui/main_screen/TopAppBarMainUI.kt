@@ -26,7 +26,7 @@ import white.ball.success_diary.presentation.ui.main_screen.button.BalanceUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonMusicUI
 import white.ball.success_diary.presentation.ui.main_screen.button.ButtonPlayerCustomizeTimerUI
 import white.ball.success_diary.presentation.ui.main_screen.dialog.DialogPlayerCollectionUI
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun TopAppBarMainUI(

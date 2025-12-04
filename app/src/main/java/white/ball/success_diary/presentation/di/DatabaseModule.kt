@@ -13,10 +13,10 @@ import white.ball.data.local_storage.room.dao.MusicDao
 import white.ball.data.local_storage.room.dao.NoteDao
 import white.ball.data.local_storage.room.dao.TagDao
 import white.ball.data.local_storage.room.database.SuccessDiaryDatabase
-import white.ball.data.local_storage.room.implementation.CoffeeCoinImpl
-import white.ball.data.local_storage.room.implementation.MusicImpl
-import white.ball.data.local_storage.room.implementation.NoteImpl
-import white.ball.data.local_storage.room.implementation.TagImpl
+import white.ball.data.local_storage.room.implementation.CoffeeCoinRepositoryImpl
+import white.ball.data.local_storage.room.implementation.MusicRepositoryImpl
+import white.ball.data.local_storage.room.implementation.NoteRepositoryImpl
+import white.ball.data.local_storage.room.implementation.TagRepositoryImpl
 import white.ball.domain.repository.CoffeeCoinRepository
 import white.ball.domain.repository.MusicRepository
 import white.ball.domain.repository.NoteRepository
@@ -63,25 +63,25 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providesNoteRepositoryImpl(noteDao: NoteDao): NoteRepository {
-        return NoteImpl(noteDao)
+        return NoteRepositoryImpl(noteDao)
     }
 
     @Provides
     @Singleton
     fun providesTagRepositoryImpl(tagDao: TagDao): TagRepository {
-        return TagImpl(tagDao)
+        return TagRepositoryImpl(tagDao)
     }
 
     @Provides
     @Singleton
     fun providesCoffeeCoinImpl(coffeeCoinDao: CoffeeCoinDao): CoffeeCoinRepository {
-        return CoffeeCoinImpl(coffeeCoinDao)
+        return CoffeeCoinRepositoryImpl(coffeeCoinDao)
     }
 
     @Provides
     @Singleton
     fun providesMusicImpl(musicDao: MusicDao): MusicRepository {
-        return MusicImpl(musicDao)
+        return MusicRepositoryImpl(musicDao)
     }
 
     private const val NAME_DATABASE = "room"

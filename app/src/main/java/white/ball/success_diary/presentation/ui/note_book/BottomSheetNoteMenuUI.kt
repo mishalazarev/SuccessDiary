@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.ui.theme.BottomBarColor
 import white.ball.success_diary.presentation.ui.theme.LineCoffeeCoinBalanceColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

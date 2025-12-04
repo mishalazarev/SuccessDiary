@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import white.ball.domain.model.Tag
+import white.ball.domain.model.TagDomainModel
 import white.ball.domain.repository.TagRepository
 
 class UpdateTagUseCaseTest {
@@ -20,7 +20,7 @@ class UpdateTagUseCaseTest {
 
     @Test
     fun `update tag`() = runTest {
-        val testData = Tag(
+        val testData = TagDomainModel(
             tagId = 0,
             title = "",
             imageResId = 0,

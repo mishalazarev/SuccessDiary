@@ -18,8 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.LocalDateTime
 import white.ball.success_diary.platform.app.service.TimerWorker
 import white.ball.success_diary.presentation.navigation.MainNavController
-import white.ball.success_diary.presentation.view_model.MainViewModel
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 import white.ball.success_diary.presentation.ui.theme.SuccessDiaryTheme
 
 @AndroidEntryPoint

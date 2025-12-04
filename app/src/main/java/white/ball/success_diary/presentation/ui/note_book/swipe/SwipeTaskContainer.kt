@@ -27,16 +27,15 @@ import white.ball.domain.model.additional.TaskByNoteDomainModel
 import white.ball.success_diary.R
 import white.ball.success_diary.presentation.ui.note_book.model.BlockTaskUI
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun SwipeTaskContainer(
     taskByNoteDomainModel: TaskByNoteDomainModel,
+    onDeleteTask: () -> Unit,
     noteBookViewModel: NoteBookViewModel,
 ) {
     var isRemoved by remember (taskByNoteDomainModel.localId) { mutableStateOf(false) }
-
-    val scope = rememberCoroutineScope()
 
     val swipeState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
@@ -69,9 +68,6 @@ fun SwipeTaskContainer(
                                     ClickedButtonTimerColor
                                 )
                         )
-                        scope.launch {
-                            swipeState.reset()
-                        }
                     }
 
                     else -> {}
@@ -79,15 +75,17 @@ fun SwipeTaskContainer(
             }
         ) {
             BlockTaskUI(
-                noteBookViewModel = noteBookViewModel,
                 task = taskByNoteDomainModel,
+                noteBookViewModel = noteBookViewModel,
             )
         }
 
         LaunchedEffect(key1 = isRemoved) {
             if (isRemoved) {
-                noteBookViewModel.deleteTask(taskByNoteDomainModel)
+                onDeleteTask()
             }
+
+            swipeState.reset()
         }
     }
 }

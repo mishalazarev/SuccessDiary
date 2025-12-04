@@ -32,7 +32,7 @@ import white.ball.success_diary.presentation.ui.main_screen.model.player.PlayerC
 import white.ball.success_diary.presentation.ui.main_screen.model.player.PlayerCardTagUI
 import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
-import white.ball.success_diary.presentation.view_model.MainViewModel
+import white.ball.success_diary.presentation.screen.main.MainViewModel
 
 @Composable
 fun DialogPlayerCollectionUI(
@@ -102,9 +102,8 @@ fun DialogPlayerCollectionUI(
                     items(availableMusic.size) { index ->
                         val currentMusic = availableMusic[index]
                         PlayerCardMusicUI(
-                            music = currentMusic,
+                            musicDomainModel = currentMusic,
                             isSelected = selectedMusic == currentMusic.rawResId,
-                            mainViewModel = mainViewModel
                         ) {
                             mainViewModel.selectedMusic(currentMusic.rawResId)
                         }
@@ -136,10 +135,11 @@ fun DialogPlayerCollectionUI(
                         items(availableTag.size) { index ->
                             val currentTag = availableTag[index]
                             PlayerCardTagUI(
-                                tag = currentTag,
-                                mainViewModel = mainViewModel,
-                                isSelected = selectedTag == currentTag
-                            )
+                                tagDomainModel = currentTag,
+                                isSelected = selectedTag == currentTag.imageResId
+                            ) {
+                                mainViewModel.setSelectedTag(currentTag)
+                            }
                         }
                     }
 

@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import white.ball.domain.extension_model.ItemLocation
 import white.ball.domain.extension_model.PageColor
+import white.ball.domain.model.NoteDomainModel
 
 @Entity("note",)
 data class NoteDTO(
@@ -14,4 +15,13 @@ data class NoteDTO(
     var createdDate: String,
     var color: PageColor,
     var location: ItemLocation,
+)
+
+fun NoteDomainModel.toNoteDTO() = NoteDTO(
+    noteId = this.noteId,
+    title = this.title,
+    content = this.content,
+    createdDate = this.createdDate,
+    color = this.color,
+    location = this.location,
 )

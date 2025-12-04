@@ -36,7 +36,7 @@ import white.ball.success_diary.presentation.model.NoteModelUI
 import white.ball.success_diary.presentation.ui.note_book.model.BlockNoteUI
 import white.ball.success_diary.presentation.ui.theme.BottomBarItemDefaultColor
 import white.ball.success_diary.presentation.ui.theme.ClickedButtonTimerColor
-import white.ball.success_diary.presentation.view_model.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
 
 @Composable
 fun SwipeNoteContainer(
