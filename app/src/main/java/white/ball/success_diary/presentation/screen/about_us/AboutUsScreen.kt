@@ -1,15 +1,19 @@
-package white.ball.success_diary.presentation.screen
+package white.ball.success_diary.presentation.screen.about_us
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -18,8 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,8 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.R
-import white.ball.success_diary.presentation.ui.theme.CardDefaultColor
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 
 @Composable
@@ -64,6 +70,62 @@ fun AboutUsScreen(
                     .padding(innerPadding)
                     .padding(horizontal = 6.dp)
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, RoundedCornerShape(10.dp))
+                        .padding(bottom = 20.dp),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Text(
+                        text = "Резервное копирование", style = TextStyle(
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.roboto))
+                        ), modifier = Modifier.padding(start = 9.dp, top = 9.dp, bottom = 9.dp)
+                    )
+
+                    Text(
+                        text = "Импортируйте/Эскпортируйте свой прогресс", style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.roboto))
+                        ), modifier = Modifier.padding(start = 9.dp, top = 9.dp, bottom = 9.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Image(
+                            painter = painterResource(white.ball.domain.R.drawable.icon_import_file_default),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable {
+                                }
+                                .clip(CircleShape)
+                        )
+
+                        Image(
+                            painter = painterResource(white.ball.domain.R.drawable.icon_export_file_default),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clickable {
+
+                                }
+                                .clip(CircleShape)
+                        )
+                    }
+                }
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

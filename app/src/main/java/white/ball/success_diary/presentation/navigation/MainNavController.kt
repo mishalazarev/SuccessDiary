@@ -11,7 +11,7 @@ import white.ball.domain.extension_model.navigation.ScreenNavigation
 import white.ball.success_diary.presentation.bottom_bar.BottomNavigationBar
 import white.ball.success_diary.presentation.screen.main.MainScreen
 import white.ball.success_diary.presentation.screen.note_book.NoteBookScreen
-import white.ball.success_diary.presentation.screen.AboutUsScreen
+import white.ball.success_diary.presentation.screen.about_us.AboutUsScreen
 import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
 import white.ball.success_diary.presentation.screen.additional.StoreScreen
 import white.ball.success_diary.presentation.screen.main.MainViewModel

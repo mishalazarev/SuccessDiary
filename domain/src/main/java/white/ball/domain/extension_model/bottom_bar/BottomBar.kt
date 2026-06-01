@@ -9,5 +9,5 @@ enum class BottomBar (
 ) {
     HOME(ScreenNavigation.MAIN_SCREEN.route, R.drawable.icon_home_bottom_bar_default),
     NOTE_BOOK(ScreenNavigation.NOTE_BOOK_SCREEN.route, R.drawable.icon_note_bottom_bar_default),
-    PROFILE(ScreenNavigation.ABOUT_US_SCREEN.route, R.drawable.icon_warning_bottom_bar_default),
+    ABOUT_US(ScreenNavigation.ABOUT_US_SCREEN.route, R.drawable.icon_warning_bottom_bar_default),
 }
