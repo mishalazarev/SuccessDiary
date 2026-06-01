@@ -70,7 +70,7 @@ fun MainNavController(
             route = ScreenNavigation.ABOUT_US_SCREEN.route
         ) {
             AboutUsScreen(
-                versionApp = "1.1.0"
+                versionApp = "1.1.5"
             )
         }
     }
@@ -82,7 +82,8 @@ fun MainNavController(
                 navController = navController
             )
         }
-    ) {
+    ) { innerPadding ->
+        val keepPadding = innerPadding
         NavHost(
             navController = navController,
             graph = graph,
