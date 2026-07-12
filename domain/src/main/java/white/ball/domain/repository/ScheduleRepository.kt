@@ -15,9 +15,10 @@ interface ScheduleRepository {
 
     suspend fun deleteDaySchedule(dayScheduleDomainModel: DayScheduleDomainModel)
 
-    suspend fun getDaySchedule(localDate: LocalDate): Flow<DayScheduleDomainModel>
+    suspend fun getScheduleByDay(localDate: LocalDate): Flow<DayScheduleDomainModel>
 
     suspend fun insertDaySchedule(dayScheduleDomainModel: DayScheduleDomainModel)
 
     suspend fun updateDaySchedule(dayScheduleDomainModel: DayScheduleDomainModel)
+    suspend fun insertSchedule(dayScheduleDomainModel: DayScheduleDomainModel)
 }

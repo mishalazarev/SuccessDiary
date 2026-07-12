@@ -36,7 +36,6 @@ interface NoteDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertTaskList(taskList: List<TaskByNoteDTO>)
 
-
     @Delete
     suspend fun deleteTask(task: TaskByNoteDTO)
 

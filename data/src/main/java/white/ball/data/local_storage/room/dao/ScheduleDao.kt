@@ -9,7 +9,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import white.ball.data.local_storage.room.entity.DayScheduleDTO
-import white.ball.data.local_storage.room.entity.additional.ScheduleDTO
+import white.ball.data.local_storage.room.entity.agregate.DayScheduleWithScheduleDTO
 import java.time.LocalDate
 
 @Dao
@@ -20,7 +20,7 @@ interface ScheduleDao {
 
     @Transaction
     @Query("SELECT * FROM DayScheduleDTO")
-    fun getScheduleList(): Flow<List<DayScheduleDTO>>
+    fun getScheduleList(): Flow<List<DayScheduleWithScheduleDTO>>
 
     @Transaction
     @Query("SELECT * FROM DayScheduleDTO WHERE dayId = :localDate")
@@ -32,9 +32,13 @@ interface ScheduleDao {
     @Insert(onConflict = REPLACE)
     suspend fun insertDaySchedule(dayScheduleDTO: DayScheduleDTO)
 
+    @Insert
+    suspend fun insertSchedule(dayScheduleDTO: DayScheduleDTO)
+
     @Delete
     suspend fun deleteDaySchedule(dayScheduleDTO: DayScheduleDTO)
 
     @Update
     suspend fun updateDaySchedule(dayScheduleDTO: DayScheduleDTO)
+
 }

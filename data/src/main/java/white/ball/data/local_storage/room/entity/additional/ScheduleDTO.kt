@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import white.ball.data.local_storage.room.entity.DayScheduleDTO
 import white.ball.domain.model.additional.ScheduleDomainModel
+import java.time.LocalDate
 
 @Entity (
     foreignKeys = [
@@ -30,6 +31,7 @@ fun ScheduleDTO.toScheduleDomainModel() = ScheduleDomainModel(
     tagTime = this.tagTime,
     tagCount = this.tagCount,
     tagImageResId = this.tagImageResId,
+    createDate = LocalDate.now()
 )
 
 fun ScheduleDomainModel.toScheduleByDayScheduleDTO() = ScheduleDTO(
