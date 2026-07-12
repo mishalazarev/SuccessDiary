@@ -2,6 +2,9 @@ package white.ball.success_diary.presentation.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +29,19 @@ import white.ball.domain.repository.TagRepository
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+
+    val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+            CREATE TABLE IF NOT EXISTS Task (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                title TEXT NOT NULL,
+                description TEXT
+            )
+        """.trimIndent())
+        }
+    }
+
     @Provides
     @Singleton
     fun provideSuccessDiaryDatabase(@ApplicationContext context: Context): SuccessDiaryDatabase {
@@ -33,7 +49,9 @@ object DatabaseModule {
             context,
             SuccessDiaryDatabase::class.java,
             NAME_DATABASE
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .build()
     }
 
     @Provides
@@ -84,5 +102,6 @@ object DatabaseModule {
         return MusicRepositoryImpl(musicDao)
     }
 
-    private const val NAME_DATABASE = "room"
+
+    const val NAME_DATABASE = "room"
 }

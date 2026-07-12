@@ -4,9 +4,10 @@ enum class ScreenNavigation (val route: String) {
     // Main
     MAIN_SCREEN("main_screen"),
     NOTE_BOOK_SCREEN("note_book_screen"),
+    SCHEDULE_SCREEN("schedule_screen"),
+    ABOUT_US_SCREEN("about_us_screen"),
     // Secondary
     CREATE_NOTE_SCREEN("create_note_screen"),
-    ABOUT_US_SCREEN("about_us_screen"),
     STORE_SCREEN("store_screen"),
 
 }

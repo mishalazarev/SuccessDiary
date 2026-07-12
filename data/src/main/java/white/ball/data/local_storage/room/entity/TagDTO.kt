@@ -22,13 +22,12 @@ fun TagDomainModel.toTagDTO() = TagDTO(
     price = this.price,
 )
 
-fun TagDTO.toTag(): TagDomainModel {
-    return TagDomainModel(
+fun TagDTO.toTag(): TagDomainModel = TagDomainModel(
         tagId = this.tagId,
         title = this.title,
         status = this.status,
         price = this.price,
         imageResId = TagCollection.getImageResId(this.title)
-    )
-}
+)
+
 

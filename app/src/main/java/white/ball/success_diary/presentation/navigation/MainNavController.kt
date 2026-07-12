@@ -46,7 +46,21 @@ fun MainNavController(
             )
         }
 
-        // Additional
+        composable (
+            route = ScreenNavigation.SCHEDULE_SCREEN.route
+        ) {
+
+        }
+
+        composable (
+            route = ScreenNavigation.ABOUT_US_SCREEN.route
+        ) {
+            AboutUsScreen(
+                versionApp = "1.1.6"
+            )
+        }
+
+        // Secondary
         composable (
             route = ScreenNavigation.CREATE_NOTE_SCREEN.route
         ) {
@@ -63,14 +77,6 @@ fun MainNavController(
             StoreScreen(
                 mainViewModel = mainViewModel,
                 navController = navController,
-            )
-        }
-
-        composable (
-            route = ScreenNavigation.ABOUT_US_SCREEN.route
-        ) {
-            AboutUsScreen(
-                versionApp = "1.1.5"
             )
         }
     }

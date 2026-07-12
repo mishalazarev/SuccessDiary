@@ -227,6 +227,5 @@ enum class TagCollection(
         fun getImageResId(title: String) = TagCollection.entries
             .first { it.title == title }
             .imageResId
-
     }
 }
