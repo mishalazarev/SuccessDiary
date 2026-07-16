@@ -29,16 +29,14 @@ import white.ball.domain.repository.TagRepository
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-
     val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            db.execSQL("""
-            CREATE TABLE IF NOT EXISTS Task (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                title TEXT NOT NULL,
-                description TEXT
-            )
-        """.trimIndent())
+            db.execSQL("CREATE TABLE IF NOT EXISTS `CoffeeCoinDTO` (`coffeeCoinId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `balance` INTEGER NOT NULL)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `TaskByNoteDTO` (`taskId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `isDone` INTEGER NOT NULL, `noteId` INTEGER NOT NULL, FOREIGN KEY(`noteId`) REFERENCES `note`(`noteId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `tag` (`tagId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `status` TEXT NOT NULL, `price` INTEGER NOT NULL)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `MusicDTO` (`musicId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `artist` TEXT NOT NULL, `price` INTEGER NOT NULL, `status` TEXT NOT NULL)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `DayScheduleDTO` (`dayId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdDate` TEXT NOT NULL)")
+            db.execSQL("CREATE TABLE IF NOT EXISTS `ScheduleDTO` (`scheduleId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dayId` INTEGER NOT NULL, `tagTime` INTEGER NOT NULL, `tagCount` INTEGER NOT NULL, `tagImageResId` INTEGER NOT NULL, FOREIGN KEY(`dayId`) REFERENCES `DayScheduleDTO`(`dayId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         }
     }
 

@@ -14,11 +14,15 @@ import white.ball.data.local_storage.room.entity.NoteDTO
 import white.ball.data.local_storage.room.entity.TagDTO
 import white.ball.data.local_storage.room.entity.additional.ScheduleDTO
 import white.ball.data.local_storage.room.entity.additional.TaskByNoteDTO
+import white.ball.data.local_storage.room.entity.converter.LocalDateConverter
+import androidx.room.TypeConverters
+
 
 @Database(entities = [
     NoteDTO::class, CoffeeCoinDTO::class, TaskByNoteDTO::class, TagDTO::class,
     MusicDTO::class, ScheduleDTO::class, DayScheduleDTO::class],
     version = 2, exportSchema = false)
+@TypeConverters(LocalDateConverter::class)
 abstract class SuccessDiaryDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao

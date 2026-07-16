@@ -20,6 +20,7 @@ import white.ball.success_diary.platform.app.service.TimerWorker
 import white.ball.success_diary.presentation.navigation.MainNavController
 import white.ball.success_diary.presentation.screen.main.MainViewModel
 import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.schedule.ScheduleViewModel
 import white.ball.success_diary.presentation.ui.theme.SuccessDiaryTheme
 
 @AndroidEntryPoint
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
 
                 val mainViewModel: MainViewModel = hiltViewModel()
                 val noteBookViewModel: NoteBookViewModel = hiltViewModel()
+                val schedulerViewModel: ScheduleViewModel = hiltViewModel()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
@@ -42,6 +44,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         mainViewModel = mainViewModel,
                         noteBookViewModel = noteBookViewModel,
+                        schedulerViewModel = schedulerViewModel,
                         innerPadding = innerPadding,
                     ) {
                         this.finish()
@@ -50,7 +53,6 @@ class MainActivity : ComponentActivity() {
             }
 
         }
-
 
 
         if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)

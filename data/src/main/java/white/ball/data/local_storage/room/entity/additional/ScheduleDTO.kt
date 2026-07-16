@@ -3,6 +3,7 @@ package white.ball.data.local_storage.room.entity.additional
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.PrimaryKey
 import white.ball.data.local_storage.room.entity.DayScheduleDTO
 import white.ball.domain.model.additional.ScheduleDomainModel
 import java.time.LocalDate
@@ -18,6 +19,7 @@ import java.time.LocalDate
     ]
 )
 data class ScheduleDTO(
+    @PrimaryKey(autoGenerate = true)
     val scheduleId: Long,
     val dayId: Long,
     var tagTime: Long,

@@ -23,8 +23,8 @@ interface ScheduleDao {
     fun getScheduleList(): Flow<List<DayScheduleWithScheduleDTO>>
 
     @Transaction
-    @Query("SELECT * FROM DayScheduleDTO WHERE dayId = :localDate")
-    fun getScheduleByDay(localDate: LocalDate): Flow<DayScheduleDTO>
+    @Query("SELECT * FROM DayScheduleDTO WHERE createdDate = :localDate")
+    fun getScheduleByDay(localDate: LocalDate): Flow<DayScheduleWithScheduleDTO>
 
     @Query("DELETE FROM DayScheduleDTO WHERE createdDate = :localDate")
     suspend fun deleteDaySchedule(localDate: LocalDate)

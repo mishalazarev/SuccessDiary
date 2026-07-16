@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,11 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import white.ball.domain.extension_model.TimerTime
+import white.ball.success_diary.presentation.custom_view.TimerTimePicker
 import white.ball.success_diary.presentation.ui.theme.MainBackgroundColor
 import white.ball.success_diary.presentation.screen.main.MainViewModel
 
@@ -58,33 +62,33 @@ fun TimerPickerUI(
         }
     }
 
-    LazyRow(
-        state = listState,
+    AndroidView(
+        factory = { context ->
+            TimerTimePicker(context).apply {
+                onTimeChanged = { time: Int ->
+                    mainViewModel.setSelectedTime(time)
+                }
+            }
+        },
+        update = { view ->
+            view.setTime(selectedTime)
+        },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 9.dp),
-        contentPadding = PaddingValues(horizontal = 120.dp),
+            .padding(top = 9.dp, start = 20.dp, end = 30.dp),
+    )
+
+    Row (
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(infiniteNumberList.size) { index ->
-            val currentNumber = infiniteNumberList[index]
-            val isSelected = currentNumber == selectedTime
-
-            Box(
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp)
-                    .padding(horizontal = 6.dp, vertical = 9.dp)
-                    .background(Color.White, RoundedCornerShape(5.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = currentNumber.toString(),
-                    color = if (isSelected) MainBackgroundColor else Color.DarkGray,
-                    fontSize = if (isSelected) 26.sp else 16.sp,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                )
-            }
-        }
+        Text(
+            text = selectedTime.toString(),
+            color = MainBackgroundColor,
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }

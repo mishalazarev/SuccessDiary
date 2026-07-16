@@ -16,12 +16,15 @@ import white.ball.success_diary.presentation.screen.additional.CreateNoteScreen
 import white.ball.success_diary.presentation.screen.additional.StoreScreen
 import white.ball.success_diary.presentation.screen.main.MainViewModel
 import white.ball.success_diary.presentation.screen.note_book.NoteBookViewModel
+import white.ball.success_diary.presentation.screen.schedule.ScheduleScreen
+import white.ball.success_diary.presentation.screen.schedule.ScheduleViewModel
 
 @Composable
 fun MainNavController(
     navController: NavHostController,
     mainViewModel: MainViewModel,
     noteBookViewModel: NoteBookViewModel,
+    schedulerViewModel: ScheduleViewModel,
     innerPadding: PaddingValues,
     finishApp: () -> Unit
 ) {
@@ -49,7 +52,9 @@ fun MainNavController(
         composable (
             route = ScreenNavigation.SCHEDULE_SCREEN.route
         ) {
-
+            ScheduleScreen(
+                schedulerViewModel,
+            )
         }
 
         composable (
